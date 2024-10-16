@@ -19,7 +19,15 @@ export class TournamentService {
     return this.http.get<any[]>(`${this.apiUrl}/tournament/${tournamentId}/team`);
   }
 
+  getTeamDetails(teamId: number): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/team/${teamId}`);
+  }
+
   getTeamPlayers(teamId: number): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/team/${teamId}/player`);
+  }
+
+  addPlayer(playerName: string, teamId: number): Observable<any> {
+    return this.http.post(`${this.apiUrl}/player`, { name: playerName, teamId: teamId });
   }
 }

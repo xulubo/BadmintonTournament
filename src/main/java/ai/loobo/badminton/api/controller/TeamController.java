@@ -41,6 +41,13 @@ public class TeamController {
         return ResponseEntity.ok(Response.builder().status("SUCCESS").build());
     }
 
+    @GetMapping("/{teamId}")
+    public Team getTeam(
+            @PathVariable int teamId
+    ) {
+        return teamRepository.findById(teamId).get();
+    }
+
     @GetMapping("/{teamId}/player")
     public ResponseEntity<Collection<Player>> getPlayerList(
             @PathVariable int teamId

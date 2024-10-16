@@ -14,4 +14,8 @@ export class TournamentService {
   getTournaments(): Observable<Tournament[]> {
     return this.http.get<Tournament[]>(this.apiUrl);
   }
+
+  getTournamentTeams(tournamentId: number): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/${tournamentId}/team`);
+  }
 }

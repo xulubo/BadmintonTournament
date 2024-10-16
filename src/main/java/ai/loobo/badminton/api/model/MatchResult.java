@@ -22,6 +22,7 @@ import java.util.List;
 @Data
 public class MatchResult {
     private Integer teamMatchId;
+    private Integer matchId;
     private Integer matchNumber;
     private String matchType;
 

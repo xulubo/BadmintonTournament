@@ -8,10 +8,7 @@ import ai.loobo.badminton.model.MatchPlayers;
 import ai.loobo.badminton.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.stream.Collectors;
 
@@ -68,6 +65,16 @@ public class MatchController {
             }
         }
 
+
+        return Response.builder().status("SUCCESS").build();
+    }
+
+    @Transactional
+    @DeleteMapping("/{matchId}")
+    public Response deleteMatch(
+            @PathVariable Integer matchId
+    ) {
+        matchRepository.deleteById(matchId);
 
         return Response.builder().status("SUCCESS").build();
     }

@@ -109,6 +109,7 @@ public class TeamMatchController {
 
             var matchResult = MatchResult.builder()
                     .teamMatchId(teamMatchId)
+                    .matchId(match.getId())
                     .matchType(match.getType())
                     .matchNumber(match.getMatchNumber())
                     .teamResults(teamResults)

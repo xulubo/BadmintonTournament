@@ -111,8 +111,8 @@ export class TeamMatchComponent implements OnInit {
       matchNumber: this.matchNumber,
       matchType: '',
       teams: [
-        { id: this.teams[0].team.id, players: [new Player(), new Player()], scores: [0, 0, 0] },
-        { id: this.teams[1].team.id, players: [new Player(), new Player()], scores: [0, 0, 0] }
+        { id: this.teams[0].team.id, players: [new Player(), new Player()], scores: [new GameScore(), new GameScore(), new GameScore()] },
+        { id: this.teams[1].team.id, players: [new Player(), new Player()], scores: [new GameScore(), new GameScore(), new GameScore()] }
       ]
     };
   }
@@ -139,5 +139,19 @@ export class TeamMatchComponent implements OnInit {
         console.error('Error fetching single matches:', error);
       }
     );
+  }
+
+  deleteSingleMatch(matchId: number): void {
+    if (confirm('Are you sure you want to delete this single match?')) {
+      this.tournamentService.deleteSingleMatch(matchId).subscribe(
+        () => {
+          console.log('Single match deleted successfully');
+          this.loadSingleMatches(); // Reload the single matches list
+        },
+        (error) => {
+          console.error('Error deleting single match:', error);
+        }
+      );
+    }
   }
 }

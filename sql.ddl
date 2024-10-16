@@ -18,7 +18,13 @@ CREATE TABLE team (
 -- 3. Player Table
 CREATE TABLE player (
     player_id SERIAL PRIMARY KEY,
-    player_name VARCHAR(255) NOT NULL,
+    player_name VARCHAR(255) NOT NULL, -- nick name
+    first_name VARCHAR(255) NOT NULL,
+
+    last_name VARCHAR(255) NOT NULL,
+
+    comment VARCHAR(1024) NOT NULL,
+
     team_id INT REFERENCES team(team_id) ON DELETE SET NULL
 );
 
@@ -61,3 +67,30 @@ CREATE TABLE team_match_team (
     team_match_id INT REFERENCES team_match(team_match_id) ON DELETE CASCADE,
     team_id INT REFERENCES team(team_id) ON DELETE CASCADE
 );
+
+
+
+CREATE OR REPLACE VIEW team_match_view AS
+SELECT
+    tm.team_match_id,
+    t.team_id,
+    t.team_name,
+    m.match_number,
+    s.game_number,
+    m.type,
+    s.team_score,
+    p.player_id,
+    p.player_name,
+    p.gender
+FROM
+    team_match tm
+LEFT JOIN team_match_team tmt ON tm.team_match_id = tmt.team_match_id
+LEFT JOIN match m ON tm.team_match_id = m.team_match_id
+LEFT JOIN team t ON tmt.team_id = t.team_id
+LEFT JOIN match_players mp ON mp.match_id = m.match_id AND mp.team_id = tmt.team_id
+LEFT JOIN player p ON p.player_id = mp.player_id
+LEFT JOIN game_score s ON m.match_id = s.match_id AND s.team_id = tmt.team_id
+ORDER BY
+    m.match_number,
+    s.game_number,
+    tmt.team_id;

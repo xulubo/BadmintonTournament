@@ -3,14 +3,18 @@ package ai.loobo.badminton.api.controller;
 import ai.loobo.badminton.api.model.Response;
 import ai.loobo.badminton.model.Player;
 import ai.loobo.badminton.model.Team;
+import ai.loobo.badminton.model.TeamMatchView;
 import ai.loobo.badminton.repository.PlayerRepository;
+import ai.loobo.badminton.repository.TeamMatchViewRepository;
 import ai.loobo.badminton.repository.TeamRepository;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/player")
@@ -18,6 +22,7 @@ import java.util.List;
 public class PlayerController {
     private final TeamRepository teamRepository;
     private final PlayerRepository playerRepository;
+    private final TeamMatchViewRepository teamMatchViewRepository;
 
     @GetMapping("")
     public ResponseEntity<List<Player>> getPlayersByTeamId(@PathVariable Integer teamId) {
@@ -43,6 +48,18 @@ public class PlayerController {
         return ResponseEntity.ok(Response.builder().status("SUCCESS").build());
     }
 
+    @GetMapping("/{playerId}/match")
+    public Collection<TeamMatchView> getMatches(
+            @PathVariable Integer playerId
+    ) {
+        var playedMatchIds = teamMatchViewRepository.findByPlayerId(playerId)
+                .stream()
+                .map(TeamMatchView::getMatchId)
+                .collect(Collectors.toSet());
+
+        return teamMatchViewRepository.findByMatchIdIn(playedMatchIds);
+    };
+
     @DeleteMapping("/{playerId}")
     public Response deletePlayer(
             @PathVariable Integer playerId
@@ -50,6 +67,7 @@ public class PlayerController {
         playerRepository.deleteById(playerId);
         return Response.builder().status("SUCCESS").build();
     }
+
 
     @Data
     public static class PlayerVO {

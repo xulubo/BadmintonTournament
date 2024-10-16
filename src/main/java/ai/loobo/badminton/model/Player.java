@@ -23,6 +23,15 @@ public class Player {
     @Column(name = "player_name", nullable = false)
     private String name;
 
+    @Column(name = "first_name", nullable = true)
+    private String firstName;
+
+    @Column(name = "last_name", nullable = true)
+    private String lastName;
+
+    @Column(name = "comment", nullable = true)
+    private String comment;
+
     @Column(name = "gender", nullable = true)
     private Character gender;
 

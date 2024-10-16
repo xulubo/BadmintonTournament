@@ -1,0 +1,6 @@
+<h2>Tournament List</h2>
+<ul>
+  <li *ngFor="let tournament of tournaments">
+    {{ tournament.name }} ({{ tournament.startDate }} - {{ tournament.endDate }})
+  </li>
+</ul>

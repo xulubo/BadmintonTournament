@@ -73,7 +73,9 @@ export class SingleTournamentComponent implements OnInit {
           console.log('Team match created successfully:', response);
           this.successMessage = 'Team match created successfully!';
           this.resetForm();
-          this.loadTeamMatches(); // Reload the team matches after creating a new one
+          this.loadTeamMatches();
+          // Redirect to the team match page
+          this.router.navigate(['/team-match', response.id]);
         },
         (error) => {
           console.error('Error creating team match:', error);

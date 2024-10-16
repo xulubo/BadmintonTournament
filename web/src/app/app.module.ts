@@ -10,6 +10,7 @@ import { TeamComponent } from './team/team.component';
 import { PlayerComponent } from './player/player.component';
 import { SingleTournamentComponent } from './single-tournament/single-tournament.component';
 import { TeamDetailsComponent } from './team-details/team-details.component';
+import { TeamMatchComponent } from './team-match/team-match.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { TeamDetailsComponent } from './team-details/team-details.component';
     TeamComponent,
     PlayerComponent,
     SingleTournamentComponent,
-    TeamDetailsComponent
+    TeamDetailsComponent,
+    TeamMatchComponent
   ],
   imports: [
     BrowserModule,

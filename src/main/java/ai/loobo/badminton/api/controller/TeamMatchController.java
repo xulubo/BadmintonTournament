@@ -22,6 +22,13 @@ public class TeamMatchController {
     private final PlayerRepository playerRepository;
     private final TournamentRepository tournamentRepository;
 
+    @GetMapping("/{teamMatchId}")
+    public TeamMatch get(
+            @PathVariable int teamMatchId
+    ) {
+        return teamMatchRepository.findById(teamMatchId).get();
+    }
+    
     @Transactional
     @PostMapping
     public Response create(

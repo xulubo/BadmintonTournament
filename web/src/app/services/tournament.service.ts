@@ -58,4 +58,12 @@ export class TournamentService {
         })))
       );
   }
+
+  getTeamMatchDetails(teamMatchId: number): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/team_match/${teamMatchId}`);
+  }
+
+  createSingleMatch(teamMatchId: number, singleMatchData: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/team_match/${teamMatchId}/single_match`, singleMatchData);
+  }
 }

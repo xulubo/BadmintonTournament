@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 import java.util.Set;
 
 @EqualsAndHashCode(exclude = "tournament")
+@ToString(exclude = "tournament")
 @Builder
 @Entity
 @Table(name = "team_match", schema = "tournament")
@@ -27,6 +28,7 @@ public class TeamMatch {
     @OneToMany(mappedBy = "teamMatch")
     private Set<TeamMatchTeam> teams;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "teamMatch")
     private Set<Match> matches;
 

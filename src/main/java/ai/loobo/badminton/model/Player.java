@@ -5,6 +5,7 @@ import lombok.*;
 
 import javax.persistence.*;
 
+@EqualsAndHashCode(exclude = "team")
 @ToString(exclude = "team")
 @Builder
 @Entity

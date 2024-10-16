@@ -7,10 +7,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/team_match")
@@ -35,16 +32,16 @@ public class TeamMatchController {
                 .build();
         teamMatchRepository.save(teamMatch);
 
-        var match = matchRepository.save(
-                Match.builder()
-                        .teamMatch(teamMatch)
-                        .matchNumber(matchData.getMatchNumber())
-                        .type(matchData.getMatchType())
-                        .build()
-        );
+//        var match = matchRepository.save(
+//                Match.builder()
+//                        .teamMatch(teamMatch)
+//                        .matchNumber(matchData.getMatchNumber())
+//                        .type(matchData.getMatchType())
+//                        .build()
+//        );
 
-        for(var teamData: matchData.teams) {
-            var team = teamRepository.findById(teamData.getTeamId()).get();
+        for(var teamId: matchData.teamIds) {
+            var team = teamRepository.findById(teamId).get();
             var teamMatchTeam = TeamMatchTeam
                     .builder()
                     .teamMatch(teamMatch)
@@ -52,18 +49,18 @@ public class TeamMatchController {
                     .build();
             teamMatchTeamRepository.save(teamMatchTeam);
 
-            for(var playerId: teamData.getPlayers()) {
-                var player = playerRepository.findById(playerId).get();
-                matchPlayersRepository.save(
-                        new MatchPlayers(match,team, player)
-                );
-            }
-
-            for(var score: teamData.gameScores) {
-                gameScoreRepository.save(
-                        GameScore.create(match,team, score)
-                );
-            }
+//            for(var playerId: teamData.getPlayers()) {
+//                var player = playerRepository.findById(playerId).get();
+//                matchPlayersRepository.save(
+//                        new MatchPlayers(match,team, player)
+//                );
+//            }
+//
+//            for(var score: teamData.gameScores) {
+//                gameScoreRepository.save(
+//                        GameScore.create(match,team, score)
+//                );
+//            }
         }
 
 
@@ -85,6 +82,6 @@ public class TeamMatchController {
         private int tournamentId;
         private int matchNumber;
         private String matchType;
-        private TeamData[] teams;
+        private int[] teamIds;
     }
 }

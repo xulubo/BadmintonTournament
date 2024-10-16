@@ -7,8 +7,8 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Set;
 
-@EqualsAndHashCode(exclude = "teams")
-@ToString(exclude = "teams")
+@EqualsAndHashCode(exclude = {"teams","teamMatches"})
+@ToString(exclude = {"teams","teamMatches"})
 @Entity
 @Table(name = "tournament", schema = "tournament")
 @Data
@@ -36,7 +36,9 @@ public class Tournament {
     @Column(name = "prize")
     private String prize;
 
-    @JsonIgnore
     @OneToMany(mappedBy = "tournament")
     private Set<Team> teams;
+
+//    @OneToMany(mappedBy = "tournament")
+//    private Set<TeamMatch> teamMatches;
 }

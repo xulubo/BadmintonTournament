@@ -37,8 +37,13 @@ export class TournamentService {
   }
 
   createTeamMatch(tournamentId: number, matchData: any): Observable<any> {
-    console.log("matchData", matchData);
-    return this.http.post(`${this.apiUrl}/team_match`, matchData);
+    console.log("Creating team match with data:", matchData);
+    return this.http.post(`${this.apiUrl}/team_match`, matchData).pipe(
+      tap(
+        response => console.log('Team match creation response:', response),
+        error => console.error('Error creating team match:', error)
+      )
+    );
   }
 
   getTournamentTeamMatches(tournamentId: number): Observable<any[]> {

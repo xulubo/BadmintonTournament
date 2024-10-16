@@ -74,11 +74,18 @@ export class SingleTournamentComponent implements OnInit {
           this.successMessage = 'Team match created successfully!';
           this.resetForm();
           this.loadTeamMatches();
-          // Redirect to the team match page
-          this.router.navigate(['/team-match', response.id]);
+          // Check if response has an id before navigating
+          if (response && response.id) {
+            this.router.navigate(['/team-match', response.id]);
+          } else {
+            console.error('Created team match response does not contain an id:', response);
+            // Show an error message to the user
+            this.successMessage += ' However, there was an issue navigating to the new match. Please refresh the page to see the updated list.';
+          }
         },
         (error) => {
           console.error('Error creating team match:', error);
+          this.successMessage = 'Error creating team match. Please try again.';
         }
       );
   }

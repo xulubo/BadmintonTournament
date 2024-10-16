@@ -7,8 +7,8 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Set;
 
-@EqualsAndHashCode(exclude = "tournament")
-@ToString(exclude = "tournament")
+@EqualsAndHashCode(of = "id")
+@ToString(of = {"id","time"})
 @Builder
 @Entity
 @Table(name = "team_match", schema = "tournament")

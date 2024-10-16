@@ -1,16 +1,19 @@
 package ai.loobo.badminton.api.controller;
 
+import ai.loobo.badminton.api.model.MatchResult;
 import ai.loobo.badminton.api.model.Response;
-import ai.loobo.badminton.model.*;
+import ai.loobo.badminton.model.GameScore;
+import ai.loobo.badminton.model.Match;
+import ai.loobo.badminton.model.MatchPlayers;
 import ai.loobo.badminton.repository.*;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/match")
@@ -26,22 +29,24 @@ public class MatchController {
     @Transactional
     @PostMapping
     public Response create(
-            @RequestBody MatchData matchData
+            @RequestBody MatchResult matchResult
     ) {
-        var teamMatch = teamMatchRepository.findById(matchData.teamMatchId).get();
+        var teamMatch = teamMatchRepository.findById(matchResult.getTeamMatchId()).get();
 
         var match = matchRepository.save(
                 Match.builder()
                         .teamMatch(teamMatch)
-                        .matchNumber(matchData.getMatchNumber())
-                        .type(matchData.getMatchType())
+                        .matchNumber(matchResult.getMatchNumber())
+                        .type(matchResult.getMatchType())
                         .build()
         );
 
-        for(var teamData: matchData.teams) {
+        for(var teamData: matchResult.getTeamResults()) {
             var team = teamRepository.findById(teamData.getTeamId()).get();
 
-            for(var playerId: teamData.getPlayers()) {
+            for(var playerId: teamData.getPlayers()
+                    .stream().map(p->p.getId()).collect(Collectors.toList())
+            ) {
                 var player = playerRepository.findById(playerId).get();
                 var matchPlayer = new MatchPlayers(match,team, player);
                 matchPlayersRepository.save(
@@ -50,7 +55,9 @@ public class MatchController {
             }
 
             int i=1;
-            for(var score: teamData.scores) {
+            for(var score: teamData.getScores().stream()
+                    .map(s->s.getTeamScore()).collect(Collectors.toList())
+            ) {
                 if (score == null) continue;
 
                 var gameScore = GameScore.create(match,team, score);
@@ -63,23 +70,5 @@ public class MatchController {
 
 
         return Response.builder().status("SUCCESS").build();
-    }
-
-    @Data
-    public static class TeamData {
-        private Integer scores[];
-
-        @JsonProperty("id")
-        private int teamId;
-
-        private int[] players;
-    }
-
-    @Data
-    public static class MatchData {
-        private int teamMatchId;
-        private int matchNumber;
-        private String matchType;
-        private TeamData[] teams;
     }
 }

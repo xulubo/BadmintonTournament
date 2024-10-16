@@ -5,6 +5,17 @@ import lombok.*;
 
 import javax.persistence.*;
 
+/**
+ * Represent a team attending a particular team match.
+ *
+ * A single team match should contain two such entities with the same team_match_id
+ *
+ * teamMatch
+ *      +-- teamMatchTeam1
+ *                + -- team
+ *      +-- teamMatchTeam2
+ *                + -- team
+ */
 @EqualsAndHashCode(exclude = {"teamMatch"})
 @Builder
 @Entity

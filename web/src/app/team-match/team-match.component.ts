@@ -3,6 +3,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { TournamentService } from '../services/tournament.service';
 import { Location } from '@angular/common';
 import { forkJoin } from 'rxjs';
+import { Player } from '../models/player';
+import { GameScore } from '../models/game_score';
 
 @Component({
   selector: 'app-team-match',
@@ -15,14 +17,14 @@ export class TeamMatchComponent implements OnInit {
   matchTypes: string[] = ['XD', 'WD', 'MD'];
   teams: any[] = [];
   teamNames: string[] = ['', ''];
-  teamPlayers: any[][] = [[], []];
+  teamPlayers: Player[][] = [[], []];
   singleMatchData: any = {
     teamMatchId: 0,
     matchNumber: 0,
     matchType: '',
     teams: [
-      { id: null, players: [null, null], scores: [0, 0, 0] },
-      { id: null, players: [null, null], scores: [0, 0, 0] }
+      { id: null, players: [new Player(), new Player()], scores: [new GameScore(), new GameScore(), new GameScore()] },
+      { id: null, players: [new Player(), new Player()], scores: [new GameScore(), new GameScore(), new GameScore()] }
     ]
   };
 
@@ -106,8 +108,8 @@ export class TeamMatchComponent implements OnInit {
       matchNumber: this.matchNumber,
       matchType: '',
       teams: [
-        { id: this.teams[0].team.id, players: [null, null], scores: [0, 0, 0] },
-        { id: this.teams[1].team.id, players: [null, null], scores: [0, 0, 0] }
+        { id: this.teams[0].team.id, players: [new Player(), new Player()], scores: [0, 0, 0] },
+        { id: this.teams[1].team.id, players: [new Player(), new Player()], scores: [0, 0, 0] }
       ]
     };
   }
@@ -119,7 +121,8 @@ export class TeamMatchComponent implements OnInit {
   updateScore(teamIndex: number, scoreIndex: number, event: Event): void {
     const inputElement = event.target as HTMLInputElement;
     const newValue = inputElement.value;
-    this.singleMatchData.teams[teamIndex].scores[scoreIndex] = newValue ? parseInt(newValue, 10) : 0;
+    this.singleMatchData.teams[teamIndex].scores[scoreIndex].gameNumber = scoreIndex;
+    this.singleMatchData.teams[teamIndex].scores[scoreIndex].teamScore = newValue ? parseInt(newValue, 10) : 0;
     console.log("teamIndex", teamIndex, "scoreIndex", scoreIndex, "value", this.singleMatchData.teams[teamIndex]);
   }
 }

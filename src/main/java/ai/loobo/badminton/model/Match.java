@@ -6,7 +6,8 @@ import lombok.*;
 import javax.persistence.*;
 import java.util.Set;
 
-@EqualsAndHashCode(exclude = "team_match")
+@ToString(of={"matchNumber","type"})
+@EqualsAndHashCode(of = "match_id")
 @Builder
 @Entity
 @Table(name = "match", schema = "tournament")

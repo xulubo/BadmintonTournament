@@ -36,9 +36,9 @@ export class TournamentService {
     return this.http.delete(`${this.apiUrl}/player/${playerId}`);
   }
 
-  createTeamMatch(tournamentId: number, matchData: any): Observable<any> {
-    console.log("Creating team match with data:", matchData);
-    return this.http.post(`${this.apiUrl}/team_match`, matchData).pipe(
+  createTeamMatch(tournamentId: number, matchResult: any): Observable<any> {
+    console.log("Creating team match with data:", matchResult);
+    return this.http.post(`${this.apiUrl}/team_match`, matchResult).pipe(
       tap(
         response => console.log('Team match creation response:', response),
         error => console.error('Error creating team match:', error)
@@ -70,7 +70,7 @@ export class TournamentService {
 
   createSingleMatch(teamMatchId: number, singleMatchData: any): Observable<any> {
     console.log("singleMatchData", singleMatchData);
-    console.log("json", JSON.stringify(teamMatchId));
+    console.log("json", JSON.stringify(singleMatchData));
     return this.http.post(`${this.apiUrl}/match`, singleMatchData);
   }
 

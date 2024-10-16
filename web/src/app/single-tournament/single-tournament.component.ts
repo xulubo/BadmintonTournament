@@ -12,7 +12,7 @@ export class SingleTournamentComponent implements OnInit {
   teams: any[] = [];
   teamMatches: any[] = [];
   matchTypes: string[] = ['XD', 'MD', 'WD'];
-  matchData: any = {
+  matchResult: any = {
     tournamentId: 0,
     matchNumber: 1,
     matchType: '',
@@ -30,7 +30,7 @@ export class SingleTournamentComponent implements OnInit {
     const id = this.route.snapshot.paramMap.get('id');
     if (id !== null) {
       this.tournamentId = +id;
-      this.matchData.tournamentId = this.tournamentId;
+      this.matchResult.tournamentId = this.tournamentId;
       this.loadTeams();
       this.loadTeamMatches();
     } else {
@@ -67,7 +67,7 @@ export class SingleTournamentComponent implements OnInit {
   }
 
   createMatch(): void {
-    this.tournamentService.createTeamMatch(this.tournamentId, this.matchData)
+    this.tournamentService.createTeamMatch(this.tournamentId, this.matchResult)
       .subscribe(
         (response) => {
           console.log('Team match created successfully:', response);
@@ -91,9 +91,9 @@ export class SingleTournamentComponent implements OnInit {
   }
 
   resetForm(): void {
-    this.matchData = {
+    this.matchResult = {
       tournamentId: this.tournamentId,
-      matchNumber: this.matchData.matchNumber + 1,
+      matchNumber: this.matchResult.matchNumber + 1,
       matchType: '',
       teamIds: [null, null]
     };

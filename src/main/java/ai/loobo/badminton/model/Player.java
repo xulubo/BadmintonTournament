@@ -22,7 +22,7 @@ public class Player {
     @Column(name = "player_name", nullable = false)
     private String name;
 
-    @Column(name = "gender", nullable = false)
+    @Column(name = "gender", nullable = true)
     private Character gender;
 
     @JsonIgnore

@@ -30,4 +30,8 @@ export class TournamentService {
   addPlayer(playerName: string, teamId: number, gender: string): Observable<any> {
     return this.http.post(`${this.apiUrl}/player`, { name: playerName, teamId: teamId, gender: gender });
   }
+
+  deletePlayer(playerId: number): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/player/${playerId}`);
+  }
 }

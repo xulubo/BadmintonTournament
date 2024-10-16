@@ -43,6 +43,14 @@ public class PlayerController {
         return ResponseEntity.ok(Response.builder().status("SUCCESS").build());
     }
 
+    @DeleteMapping("/{playerId}")
+    public Response deletePlayer(
+            @PathVariable Integer playerId
+    ) {
+        playerRepository.deleteById(playerId);
+        return Response.builder().status("SUCCESS").build();
+    }
+
     @Data
     public static class PlayerVO {
         private String name;

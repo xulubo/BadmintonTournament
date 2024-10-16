@@ -70,4 +70,17 @@ export class TeamDetailsComponent implements OnInit {
         );
     }
   }
+
+  deletePlayer(playerId: number): void {
+    this.tournamentService.deletePlayer(playerId)
+      .subscribe(
+        () => {
+          console.log('Player deleted successfully');
+          this.loadPlayers(); // Reload the player list
+        },
+        (error) => {
+          console.error('Error deleting player:', error);
+        }
+      );
+  }
 }

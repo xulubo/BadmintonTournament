@@ -26,7 +26,7 @@ public class TournamentController {
         return ResponseEntity.ok(tournaments);
     }
 
-    @GetMapping("/{tournamentId}")
+    @GetMapping("/{tournamentId}/team")
     public ResponseEntity<Set<Team>> getAllTeams(
             @PathVariable Integer tournamentId
     ) {

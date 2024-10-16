@@ -4,6 +4,7 @@
 <ul>
   <li *ngFor="let player of players">
     {{ player.name }} ({{ player.gender === 'M' ? 'Male' : 'Female' }})
+    <button (click)="deletePlayer(player.id)">Delete</button>
   </li>
 </ul>
 

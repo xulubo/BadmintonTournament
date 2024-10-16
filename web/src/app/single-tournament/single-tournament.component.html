@@ -1,6 +1,8 @@
 <h2>Tournament Teams</h2>
 <ul>
   <li *ngFor="let team of teams">
-    {{ team.name }}
+    <a [routerLink]="['/team', team.id]">
+      {{ team.name }}
+    </a>
   </li>
 </ul>

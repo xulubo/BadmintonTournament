@@ -7,15 +7,19 @@ import { Tournament } from '../models/tournament';
   providedIn: 'root'
 })
 export class TournamentService {
-  private apiUrl = 'http://localhost:8080/api/tournament'; // Replace with your actual API URL
+  private apiUrl = 'http://localhost:8080/api';
 
   constructor(private http: HttpClient) { }
 
   getTournaments(): Observable<Tournament[]> {
-    return this.http.get<Tournament[]>(this.apiUrl);
+    return this.http.get<Tournament[]>(`${this.apiUrl}/tournament`);
   }
 
   getTournamentTeams(tournamentId: number): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/${tournamentId}/team`);
+    return this.http.get<any[]>(`${this.apiUrl}/tournament/${tournamentId}/team`);
+  }
+
+  getTeamPlayers(teamId: number): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/team/${teamId}/player`);
   }
 }

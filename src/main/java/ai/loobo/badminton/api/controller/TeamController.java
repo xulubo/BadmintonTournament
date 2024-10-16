@@ -11,10 +11,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collection;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/tournament/{tournamentId}/team")
+@RequestMapping("/api/team")
 public class TeamController {
 
     @Autowired
@@ -23,31 +24,34 @@ public class TeamController {
     @Autowired
     private TournamentRepository tournamentRepository;
 
-    @GetMapping("")
-    public ResponseEntity<List<Team>> getAllTeams() {
-        List<Team> teams = teamRepository.findAll();
-        return ResponseEntity.ok(teams);
-    }
+    @Autowired
+    private PlayerRepository playerRepository;
 
     @PostMapping
     public ResponseEntity<Response> createTeam(
-            @PathVariable Integer tournamentId,
             @RequestBody TeamVO team
     ) {
         teamRepository.save(Team
                 .builder()
                         .name(team.getTeamName())
-                        .tournament(tournamentRepository.findById(tournamentId).get())
+                        .tournament(tournamentRepository.findById(team.getTournamentId()).get())
                 .build()
         );
 
         return ResponseEntity.ok(Response.builder().status("SUCCESS").build());
     }
 
-
+    @GetMapping("/{teamId}/player")
+    public ResponseEntity<Collection<Player>> getPlayerList(
+            @PathVariable int teamId
+    ) {
+        return ResponseEntity
+                .ok(teamRepository.findById(teamId).get().getPlayers());
+    }
 
     @Data
     public static class TeamVO {
         private String teamName;
+        private Integer tournamentId;
     }
 }

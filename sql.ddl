@@ -25,17 +25,17 @@ CREATE TABLE player (
 -- 4. Team_Match Table
 CREATE TABLE team_match (
     team_match_id SERIAL PRIMARY KEY,
-    time TIMESTAMP,
-    team_a_id INT REFERENCES team(team_id) ON DELETE CASCADE,
-    team_b_id INT REFERENCES team(team_id) ON DELETE CASCADE
+    tournament_id INT REFERENCES tournament(tournament_id) ON DELETE CASCADE,
+    time TIMESTAMP
 );
+
 
 -- 5. Match Table
 CREATE TABLE match (
     match_id SERIAL PRIMARY KEY,
     team_match_id INT REFERENCES team_match(team_match_id) ON DELETE CASCADE,
     match_number INT NOT NULL,
-    type characteric
+    type character
 );
 
 -- 6. Game_Score Table
@@ -52,4 +52,11 @@ CREATE TABLE match_players (
     team_id INT REFERENCES team(team_id) ON DELETE CASCADE,
     player_id INT REFERENCES player(player_id) ON DELETE CASCADE,
     PRIMARY KEY (match_id, team_id, player_id)
+);
+
+-- 8.
+CREATE TABLE team_match_team (
+    team_match_team_id SERIAL PRIMARY KEY,
+    team_match_id INT REFERENCES team_match(team_match_id) ON DELETE CASCADE,
+    team_id INT REFERENCES team(team_id) ON DELETE CASCADE
 );

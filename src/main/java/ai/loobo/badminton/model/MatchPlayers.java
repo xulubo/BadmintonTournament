@@ -1,11 +1,13 @@
 package ai.loobo.badminton.model;
 
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 
 import javax.persistence.*;
 
+@Builder
 @Entity
 @Table(name = "match_players", schema = "tournament")
 @Data

@@ -34,4 +34,9 @@ export class TournamentService {
   deletePlayer(playerId: number): Observable<any> {
     return this.http.delete(`${this.apiUrl}/player/${playerId}`);
   }
+
+  createTeamMatch(tournamentId: number, matchData: any): Observable<any> {
+    console.log("matchData", matchData);
+    return this.http.post(`${this.apiUrl}/team_match`, matchData);
+  }
 }

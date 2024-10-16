@@ -1,4 +1,4 @@
-<h2>Tournament Teams</h2>
+<h2>Tournament Teams (Tournament ID: {{ tournamentId }})</h2>
 <ul>
   <li *ngFor="let team of teams">
     <a [routerLink]="['/team', team.id]">
@@ -6,3 +6,43 @@
     </a>
   </li>
 </ul>
+
+<h2>Create Team Match</h2>
+<form (ngSubmit)="createMatch()">
+  <div>
+    <label for="matchNumber">Match Number:</label>
+    <input type="number" id="matchNumber" [(ngModel)]="matchData.matchNumber" name="matchNumber" required>
+  </div>
+
+  <div>
+    <label for="matchType">Match Type:</label>
+    <select id="matchType" [(ngModel)]="matchData.matchType" name="matchType" required>
+      <option value="">Select match type</option>
+      <option *ngFor="let type of matchTypes" [value]="type">{{ type }}</option>
+    </select>
+  </div>
+
+  <ng-container *ngFor="let team of matchData.teams; let i = index">
+    <h3>Team {{ i + 1 }}</h3>
+    <div>
+      <label for="team{{i}}">Team {{ i + 1 }}:</label>
+      <select id="team{{i}}" [(ngModel)]="team.id" (change)="onTeamSelect(i)" name="team{{i}}" required>
+        <option value="">Select a team</option>
+        <option *ngFor="let t of teams" [value]="t.id">{{ t.name }}</option>
+      </select>
+    </div>
+    <div *ngFor="let player of team.players; let j = index">
+      <label for="team{{i}}Player{{j}}">Player {{ j + 1 }}:</label>
+      <select id="team{{i}}Player{{j}}" [(ngModel)]="team.players[j]" name="team{{i}}Player{{j}}" required>
+        <option value="">Select a player</option>
+        <option *ngFor="let player of teamPlayers[i]" [value]="player.id">{{ player.name }}</option>
+      </select>
+    </div>
+    <div *ngFor="let score of team.gameScores; let j = index">
+      <label for="team{{i}}Game{{j+1}}">Game {{ j + 1 }} Score:</label>
+      <input type="number" id="team{{i}}Game{{j+1}}" [(ngModel)]="team.gameScores[j]" name="team{{i}}Game{{j+1}}" required>
+    </div>
+  </ng-container>
+
+  <button type="submit">Create Match</button>
+</form>

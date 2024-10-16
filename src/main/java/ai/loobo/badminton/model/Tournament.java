@@ -1,16 +1,14 @@
 package ai.loobo.badminton.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Set;
 
 @EqualsAndHashCode(exclude = "teams")
+@ToString(exclude = "teams")
 @Entity
 @Table(name = "tournament", schema = "tournament")
 @Data

@@ -1,13 +1,14 @@
 package ai.loobo.badminton.model;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Set;
 
+@EqualsAndHashCode(exclude = "tournament")
+@Builder
 @Entity
 @Table(name = "team_match", schema = "tournament")
 @Data
@@ -23,14 +24,14 @@ public class TeamMatch {
     @Column(name = "time")
     private LocalDateTime time;
 
-    @ManyToOne
-    @JoinColumn(name = "team_a_id")
-    private Team teamA;
-
-    @ManyToOne
-    @JoinColumn(name = "team_b_id")
-    private Team teamB;
+    @OneToMany(mappedBy = "teamMatch")
+    private Set<TeamMatchTeam> teams;
 
     @OneToMany(mappedBy = "teamMatch")
     private Set<Match> matches;
+
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "tournament_id")
+    private Tournament tournament;
 }

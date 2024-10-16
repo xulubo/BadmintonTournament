@@ -11,6 +11,7 @@ import { PlayerComponent } from './player/player.component';
 import { SingleTournamentComponent } from './single-tournament/single-tournament.component';
 import { TeamDetailsComponent } from './team-details/team-details.component';
 import { TeamMatchComponent } from './team-match/team-match.component';
+import { AutoFocusDirective } from './directives/auto-focus.directive';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { TeamMatchComponent } from './team-match/team-match.component';
     PlayerComponent,
     SingleTournamentComponent,
     TeamDetailsComponent,
-    TeamMatchComponent
+    TeamMatchComponent,
+    AutoFocusDirective
   ],
   imports: [
     BrowserModule,

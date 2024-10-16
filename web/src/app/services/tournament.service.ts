@@ -64,6 +64,11 @@ export class TournamentService {
   }
 
   createSingleMatch(teamMatchId: number, singleMatchData: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/team_match/${teamMatchId}/single_match`, singleMatchData);
+    console.log("singleMatchData", singleMatchData);
+    return this.http.post(`${this.apiUrl}/match`, singleMatchData);
+  }
+
+  updateTeamMatchNumber(teamMatchId: number, matchNumber: number): Observable<any> {
+    return this.http.put(`${this.apiUrl}/team_match/${teamMatchId}/match_number`, { matchNumber });
   }
 }

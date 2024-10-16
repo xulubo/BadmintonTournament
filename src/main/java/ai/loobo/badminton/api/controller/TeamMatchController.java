@@ -28,7 +28,7 @@ public class TeamMatchController {
     ) {
         return teamMatchRepository.findById(teamMatchId).get();
     }
-    
+
     @Transactional
     @PostMapping
     public Response create(
@@ -39,14 +39,6 @@ public class TeamMatchController {
                 .build();
         teamMatchRepository.save(teamMatch);
 
-//        var match = matchRepository.save(
-//                Match.builder()
-//                        .teamMatch(teamMatch)
-//                        .matchNumber(matchData.getMatchNumber())
-//                        .type(matchData.getMatchType())
-//                        .build()
-//        );
-
         for(var teamId: matchData.teamIds) {
             var team = teamRepository.findById(teamId).get();
             var teamMatchTeam = TeamMatchTeam
@@ -55,33 +47,10 @@ public class TeamMatchController {
                     .team(team)
                     .build();
             teamMatchTeamRepository.save(teamMatchTeam);
-
-//            for(var playerId: teamData.getPlayers()) {
-//                var player = playerRepository.findById(playerId).get();
-//                matchPlayersRepository.save(
-//                        new MatchPlayers(match,team, player)
-//                );
-//            }
-//
-//            for(var score: teamData.gameScores) {
-//                gameScoreRepository.save(
-//                        GameScore.create(match,team, score)
-//                );
-//            }
         }
 
 
         return Response.builder().status("SUCCESS").build();
-    }
-
-    @Data
-    public static class TeamData {
-        private int gameScores[];
-
-        @JsonProperty("id")
-        private int teamId;
-
-        private int[] players;
     }
 
     @Data

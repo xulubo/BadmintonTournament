@@ -1,6 +1,10 @@
 <button (click)="goBack()">Back to Tournament</button>
 
 <h2>Team Match Details</h2>
+<div>
+  <label for="matchNumber">Match Number:</label>
+  <input type="number" id="matchNumber" [(ngModel)]="matchNumber" name="matchNumber" (change)="updateMatchNumber()">
+</div>
 <h3>{{ teamNames[0] }} vs {{ teamNames[1] }}</h3>
 
 <h3>Create Single Match</h3>
@@ -13,25 +17,24 @@
     </select>
   </div>
 
-  <div *ngFor="let team of teams; let i = index">
+  <div *ngFor="let team of singleMatchData.teams; let i = index">
     <h4>{{ teamNames[i] }}</h4>
-    <div>
-      <label for="team{{i+1}}Player1">Player 1:</label>
-      <select id="team{{i+1}}Player1" [(ngModel)]="singleMatchData['team' + (i+1)].player1" name="team{{i+1}}Player1" required>
+    <div *ngFor="let player of team.players; let j = index">
+      <label for="team{{i+1}}Player{{j+1}}">Player {{j+1}}:</label>
+      <select id="team{{i+1}}Player{{j+1}}" [(ngModel)]="team.players[j]" name="team{{i+1}}Player{{j+1}}" required>
         <option value="">Select player</option>
-        <option *ngFor="let player of team.players" [value]="player.id">{{ player.name }}</option>
+        <option *ngFor="let player of teamPlayers[i]" [value]="player.id">{{ player.name }}</option>
       </select>
     </div>
-    <div>
-      <label for="team{{i+1}}Player2">Player 2:</label>
-      <select id="team{{i+1}}Player2" [(ngModel)]="singleMatchData['team' + (i+1)].player2" name="team{{i+1}}Player2" required>
-        <option value="">Select player</option>
-        <option *ngFor="let player of team.players" [value]="player.id">{{ player.name }}</option>
-      </select>
-    </div>
-    <div *ngFor="let score of singleMatchData['team' + (i+1)].scores; let j = index">
+    <div *ngFor="let score of team.scores; let j = index">
       <label for="team{{i+1}}Score{{j+1}}">Score {{j+1}}:</label>
-      <input type="number" id="team{{i+1}}Score{{j+1}}" [(ngModel)]="singleMatchData['team' + (i+1)].scores[j]" name="team{{i+1}}Score{{j+1}}" required>
+      <input type="number" 
+             id="team{{i+1}}Score{{j+1}}" 
+             [(ngModel)]="team.scores[j]" 
+             name="team{{i+1}}Score{{j+1}}" 
+             required 
+             appAutoFocus 
+             maxlength="2">
     </div>
   </div>
 

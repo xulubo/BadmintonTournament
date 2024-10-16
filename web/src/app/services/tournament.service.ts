@@ -7,7 +7,7 @@ import { Tournament } from '../models/tournament';
   providedIn: 'root'
 })
 export class TournamentService {
-  private apiUrl = 'https://localhost:8080/api/tournament'; // Replace with your actual API URL
+  private apiUrl = 'http://localhost:8080/api/tournament'; // Replace with your actual API URL
 
   constructor(private http: HttpClient) { }
 

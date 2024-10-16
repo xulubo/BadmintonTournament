@@ -1,0 +1,9 @@
+<h2>Team Details</h2>
+@if (team) {
+  <h3>{{ team.name }}</h3>
+  <p>Team ID: {{ team.id }}</p>
+  <!-- Add more team details here as needed -->
+} @else {
+  <p>Loading team details...</p>
+}
+<a [routerLink]="['/tournament', team?.tournamentId]">Back to Tournament</a>

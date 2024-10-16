@@ -115,4 +115,11 @@ export class TeamMatchComponent implements OnInit {
   goBack(): void {
     this.location.back();
   }
+
+  updateScore(teamIndex: number, scoreIndex: number, event: Event): void {
+    const inputElement = event.target as HTMLInputElement;
+    const newValue = inputElement.value;
+    this.singleMatchData.teams[teamIndex].scores[scoreIndex] = newValue ? parseInt(newValue, 10) : 0;
+    console.log("teamIndex", teamIndex, "scoreIndex", scoreIndex, "value", this.singleMatchData.teams[teamIndex]);
+  }
 }

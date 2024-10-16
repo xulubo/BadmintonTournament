@@ -28,13 +28,14 @@ public class PlayerController {
         return ResponseEntity.ok(players);
     }
 
-    @PostMapping("/player")
+    @PostMapping("")
     public ResponseEntity<Response> createPlayer(
             @RequestBody PlayerVO playerVO
     ) {
         var player = Player.builder()
                 .team(teamRepository.findById(playerVO.teamId).get())
                 .name(playerVO.name)
+                .gender(playerVO.gender)
                 .build();
 
         playerRepository.save(player);
@@ -46,5 +47,6 @@ public class PlayerController {
     public static class PlayerVO {
         private String name;
         private Integer teamId;
+        private char gender;
     }
 }

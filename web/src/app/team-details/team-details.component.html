@@ -3,12 +3,16 @@
 <h2>Team Players</h2>
 <ul>
   <li *ngFor="let player of players">
-    {{ player.name }}
+    {{ player.name }} ({{ player.gender === 'M' ? 'Male' : 'Female' }})
   </li>
 </ul>
 
 <h3>Add New Player</h3>
 <form (ngSubmit)="addPlayer()">
   <input type="text" [(ngModel)]="newPlayerName" name="newPlayerName" placeholder="Enter player name" required>
+  <select [(ngModel)]="newPlayerGender" name="newPlayerGender">
+    <option value="M">Male</option>
+    <option value="F">Female</option>
+  </select>
   <button type="submit">Add Player</button>
 </form>

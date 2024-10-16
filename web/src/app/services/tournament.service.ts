@@ -27,7 +27,7 @@ export class TournamentService {
     return this.http.get<any[]>(`${this.apiUrl}/team/${teamId}/player`);
   }
 
-  addPlayer(playerName: string, teamId: number): Observable<any> {
-    return this.http.post(`${this.apiUrl}/player`, { name: playerName, teamId: teamId });
+  addPlayer(playerName: string, teamId: number, gender: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/player`, { name: playerName, teamId: teamId, gender: gender });
   }
 }

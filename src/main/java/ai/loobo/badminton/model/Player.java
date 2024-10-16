@@ -1,12 +1,11 @@
 package ai.loobo.badminton.model;
 
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 
 import javax.persistence.*;
 
+@ToString(exclude = "team")
 @Builder
 @Entity
 @Table(name = "player", schema = "tournament")
@@ -23,6 +22,10 @@ public class Player {
     @Column(name = "player_name", nullable = false)
     private String name;
 
+    @Column(name = "gender", nullable = false)
+    private Character gender;
+
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "team_id")
     private Team team;

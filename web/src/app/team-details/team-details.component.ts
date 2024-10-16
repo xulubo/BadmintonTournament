@@ -12,6 +12,7 @@ export class TeamDetailsComponent implements OnInit {
   teamName: string = '';
   players: any[] = [];
   newPlayerName: string = '';
+  newPlayerGender: string = 'M'; // Default to Male
 
   constructor(
     private route: ActivatedRoute,
@@ -55,11 +56,12 @@ export class TeamDetailsComponent implements OnInit {
 
   addPlayer(): void {
     if (this.newPlayerName.trim()) {
-      this.tournamentService.addPlayer(this.newPlayerName, this.teamId)
+      this.tournamentService.addPlayer(this.newPlayerName, this.teamId, this.newPlayerGender)
         .subscribe(
           (response) => {
             console.log('Player added successfully:', response);
             this.newPlayerName = ''; // Clear the input field
+            this.newPlayerGender = 'M'; // Reset to default
             this.loadPlayers(); // Reload the player list
           },
           (error) => {

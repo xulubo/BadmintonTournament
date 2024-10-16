@@ -1,13 +1,15 @@
 <button (click)="goBack()">Back to Tournament</button>
 
 <h2>Team Match Details</h2>
-<div>
-  <label for="matchNumber">Match Number:</label>
-  <input type="number" id="matchNumber" [(ngModel)]="matchNumber" name="matchNumber" (change)="updateMatchNumber()">
-</div>
 <h3>{{ teamNames[0] }} vs {{ teamNames[1] }}</h3>
 
 <h3>Create Single Match</h3>
+
+<div>
+  <label for="matchNumber">Match Number:</label>
+  <input type="number" id="matchNumber" [(ngModel)]="matchNumber" name="matchNumber">
+</div>
+
 <form (ngSubmit)="createSingleMatch()">
   <div>
     <label for="matchType">Match Type:</label>
@@ -33,8 +35,9 @@
              [(ngModel)]="team.scores[j]" 
              name="team{{i+1}}Score{{j+1}}" 
              required 
-             appAutoFocus 
-             maxlength="2">
+             [appAutoFocus]="false" 
+             min="0"
+             max="99">
     </div>
   </div>
 

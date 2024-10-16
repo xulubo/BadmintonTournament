@@ -58,8 +58,10 @@ public class MatchController {
 
             for(var score: teamData.scores) {
                 if (score == null) continue;
+
+                var gameScore = GameScore.create(match,team, score);
                 gameScoreRepository.save(
-                        GameScore.create(match,team, score)
+                        gameScore
                 );
             }
         }

@@ -65,6 +65,7 @@ export class TournamentService {
 
   createSingleMatch(teamMatchId: number, singleMatchData: any): Observable<any> {
     console.log("singleMatchData", singleMatchData);
+    console.log("json", JSON.stringify(teamMatchId));
     return this.http.post(`${this.apiUrl}/match`, singleMatchData);
   }
 

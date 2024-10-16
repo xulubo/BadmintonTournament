@@ -28,17 +28,21 @@ public class MatchResult {
     @JsonProperty("teams")
     private List<TeamResult> teamResults;
 
+    /**
+     * Represent each team's game results in a single match between two teams
+     */
     @Builder
     @Data
     public static class TeamResult {
         @JsonProperty("id")
         private int teamId;
 
-        // players attending the game
+        // players attending the game, must have 2 elements
         private List<Player> players;
 
         // scores of each single game
         // the list index uses for the game sequence number
+        // must have at least 2 elements
         private List<GameScore> scores;
     }
 }

@@ -74,45 +74,51 @@ public class TeamMatchController {
     ) {
         var teamMatch = teamMatchRepository.findById(teamMatchId).get();
         var allMatches = matchRepository.findAllByTeamMatch(teamMatch);
+        var matchResults = new ArrayList<MatchResult>();
 
-        var teamResults = teamMatch
-                .getTeams()
-                .stream()
-                .map(team-> MatchResult.TeamResult.builder()
-                        .teamId(team.getTeam().getId())
-                        .build()
-                )
-                .collect(Collectors.toList());
+        for(var match: allMatches) {
+            var teamResults = teamMatch
+                    .getTeams()
+                    .stream()
+                    .map(team-> MatchResult.TeamResult.builder()
+                            .teamId(team.getTeam().getId())
+                            .build()
+                    )
+                    .collect(Collectors.toList());
 
-        for(var teamResult: teamResults) {
-            teamResult.setPlayers(
-                    allMatches.stream()
-                            .flatMap(m->m.getMatchPlayers().stream())
-                            .filter(p->p.getTeam().getId() == teamResult.getTeamId())
-                            .map(p->p.getPlayer())
-                            .collect(Collectors.toList())
-            );
+            for(var teamResult: teamResults) {
+                teamResult.setPlayers(
+                        allMatches.stream()
+                                .flatMap(m->m.getMatchPlayers().stream())
+                                .filter(p->p.getTeam().getId() == teamResult.getTeamId())
+                                .filter(p->p.getMatch().getId() == match.getId())
+                                .map(p->p.getPlayer())
+                                .sorted(Comparator.comparing(Player::getGender))
+                                .collect(Collectors.toList())
+                );
 
-            teamResult.setScores(
-                    allMatches.stream()
-                            .flatMap(m->m.getGameScores().stream())
-                            .filter(s->s.getTeam().getId() == teamResult.getTeamId())
-                            .collect(Collectors.toList())
-            );
+                teamResult.setScores(
+                        allMatches.stream()
+                                .flatMap(m->m.getGameScores().stream())
+                                .filter(s->s.getTeam().getId() == teamResult.getTeamId())
+                                .filter(s->s.getMatch().getId() == match.getId())
+                                .sorted(Comparator.comparing(GameScore::getGameNumber))
+                                .collect(Collectors.toList())
+                );
+            }
+
+            var matchResult = MatchResult.builder()
+                    .teamMatchId(teamMatchId)
+                    .matchType(match.getType())
+                    .matchNumber(match.getMatchNumber())
+                    .teamResults(teamResults)
+                    .build();
+
+            matchResults.add(matchResult);
         }
 
-        return teamMatch
-                .getMatches()
-                .stream()
-                .map(match->MatchResult
-                        .builder()
-                        .teamMatchId(teamMatchId)
-                        .matchNumber(match.getMatchNumber())
-                        .matchType(match.getType())
-                        .teamResults(teamResults)
-                        .build())
-                .sorted(Comparator.comparing(MatchResult::getMatchNumber))
-                .collect(Collectors.toList());
+
+        return matchResults.stream().sorted(Comparator.comparing(MatchResult::getMatchNumber)).collect(Collectors.toList());
     }
 
     @Data

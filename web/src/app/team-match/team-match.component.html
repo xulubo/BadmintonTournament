@@ -3,6 +3,30 @@
 <h2>Team Match Details</h2>
 <h3>{{ teamNames[0] }} vs {{ teamNames[1] }}</h3>
 
+<h3>Single Matches</h3>
+<div *ngIf="singleMatches.length === 0">No single matches found.</div>
+<ul>
+  <li *ngFor="let match of singleMatches">
+    Match Type: {{ match.matchType }}
+    <ul>
+      <li *ngFor="let team of match.teams; let i = index">
+        {{ teamNames[i] }}:
+        <ul>
+          <li *ngFor="let player of team.players">
+            {{ player.name }}
+          </li>
+        </ul>
+        Scores:
+        <ul>
+          <li *ngFor="let score of team.scores">
+            Game {{ score.gameNumber + 1 }}: {{ score.teamScore }}
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
 <h3>Create Single Match</h3>
 
 <div>

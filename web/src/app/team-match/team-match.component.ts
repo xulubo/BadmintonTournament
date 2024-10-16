@@ -18,6 +18,7 @@ export class TeamMatchComponent implements OnInit {
   teams: any[] = [];
   teamNames: string[] = ['', ''];
   teamPlayers: Player[][] = [[], []];
+  singleMatches: any[] = []; // New property to store single matches
   singleMatchData: any = {
     teamMatchId: 0,
     matchNumber: 0,
@@ -40,6 +41,7 @@ export class TeamMatchComponent implements OnInit {
     if (id !== null) {
       this.teamMatchId = +id;
       this.loadTeamMatchDetails();
+      this.loadSingleMatches(); // New method to load single matches
     } else {
       console.error('Team Match ID is missing');
     }
@@ -95,6 +97,7 @@ export class TeamMatchComponent implements OnInit {
       (response) => {
         console.log('Single match created successfully:', response);
         this.resetForm();
+        this.loadSingleMatches(); // Reload single matches after creating a new one
       },
       (error) => {
         console.error('Error creating single match:', error);
@@ -124,5 +127,17 @@ export class TeamMatchComponent implements OnInit {
     this.singleMatchData.teams[teamIndex].scores[scoreIndex].gameNumber = scoreIndex;
     this.singleMatchData.teams[teamIndex].scores[scoreIndex].teamScore = newValue ? parseInt(newValue, 10) : 0;
     console.log("teamIndex", teamIndex, "scoreIndex", scoreIndex, "value", this.singleMatchData.teams[teamIndex]);
+  }
+
+  loadSingleMatches(): void {
+    this.tournamentService.getTeamMatchResults(this.teamMatchId).subscribe(
+      (data: any[]) => {
+        this.singleMatches = data;
+        console.log('Single matches loaded:', this.singleMatches);
+      },
+      (error) => {
+        console.error('Error fetching single matches:', error);
+      }
+    );
   }
 }

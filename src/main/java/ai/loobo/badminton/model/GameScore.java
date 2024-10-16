@@ -14,17 +14,20 @@ import javax.persistence.*;
 @AllArgsConstructor
 public class GameScore {
 
-    @EmbeddedId
-    private GameScoreId id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "game_score_id")
+    private Integer id;
+
+    @Column(name = "game_number")
+    private Integer gameNumber;
 
     @JsonIgnore
-    @MapsId("matchId")
     @ManyToOne
     @JoinColumn(name = "match_id")
     private Match match;
 
     @JsonIgnore
-    @MapsId("teamId")
     @ManyToOne
     @JoinColumn(name = "team_id")
     private Team team;
@@ -34,11 +37,6 @@ public class GameScore {
 
     public static GameScore create(Match match, Team team, int score) {
         return GameScore.builder()
-                .id(GameScoreId
-                        .builder()
-                        .matchId(match.getId())
-                        .teamId(team.getId())
-                        .build())
                 .teamScore(score)
                 .match(match)
                 .team(team)

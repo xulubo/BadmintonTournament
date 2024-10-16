@@ -53,6 +53,15 @@ public class TeamMatchController {
         return Response.builder().status("SUCCESS").build();
     }
 
+    @DeleteMapping("/{teamMatchId}")
+    public Response deleteTeamMatch(
+            @PathVariable int teamMatchId
+    ) {
+        teamMatchRepository.deleteById(teamMatchId);
+
+        return Response.builder().status("SUCCESS").build();
+    }
+
     @Data
     public static class MatchData {
         private int tournamentId;

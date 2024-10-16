@@ -19,11 +19,9 @@ public class MatchController {
     private final TeamMatchRepository teamMatchRepository;
     private final GameScoreRepository gameScoreRepository;
     private final TeamRepository teamRepository;
-    private final TeamMatchTeamRepository teamMatchTeamRepository;
     private final MatchRepository matchRepository;
     private final MatchPlayersRepository matchPlayersRepository;
     private final PlayerRepository playerRepository;
-    private final TournamentRepository tournamentRepository;
 
     @Transactional
     @PostMapping
@@ -42,24 +40,21 @@ public class MatchController {
 
         for(var teamData: matchData.teams) {
             var team = teamRepository.findById(teamData.getTeamId()).get();
-            var teamMatchTeam = TeamMatchTeam
-                    .builder()
-                    .teamMatch(teamMatch)
-                    .team(team)
-                    .build();
-            teamMatchTeamRepository.save(teamMatchTeam);
 
             for(var playerId: teamData.getPlayers()) {
                 var player = playerRepository.findById(playerId).get();
+                var matchPlayer = new MatchPlayers(match,team, player);
                 matchPlayersRepository.save(
-                        new MatchPlayers(match,team, player)
+                        matchPlayer
                 );
             }
 
+            int i=1;
             for(var score: teamData.scores) {
                 if (score == null) continue;
 
                 var gameScore = GameScore.create(match,team, score);
+                gameScore.setGameNumber(i++);
                 gameScoreRepository.save(
                         gameScore
                 );

@@ -40,10 +40,11 @@ CREATE TABLE match (
 
 -- 6. Game_Score Table
 CREATE TABLE game_score (
+    game_score_id SERIAL PRIMARY KEY,
+    game_number INT,
     match_id INT REFERENCES match(match_id) ON DELETE CASCADE,
     team_id INT REFERENCES team(team_id) ON DELETE CASCADE,
-    team_score INT NOT NULL,
-    PRIMARY KEY (match_id, team_id)
+    team_score INT NOT NULL
 );
 
 -- 7. Match_Players Table

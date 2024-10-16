@@ -72,4 +72,8 @@ export class TournamentService {
   updateTeamMatchNumber(teamMatchId: number, matchNumber: number): Observable<any> {
     return this.http.put(`${this.apiUrl}/team_match/${teamMatchId}/match_number`, { matchNumber });
   }
+
+  deleteTeamMatch(teamMatchId: number): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/team_match/${teamMatchId}`);
+  }
 }

@@ -91,4 +91,18 @@ export class SingleTournamentComponent implements OnInit {
       teamIds: [null, null]
     };
   }
+
+  deleteTeamMatch(matchId: number): void {
+    if (confirm('Are you sure you want to delete this team match?')) {
+      this.tournamentService.deleteTeamMatch(matchId).subscribe(
+        () => {
+          console.log('Team match deleted successfully');
+          this.loadTeamMatches(); // Reload the team matches list
+        },
+        (error) => {
+          console.error('Error deleting team match:', error);
+        }
+      );
+    }
+  }
 }

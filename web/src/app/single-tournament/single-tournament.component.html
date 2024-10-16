@@ -14,6 +14,7 @@
     <a [routerLink]="['/team-match', match.id]">
       Match ID: {{ match.id }}
     </a>
+    <button (click)="deleteTeamMatch(match.id)">Delete</button>
     <ul>
       <li *ngFor="let team of match.teams">
         Team ID: {{ team.id }} - {{ team.name }}

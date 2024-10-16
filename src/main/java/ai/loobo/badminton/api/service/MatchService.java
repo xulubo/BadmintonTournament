@@ -63,10 +63,10 @@ public class MatchService {
         matchPlayersRepository.saveAll(matchPlayersList);
 
         // Insert game scores
-        List<GameScore> gameScores = Arrays.asList(
-            new GameScore(new GameScoreId(match.getId(), team1.getId()), match, team1, team1Score),
-            new GameScore(new GameScoreId(match.getId(), team2.getId()), match, team2, team2Score)
-        );
-        gameScoreRepository.saveAll(gameScores);
+//        List<GameScore> gameScores = Arrays.asList(
+//            new GameScore(new GameScoreId(match.getId(), team1.getId()), match, team1, team1Score),
+//            new GameScore(new GameScoreId(match.getId(), team2.getId()), match, team2, team2Score)
+//        );
+//        gameScoreRepository.saveAll(gameScores);
     }
 }

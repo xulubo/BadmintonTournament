@@ -5,27 +5,41 @@
 
 <h3>Single Matches</h3>
 <div *ngIf="singleMatches.length === 0">No single matches found.</div>
-<ul>
-  <li *ngFor="let match of singleMatches">
-    Match Type: {{ match.matchType }}
-    <ul>
-      <li *ngFor="let team of match.teams; let i = index">
-        {{ teamNames[i] }}:
-        <ul>
-          <li *ngFor="let player of team.players">
-            {{ player.name }}
-          </li>
-        </ul>
-        Scores:
-        <ul>
-          <li *ngFor="let score of team.scores">
-            Game {{ score.gameNumber + 1 }}: {{ score.teamScore }}
-          </li>
-        </ul>
-      </li>
-    </ul>
-  </li>
-</ul>
+<table *ngFor="let match of singleMatches" style="margin-bottom: 20px; border-collapse: collapse; width: 100%;">
+  <tr>
+    <th colspan="5" style="text-align: center; padding: 10px; background-color: #f2f2f2;">
+      {{ teamNames[0] }} vs {{ teamNames[1] }}
+    </th>
+  </tr>
+  <tr>
+    <td style="padding: 10px; border: 1px solid #ddd;">Match Type</td>
+    <td style="padding: 10px; border: 1px solid #ddd;">{{ teamNames[0] }} Players</td>
+    <td style="padding: 10px; border: 1px solid #ddd;">{{ teamNames[1] }} Players</td>
+    <td style="padding: 10px; border: 1px solid #ddd;">Game 1</td>
+    <td style="padding: 10px; border: 1px solid #ddd;">Game 2</td>
+    <td style="padding: 10px; border: 1px solid #ddd;">Game 3</td>
+  </tr>
+  <tr>
+    <td style="padding: 10px; border: 1px solid #ddd;">{{ match.matchType }}</td>
+    <td style="padding: 10px; border: 1px solid #ddd;">
+      {{ match.teams[0].players[0].name }}<br>
+      {{ match.teams[0].players[1].name }}
+    </td>
+    <td style="padding: 10px; border: 1px solid #ddd;">
+      {{ match.teams[1].players[0].name }}<br>
+      {{ match.teams[1].players[1].name }}
+    </td>
+    <td style="padding: 10px; border: 1px solid #ddd;">
+      {{ match.teams[0].scores[0].teamScore }}:{{ match.teams[1].scores[0].teamScore }}
+    </td>
+    <td style="padding: 10px; border: 1px solid #ddd;">
+      {{ match.teams[0].scores[1].teamScore }}:{{ match.teams[1].scores[1].teamScore }}
+    </td>
+    <td style="padding: 10px; border: 1px solid #ddd;">
+      {{ match.teams[0].scores[2].teamScore }}:{{ match.teams[1].scores[2].teamScore }}
+    </td>
+  </tr>
+</table>
 
 <h3>Create Single Match</h3>
 

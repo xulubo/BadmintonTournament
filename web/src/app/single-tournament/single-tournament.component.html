@@ -7,6 +7,19 @@
   </li>
 </ul>
 
+<h2>Team Matches</h2>
+<div *ngIf="teamMatches.length === 0">No team matches found.</div>
+<ul>
+  <li *ngFor="let match of teamMatches">
+    Match ID: {{ match.id }}
+    <ul>
+      <li *ngFor="let team of match.teams">
+        Team ID: {{ team.id }} - {{ team.name }}
+      </li>
+    </ul>
+  </li>
+</ul>
+
 <h2>Create Team Match</h2>
 <form (ngSubmit)="createMatch()">
   <div>

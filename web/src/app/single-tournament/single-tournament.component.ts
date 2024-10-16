@@ -10,6 +10,7 @@ import { TournamentService } from '../services/tournament.service';
 export class SingleTournamentComponent implements OnInit {
   tournamentId: number = 0;
   teams: any[] = [];
+  teamMatches: any[] = [];
   matchTypes: string[] = ['XD', 'MD', 'WD'];
   matchData: any = {
     tournamentId: 0,
@@ -31,6 +32,7 @@ export class SingleTournamentComponent implements OnInit {
       this.tournamentId = +id;
       this.matchData.tournamentId = this.tournamentId;
       this.loadTeams();
+      this.loadTeamMatches();
     } else {
       console.error('Tournament ID is missing');
     }
@@ -41,9 +43,25 @@ export class SingleTournamentComponent implements OnInit {
       .subscribe(
         (data: any[]) => {
           this.teams = data;
+          console.log('Teams loaded:', this.teams);
         },
         (error) => {
           console.error('Error fetching teams:', error);
+        }
+      );
+  }
+
+  loadTeamMatches(): void {
+    console.log('Loading team matches for tournament:', this.tournamentId);
+    this.tournamentService.getTournamentTeamMatches(this.tournamentId)
+      .subscribe(
+        (data: any[]) => {
+          console.log('Team matches data received:', data);
+          this.teamMatches = data;
+          console.log('Team matches loaded:', this.teamMatches);
+        },
+        (error) => {
+          console.error('Error fetching team matches:', error);
         }
       );
   }
@@ -55,8 +73,7 @@ export class SingleTournamentComponent implements OnInit {
           console.log('Team match created successfully:', response);
           this.successMessage = 'Team match created successfully!';
           this.resetForm();
-          // Optionally, you can navigate to a different page or update the current page
-          // this.router.navigate(['/tournament', this.tournamentId]);
+          this.loadTeamMatches(); // Reload the team matches after creating a new one
         },
         (error) => {
           console.error('Error creating team match:', error);

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Tournament } from '../models/tournament';
+import { tap, map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -38,5 +39,23 @@ export class TournamentService {
   createTeamMatch(tournamentId: number, matchData: any): Observable<any> {
     console.log("matchData", matchData);
     return this.http.post(`${this.apiUrl}/team_match`, matchData);
+  }
+
+  getTournamentTeamMatches(tournamentId: number): Observable<any[]> {
+    console.log(`Fetching team matches for tournament ${tournamentId}`);
+    return this.http.get<any[]>(`${this.apiUrl}/tournament/${tournamentId}/team_match`)
+      .pipe(
+        tap(
+          data => console.log('Team matches data received:', data),
+          error => console.error('Error fetching team matches:', error)
+        ),
+        map(matches => matches.map(match => ({
+          id: match.id,
+          teams: match.teams.map((team: any) => ({
+            id: team.id,
+            name: team.team.name
+          }))
+        })))
+      );
   }
 }

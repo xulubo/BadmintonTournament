@@ -32,6 +32,7 @@
       <label for="team{{i+1}}Score{{j+1}}">Score {{j+1}}:</label>
       <input type="number" 
              id="team{{i+1}}Score{{j+1}}" 
+             name="team{{i+1}}Score{{j+1}}" 
              [value]="team.scores[j]"
              (change)="updateScore(i, j, $event)"
              required 

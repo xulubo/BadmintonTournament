@@ -12,3 +12,15 @@ spring:
       hibernate:
         format_sql: true
         default_schema: tournament
+
+  mvc:
+    static-path-pattern: /**
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+server:
+  error:
+    whitelabel:
+      enabled: false   # Disable the default Whitelabel error page
+    include-stacktrace: never # Do not include stack traces in the error response
+    path: /error  # Map all errors to the /error path (handled by the CustomErrorController)

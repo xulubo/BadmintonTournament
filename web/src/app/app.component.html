@@ -26,6 +26,8 @@
     <li><a routerLink="/tournament">Tournament</a></li>
     <li><a routerLink="/team">Team</a></li>
     <li><a routerLink="/player">Player</a></li>
+    <li *ngIf="!authService.currentUserValue"><a routerLink="/login">Login</a></li>
+    <li *ngIf="authService.currentUserValue"><a (click)="logout()">Logout</a></li>
   </ul>
 </nav>
 

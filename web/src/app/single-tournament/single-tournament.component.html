@@ -36,24 +36,26 @@
   </tr>
 </table>
 
-<h2>Team Matches</h2>
-<div *ngIf="teamMatches.length === 0">No team matches found.</div>
-<ul>
-  <li *ngFor="let match of teamMatches">
-    <a [routerLink]="['/team-match', match.id]">
-      Match ID: {{ match.id }}
-    </a>
-    <button (click)="deleteTeamMatch(match.id)">Delete</button>
+<div *ngIf="authService.isAdmin()">
+    <h2>Team Matches</h2>
+    <div *ngIf="teamMatches.length === 0">No team matches found.</div>
     <ul>
-      <li *ngFor="let team of match.teams">
-        Team ID: {{ team.id }} - {{ team.name }}
-      </li>
+    <li *ngFor="let match of teamMatches">
+        <a [routerLink]="['/team-match', match.id]">
+        Match ID: {{ match.id }}
+        </a>
+        <button *ngIf="authService.isAdmin()" (click)="deleteTeamMatch(match.id)">Delete</button>
+        <ul>
+        <li *ngFor="let team of match.teams">
+            Team ID: {{ team.id }} - {{ team.name }}
+        </li>
+        </ul>
+    </li>
     </ul>
-  </li>
-</ul>
+</div>
 
-<h2>Create Team Match</h2>
-<form (ngSubmit)="createMatch()">
+<h2 *ngIf="authService.isAdmin()">Create Team Match</h2>
+<form *ngIf="authService.isAdmin()" (ngSubmit)="createMatch()">
   <div>
     <label for="matchNumber">Match Number:</label>
     <input type="number" id="matchNumber" [(ngModel)]="matchResult.matchNumber" name="matchNumber" required>

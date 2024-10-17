@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TournamentService } from '../services/tournament.service';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-single-tournament',
@@ -26,7 +27,8 @@ export class SingleTournamentComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private tournamentService: TournamentService
+    private tournamentService: TournamentService,
+    public authService: AuthService
   ) { }
 
   ngOnInit(): void {
@@ -112,6 +114,10 @@ export class SingleTournamentComponent implements OnInit {
   }
 
   createMatch(): void {
+    if (!this.authService.isAdmin()) {
+      alert('You do not have permission to perform this action.');
+      return;
+    }
     this.tournamentService.createTeamMatch(this.tournamentId, this.matchResult)
       .subscribe(
         (response) => {
@@ -145,6 +151,10 @@ export class SingleTournamentComponent implements OnInit {
   }
 
   deleteTeamMatch(matchId: number): void {
+    if (!this.authService.isAdmin()) {
+      alert('You do not have permission to perform this action.');
+      return;
+    }
     if (confirm('Are you sure you want to delete this team match?')) {
       this.tournamentService.deleteTeamMatch(matchId).subscribe(
         () => {

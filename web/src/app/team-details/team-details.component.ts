@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { TournamentService } from '../services/tournament.service';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-team-details',
@@ -16,7 +17,8 @@ export class TeamDetailsComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private tournamentService: TournamentService
+    private tournamentService: TournamentService,
+    public authService: AuthService
   ) { }
 
   ngOnInit(): void {
@@ -55,6 +57,10 @@ export class TeamDetailsComponent implements OnInit {
   }
 
   addPlayer(): void {
+    if (!this.authService.isAdmin()) {
+      alert('You do not have permission to perform this action.');
+      return;
+    }
     if (this.newPlayerName.trim()) {
       this.tournamentService.addPlayer(this.newPlayerName, this.teamId, this.newPlayerGender)
         .subscribe(
@@ -72,6 +78,10 @@ export class TeamDetailsComponent implements OnInit {
   }
 
   deletePlayer(playerId: number): void {
+    if (!this.authService.isAdmin()) {
+      alert('You do not have permission to perform this action.');
+      return;
+    }
     this.tournamentService.deletePlayer(playerId)
       .subscribe(
         () => {

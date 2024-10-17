@@ -14,6 +14,8 @@ import { TeamDetailsComponent } from './team-details/team-details.component';
 import { TeamMatchComponent } from './team-match/team-match.component';
 import { AutoFocusDirective } from './directives/auto-focus.directive';
 import { PlayerMatchesComponent } from './player-matches/player-matches.component';
+import { AuthService } from './services/auth.service';
+import { LoginComponent } from './login/login.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +27,8 @@ import { PlayerMatchesComponent } from './player-matches/player-matches.componen
     TeamDetailsComponent,
     TeamMatchComponent,
     AutoFocusDirective,
-    PlayerMatchesComponent
+    PlayerMatchesComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
@@ -34,7 +37,7 @@ import { PlayerMatchesComponent } from './player-matches/player-matches.componen
     FormsModule,
     CommonModule
   ],
-  providers: [],
+  providers: [AuthService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -23,12 +23,12 @@
   <tr>
     <td style="padding: 10px; border: 1px solid #ddd;">{{ match.matchType }}</td>
     <td style="padding: 10px; border: 1px solid #ddd;">
-      {{ match.teams[0].players[0].name }}<br>
-      {{ match.teams[0].players[1].name }}
+      <a [routerLink]="['/player-matches', match.teams[0].players[0].id]">{{ match.teams[0].players[0].name }}</a><br>
+      <a [routerLink]="['/player-matches', match.teams[0].players[1].id]">{{ match.teams[0].players[1].name }}</a>
     </td>
     <td style="padding: 10px; border: 1px solid #ddd;">
-      {{ match.teams[1].players[0].name }}<br>
-      {{ match.teams[1].players[1].name }}
+      <a [routerLink]="['/player-matches', match.teams[1].players[0].id]">{{ match.teams[1].players[0].name }}</a><br>
+      <a [routerLink]="['/player-matches', match.teams[1].players[1].id]">{{ match.teams[1].players[1].name }}</a>
     </td>
     <td style="padding: 10px; border: 1px solid #ddd;">
       {{ match.teams[0].scores[0].teamScore }}:{{ match.teams[1].scores[0].teamScore }}

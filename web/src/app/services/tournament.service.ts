@@ -89,4 +89,8 @@ export class TournamentService {
   deleteSingleMatch(matchId: number): Observable<any> {
     return this.http.delete(`${this.apiUrl}/match/${matchId}`);
   }
+
+  getPlayerMatches(playerId: number): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/player/${playerId}/matches`);
+  }
 }

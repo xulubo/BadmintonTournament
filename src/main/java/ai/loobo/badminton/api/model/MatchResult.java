@@ -38,6 +38,8 @@ public class MatchResult {
         @JsonProperty("id")
         private int teamId;
 
+        private String teamName;
+
         // players attending the game, must have 2 elements
         private List<Player> players;
 
@@ -45,5 +47,13 @@ public class MatchResult {
         // the list index uses for the game sequence number
         // must have at least 2 elements
         private List<GameScore> scores;
+    }
+
+    public boolean containsPlayer(int playerId) {
+        return teamResults
+                .stream()
+                .anyMatch(
+                        t->t.getPlayers().stream().anyMatch(p->p.getId() == playerId)
+                );
     }
 }

@@ -6,6 +6,7 @@ import { PlayerComponent } from './player/player.component';
 import { SingleTournamentComponent } from './single-tournament/single-tournament.component';
 import { TeamDetailsComponent } from './team-details/team-details.component';
 import { TeamMatchComponent } from './team-match/team-match.component';
+import { PlayerMatchesComponent } from './player-matches/player-matches.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/tournament', pathMatch: 'full' },
@@ -15,6 +16,7 @@ const routes: Routes = [
   { path: 'team/:id', component: TeamDetailsComponent },
   { path: 'player', component: PlayerComponent },
   { path: 'team-match/:id', component: TeamMatchComponent },
+  { path: 'player-matches/:id', component: PlayerMatchesComponent },
 ];
 
 @NgModule({

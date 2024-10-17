@@ -1,6 +1,9 @@
 package ai.loobo.badminton.api.controller;
 
+import ai.loobo.badminton.api.model.MatchResult;
+import ai.loobo.badminton.api.model.PlayerMatches;
 import ai.loobo.badminton.api.model.Response;
+import ai.loobo.badminton.api.service.MatchService;
 import ai.loobo.badminton.model.Player;
 import ai.loobo.badminton.model.Team;
 import ai.loobo.badminton.model.TeamMatchView;
@@ -23,6 +26,7 @@ public class PlayerController {
     private final TeamRepository teamRepository;
     private final PlayerRepository playerRepository;
     private final TeamMatchViewRepository teamMatchViewRepository;
+    private final MatchService matchService;
 
     @GetMapping("")
     public ResponseEntity<List<Player>> getPlayersByTeamId(@PathVariable Integer teamId) {
@@ -48,16 +52,11 @@ public class PlayerController {
         return ResponseEntity.ok(Response.builder().status("SUCCESS").build());
     }
 
-    @GetMapping("/{playerId}/match")
-    public Collection<TeamMatchView> getMatches(
+    @GetMapping("/{playerId}/matches")
+    public PlayerMatches getMatches(
             @PathVariable Integer playerId
     ) {
-        var playedMatchIds = teamMatchViewRepository.findByPlayerId(playerId)
-                .stream()
-                .map(TeamMatchView::getMatchId)
-                .collect(Collectors.toSet());
-
-        return teamMatchViewRepository.findByMatchIdIn(playedMatchIds);
+        return matchService.getMatchResultsByPlayerId(playerId);
     };
 
     @DeleteMapping("/{playerId}")

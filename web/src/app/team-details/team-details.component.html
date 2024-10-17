@@ -3,7 +3,7 @@
 <h2>Team Players</h2>
 <ul>
   <li *ngFor="let player of players">
-    {{ player.name }} ({{ player.gender === 'M' ? 'Male' : 'Female' }})
+    <a [routerLink]="['/player-matches/', player.id]">{{ player.name }}</a> ({{ player.gender === 'M' ? 'Male' : 'Female' }})
     <button *ngIf="authService.isAdmin()" (click)="deletePlayer(player.id)">Delete</button>
   </li>
 </ul>

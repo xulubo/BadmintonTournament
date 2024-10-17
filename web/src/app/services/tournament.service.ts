@@ -112,4 +112,8 @@ export class TournamentService {
   getPlayerMatches(playerId: number): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/player/${playerId}/matches`, { headers: this.getHeaders() });
   }
+
+  getTournamentStandings(tournamentId: number): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/tournament/${tournamentId}/standing`, { headers: this.getHeaders() });
+  }
 }

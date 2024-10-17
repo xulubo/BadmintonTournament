@@ -67,12 +67,21 @@ export class SingleTournamentComponent implements OnInit {
         teamsSet.add(JSON.stringify(team));
       });
     });
-    this.teams = Array.from(teamsSet).map(team => JSON.parse(team as string));
+
+    this.tournamentService.getTournamentTeams(this.tournamentId).subscribe(
+      (data: any[]) => {
+        this.teams = data;
+      },
+      (error) => {
+        console.error('Error fetching tournament teams:', error);
+      }
+    );
+    var matchTeams = Array.from(teamsSet).map(team => JSON.parse(team as string));
     // Create uniqueTeams array with no duplicate names
-    this.uniqueTeams = Array.from(new Set(this.teams.map(t => t.name)))
-      .map(name => this.teams.find(t => t.name === name));
-    console.log('Extracted teams:', this.teams);
-    console.log('Unique teams:', this.uniqueTeams);
+    this.uniqueTeams = Array.from(new Set(matchTeams.map(t => t.name)))
+      .map(name => matchTeams.find(t => t.name === name));
+    console.log('Extracted matchTeams:', matchTeams);
+    console.log('Unique matchTeams:', this.uniqueTeams);
   }
 
   initializeResultMatrix(): void {

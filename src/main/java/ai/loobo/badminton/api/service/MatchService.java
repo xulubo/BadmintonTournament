@@ -2,14 +2,19 @@ package ai.loobo.badminton.api.service;
 
 import ai.loobo.badminton.api.model.MatchResult;
 import ai.loobo.badminton.api.model.PlayerMatches;
+import ai.loobo.badminton.api.model.TeamScore;
 import ai.loobo.badminton.model.*;
 import ai.loobo.badminton.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -22,6 +27,15 @@ public class MatchService {
     private final MatchPlayersRepository matchPlayersRepository;
     private final GameScoreRepository gameScoreRepository;
     private final TeamMatchRepository teamMatchRepository;
+    private final JdbcTemplate jdbcTemplate;
+    private static String SQL_STANDING = "SELECT " +
+            " t.team_name team_name, " +
+            " sum(case when total_wins>2 then 1 else 0 end) team_wins, " +
+            " sum(total_wins) match_wins " +
+            " FROM tournament.team_match_team tmt " +
+            " JOIN tournament.team t on tmt.team_id = t.team_id and t.tournament_id = ?" +
+            " GROUP BY team_name " +
+            " order by team_wins DESC, match_wins DESC";
 
     public Collection<MatchResult> getMatchResults(int teamMatchId) {
         var teamMatch = teamMatchRepository.findById(teamMatchId).get();
@@ -39,6 +53,27 @@ public class MatchService {
                 .player(player)
                 .matches(matchResultList)
                 .build();
+    }
+
+    public List<TeamScore> getStanding(int tournamentId) {
+        return jdbcTemplate.query(SQL_STANDING, new Object[]{tournamentId}, (RowMapper<TeamScore>) (rs, rowNum) -> {
+            String teamName = rs.getString("team_name");
+            int teamWins = rs.getInt("team_wins");
+            int matchWins = rs.getInt("match_wins");
+
+            return new TeamScore(teamName, teamWins, matchWins);
+        });
+    }
+
+    private static class TeamScoreRowMapper implements RowMapper<TeamScore> {
+        @Override
+        public TeamScore mapRow(ResultSet rs, int rowNum) throws SQLException {
+            String teamName = rs.getString("team_name");
+            int teamWins = rs.getInt("team_wins");
+            int matchWins = rs.getInt("match_wins");
+
+            return new TeamScore(teamName, teamWins, matchWins);
+        }
     }
 
     private Collection<MatchResult> getMatchResults(

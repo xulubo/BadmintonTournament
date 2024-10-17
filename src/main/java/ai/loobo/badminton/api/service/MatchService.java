@@ -31,6 +31,7 @@ public class MatchService {
     private static String SQL_STANDING = "SELECT " +
             " t.team_name team_name, " +
             " sum(case when total_wins>2 then 1 else 0 end) team_wins, " +
+            " sum(case when total_wins<2 then 1 else 0 end) team_losts, " +
             " sum(total_wins) match_wins " +
             " FROM tournament.team_match_team tmt " +
             " JOIN tournament.team t on tmt.team_id = t.team_id and t.tournament_id = ?" +
@@ -59,21 +60,11 @@ public class MatchService {
         return jdbcTemplate.query(SQL_STANDING, new Object[]{tournamentId}, (RowMapper<TeamScore>) (rs, rowNum) -> {
             String teamName = rs.getString("team_name");
             int teamWins = rs.getInt("team_wins");
+            int teamLosts = rs.getInt("team_losts");
             int matchWins = rs.getInt("match_wins");
 
-            return new TeamScore(teamName, teamWins, matchWins);
+            return new TeamScore(teamName, teamWins, teamLosts, matchWins);
         });
-    }
-
-    private static class TeamScoreRowMapper implements RowMapper<TeamScore> {
-        @Override
-        public TeamScore mapRow(ResultSet rs, int rowNum) throws SQLException {
-            String teamName = rs.getString("team_name");
-            int teamWins = rs.getInt("team_wins");
-            int matchWins = rs.getInt("match_wins");
-
-            return new TeamScore(teamName, teamWins, matchWins);
-        }
     }
 
     private Collection<MatchResult> getMatchResults(

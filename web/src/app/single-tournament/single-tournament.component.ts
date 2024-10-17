@@ -23,6 +23,7 @@ export class SingleTournamentComponent implements OnInit {
   successMessage: string = '';
   resultMatrix: any[][] = [];
   resultMatrixWithIds: any[][] = []; // New property to store match IDs
+  standings: any[] = []; // New property for team standings
 
   constructor(
     private route: ActivatedRoute,
@@ -37,6 +38,7 @@ export class SingleTournamentComponent implements OnInit {
       this.tournamentId = +id;
       this.matchResult.tournamentId = this.tournamentId;
       this.loadTeamMatches();
+      this.loadStandings(); // New method call
     } else {
       console.error('Tournament ID is missing');
     }
@@ -181,5 +183,17 @@ export class SingleTournamentComponent implements OnInit {
     if (matchId !== null && result !== '-' && result !== '0:0') {
       this.router.navigate(['/team-match', matchId]);
     }
+  }
+
+  loadStandings(): void {
+    this.tournamentService.getTournamentStandings(this.tournamentId).subscribe(
+      (data: any[]) => {
+        this.standings = data;
+        console.log('Standings loaded:', this.standings);
+      },
+      (error) => {
+        console.error('Error fetching standings:', error);
+      }
+    );
   }
 }

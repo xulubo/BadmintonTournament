@@ -36,6 +36,26 @@
   </tr>
 </table>
 
+<h3>Team Standings</h3>
+<table style="border-collapse: collapse; width: 100%;">
+  <thead>
+    <tr>
+      <th style="padding: 10px; border: 1px solid #ddd;">Rank</th>
+      <th style="padding: 10px; border: 1px solid #ddd;">Team Name</th>
+      <th style="padding: 10px; border: 1px solid #ddd;">Team Wins</th>
+      <th style="padding: 10px; border: 1px solid #ddd;">Match Wins</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let team of standings; let i = index">
+      <td style="padding: 10px; border: 1px solid #ddd;">{{ i + 1 }}</td>
+      <td style="padding: 10px; border: 1px solid #ddd;">{{ team.teamName }}</td>
+      <td style="padding: 10px; border: 1px solid #ddd;">{{ team.teamWins }}</td>
+      <td style="padding: 10px; border: 1px solid #ddd;">{{ team.matchWins }}</td>
+    </tr>
+  </tbody>
+</table>
+
 <div *ngIf="authService.isAdmin()">
     <h2>Team Matches</h2>
     <div *ngIf="teamMatches.length === 0">No team matches found.</div>
@@ -84,4 +104,5 @@
   {{ successMessage }}
 </div>
 
-<a [routerLink]="['/tournament', tournamentId, 'standings']">View Team Standings</a>
+<!-- Remove or comment out this line as it's no longer needed -->
+<!-- <a [routerLink]="['/tournament', tournamentId, 'standings']">View Team Standings</a> -->

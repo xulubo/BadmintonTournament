@@ -29,6 +29,9 @@ public class TeamMatchTeam {
     @Column(name = "team_match_team_id")
     private Integer id;
 
+    @Column(name = "total_wins")
+    private Integer totalWins;
+
     @ManyToOne
     @JoinColumn(name = "team_id")
     private Team team;

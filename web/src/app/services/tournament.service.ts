@@ -9,12 +9,24 @@ import { AuthService } from './auth.service';
   providedIn: 'root'
 })
 export class TournamentService {
-  private apiUrl = 'http://localhost:8080/api';
+  private apiUrl: string;
 
   constructor(
     private http: HttpClient,
     private authService: AuthService
-  ) { }
+  ) {
+    this.apiUrl = this.getApiUrl();
+  }
+
+  private getApiUrl(): string {
+    const hostname = window.location.hostname;
+    if (hostname === 'localhost' || hostname === '127.0.0.1') {
+      return 'http://localhost:8080/api';
+    } else {
+      // Use the same host as the web app
+      return `${window.location.protocol}//${window.location.host}/api`;
+    }
+  }
 
   private getHeaders(): HttpHeaders {
     const currentUser = this.authService.currentUserValue;

@@ -1,0 +1,20 @@
+<h2>Team Standings</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Rank</th>
+      <th>Team Name</th>
+      <th>Team Wins</th>
+      <th>Match Wins</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let team of standings; let i = index">
+      <td>{{ i + 1 }}</td>
+      <td>{{ team.teamName }}</td>
+      <td>{{ team.teamWins }}</td>
+      <td>{{ team.matchWins }}</td>
+    </tr>
+  </tbody>
+</table>

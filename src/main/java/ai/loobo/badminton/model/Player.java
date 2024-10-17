@@ -1,11 +1,13 @@
 package ai.loobo.badminton.model;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 
 import javax.persistence.*;
 
+@EqualsAndHashCode(exclude = "team")
+@ToString(exclude = "team")
+@Builder
 @Entity
 @Table(name = "player", schema = "tournament")
 @Data
@@ -21,6 +23,19 @@ public class Player {
     @Column(name = "player_name", nullable = false)
     private String name;
 
+    @Column(name = "first_name", nullable = true)
+    private String firstName;
+
+    @Column(name = "last_name", nullable = true)
+    private String lastName;
+
+    @Column(name = "comment", nullable = true)
+    private String comment;
+
+    @Column(name = "gender", nullable = true)
+    private Character gender;
+
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "team_id")
     private Team team;

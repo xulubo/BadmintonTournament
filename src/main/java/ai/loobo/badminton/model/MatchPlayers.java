@@ -1,11 +1,12 @@
 package ai.loobo.badminton.model;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 
 import javax.persistence.*;
 
+@EqualsAndHashCode(exclude = {"match", "team", "player"})
+@Builder
 @Entity
 @Table(name = "match_players", schema = "tournament")
 @Data
@@ -16,11 +17,13 @@ public class MatchPlayers {
     @EmbeddedId
     private MatchPlayersId id;
 
+    @JsonIgnore
     @MapsId("matchId")
     @ManyToOne
     @JoinColumn(name = "match_id")
     private Match match;
 
+    @JsonIgnore
     @MapsId("teamId")
     @ManyToOne
     @JoinColumn(name = "team_id")

@@ -1,11 +1,12 @@
 package ai.loobo.badminton.model;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 
 import javax.persistence.*;
 
+@EqualsAndHashCode(exclude = {"match","team"})
+@Builder
 @Entity
 @Table(name = "game_score", schema = "tournament")
 @Data
@@ -13,19 +14,32 @@ import javax.persistence.*;
 @AllArgsConstructor
 public class GameScore {
 
-    @EmbeddedId
-    private GameScoreId id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "game_score_id")
+    private Integer id;
 
-    @MapsId("matchId")
+    @Column(name = "game_number")
+    private Integer gameNumber;
+
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "match_id")
     private Match match;
 
-    @MapsId("teamId")
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "team_id")
     private Team team;
 
     @Column(name = "team_score", nullable = false)
     private Integer teamScore;
+
+    public static GameScore create(Match match, Team team, int score) {
+        return GameScore.builder()
+                .teamScore(score)
+                .match(match)
+                .team(team)
+                .build();
+    }
 }

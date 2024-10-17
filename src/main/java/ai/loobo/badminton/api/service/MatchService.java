@@ -1,72 +1,123 @@
 package ai.loobo.badminton.api.service;
 
+import ai.loobo.badminton.api.model.MatchResult;
+import ai.loobo.badminton.api.model.PlayerMatches;
+import ai.loobo.badminton.api.model.TeamScore;
 import ai.loobo.badminton.model.*;
 import ai.loobo.badminton.repository.*;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PathVariable;
 
-import java.util.Arrays;
-import java.util.List;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class MatchService {
+    private final TeamRepository teamRepository;
+    private final PlayerRepository playerRepository;
+    private final MatchRepository matchRepository;
+    private final MatchPlayersRepository matchPlayersRepository;
+    private final GameScoreRepository gameScoreRepository;
+    private final TeamMatchRepository teamMatchRepository;
+    private final JdbcTemplate jdbcTemplate;
+    private static String SQL_STANDING = "SELECT " +
+            " t.team_name team_name, " +
+            " sum(case when total_wins>2 then 1 else 0 end) team_wins, " +
+            " sum(case when total_wins<2 then 1 else 0 end) team_losts, " +
+            " sum(total_wins) match_wins " +
+            " FROM tournament.team_match_team tmt " +
+            " JOIN tournament.team t on tmt.team_id = t.team_id and t.tournament_id = ?" +
+            " GROUP BY team_name " +
+            " order by team_wins DESC, match_wins DESC";
 
-    @Autowired
-    private TeamRepository teamRepository;
+    public Collection<MatchResult> getMatchResults(int teamMatchId) {
+        var teamMatch = teamMatchRepository.findById(teamMatchId).get();
+        return getMatchResults(teamMatch);
+    }
 
-    @Autowired
-    private PlayerRepository playerRepository;
+    public PlayerMatches getMatchResultsByPlayerId(int playerId) {
+        var player = playerRepository.findById(playerId).get();
+        var matchResultList = teamMatchRepository.findAll()
+                .stream()
+                .flatMap(m->getMatchResults(m).stream())
+                .filter(m->m.containsPlayer(playerId))
+                .collect(Collectors.toList());
+        return PlayerMatches.builder()
+                .player(player)
+                .matches(matchResultList)
+                .build();
+    }
 
-    @Autowired
-    private MatchRepository matchRepository;
+    public List<TeamScore> getStanding(int tournamentId) {
+        return jdbcTemplate.query(SQL_STANDING, new Object[]{tournamentId}, (RowMapper<TeamScore>) (rs, rowNum) -> {
+            String teamName = rs.getString("team_name");
+            int teamWins = rs.getInt("team_wins");
+            int teamLosts = rs.getInt("team_losts");
+            int matchWins = rs.getInt("match_wins");
 
-    @Autowired
-    private MatchPlayersRepository matchPlayersRepository;
+            return new TeamScore(teamName, teamWins, teamLosts, matchWins);
+        });
+    }
 
-    @Autowired
-    private GameScoreRepository gameScoreRepository;
+    private Collection<MatchResult> getMatchResults(
+            TeamMatch teamMatch
+    ) {
+        var allMatches = matchRepository.findAllByTeamMatch(teamMatch);
+        var matchResults = new ArrayList<MatchResult>();
 
-    @Transactional
-    public void insertMatchData(
-            int matchNumber,
-            Integer team1Id, Integer team1Player1Id, Integer team1Player2Id, Integer team1Score,
-                                Integer team2Id, Integer team2Player1Id, Integer team2Player2Id, Integer team2Score) {
-        // Get teams
-        Team team1 = teamRepository.findById(team1Id)
-            .orElseThrow(() -> new RuntimeException("Team not found with id: " + team1Id));
-        Team team2 = teamRepository.findById(team2Id)
-            .orElseThrow(() -> new RuntimeException("Team not found with id: " + team2Id));
+        for(var match: allMatches) {
+            var teamResults = teamMatch
+                    .getTeams()
+                    .stream()
+                    .map(team-> MatchResult.TeamResult.builder()
+                            .teamName(team.getTeam().getName())
+                            .teamId(team.getTeam().getId())
+                            .totalWins(team.getTotalWins())
+                            .build()
+                    )
+                    .collect(Collectors.toList());
 
-        // Get players
-        Player team1Player1 = playerRepository.findById(team1Player1Id)
-            .orElseThrow(() -> new RuntimeException("Player not found with id: " + team1Player1Id));
-        Player team1Player2 = playerRepository.findById(team1Player2Id)
-            .orElseThrow(() -> new RuntimeException("Player not found with id: " + team1Player2Id));
-        Player team2Player1 = playerRepository.findById(team2Player1Id)
-            .orElseThrow(() -> new RuntimeException("Player not found with id: " + team2Player1Id));
-        Player team2Player2 = playerRepository.findById(team2Player2Id)
-            .orElseThrow(() -> new RuntimeException("Player not found with id: " + team2Player2Id));
+            for(var teamResult: teamResults) {
+                teamResult.setPlayers(
+                        allMatches.stream()
+                                .flatMap(m->m.getMatchPlayers().stream())
+                                .filter(p->p.getTeam().getId() == teamResult.getTeamId())
+                                .filter(p->p.getMatch().getId() == match.getId())
+                                .map(p->p.getPlayer())
+                                .sorted(Comparator.comparing(Player::getGender))
+                                .collect(Collectors.toList())
+                );
 
-        // Create a new match
-        Match match = new Match();
-        match.setMatchNumber(matchNumber);
-        match = matchRepository.save(match);
+                teamResult.setScores(
+                        allMatches.stream()
+                                .flatMap(m->m.getGameScores().stream())
+                                .filter(s->s.getTeam().getId() == teamResult.getTeamId())
+                                .filter(s->s.getMatch().getId() == match.getId())
+                                .sorted(Comparator.comparing(GameScore::getGameNumber))
+                                .collect(Collectors.toList())
+                );
+            }
 
-        // Insert match players
-        List<MatchPlayers> matchPlayersList = Arrays.asList(
-            new MatchPlayers(match, team1, team1Player1),
-            new MatchPlayers(match, team1, team1Player2),
-            new MatchPlayers(match, team2, team2Player1),
-            new MatchPlayers(match, team2, team2Player2)
-        );
-        matchPlayersRepository.saveAll(matchPlayersList);
+            var matchResult = MatchResult.builder()
+                    .teamMatchId(teamMatch.getId())
+                    .matchId(match.getId())
+                    .matchType(match.getType())
+                    .matchNumber(match.getMatchNumber())
+                    .teamResults(teamResults)
+                    .build();
 
-        // Insert game scores
-        List<GameScore> gameScores = Arrays.asList(
-            new GameScore(new GameScoreId(match.getId(), team1.getId()), match, team1, team1Score),
-            new GameScore(new GameScoreId(match.getId(), team2.getId()), match, team2, team2Score)
-        );
-        gameScoreRepository.saveAll(gameScores);
+            matchResults.add(matchResult);
+        }
+
+
+        return matchResults.stream().sorted(Comparator.comparing(MatchResult::getMatchNumber)).collect(Collectors.toList());
     }
 }

@@ -1,13 +1,12 @@
 package ai.loobo.badminton.model;
 
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.Set;
 
+@EqualsAndHashCode(exclude = "tournament")
 @Builder
 @Entity
 @Table(name = "team", schema = "tournament")
@@ -24,12 +23,11 @@ public class Team {
     @Column(name = "team_name", nullable = false)
     private String name;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "tournament_id")
     private Tournament tournament;
 
     @OneToMany(mappedBy = "team")
     private Set<Player> players;
-
-    // Getters and setters
 }

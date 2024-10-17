@@ -21,6 +21,7 @@ export class SingleTournamentComponent implements OnInit {
   };
   successMessage: string = '';
   resultMatrix: any[][] = [];
+  resultMatrixWithIds: any[][] = []; // New property to store match IDs
 
   constructor(
     private route: ActivatedRoute,
@@ -78,6 +79,11 @@ export class SingleTournamentComponent implements OnInit {
         team.id === opponent.id ? '-' : '0:0'
       )
     );
+    this.resultMatrixWithIds = this.uniqueTeams.map(team => 
+      this.uniqueTeams.map(opponent => 
+        team.id === opponent.id ? null : null
+      )
+    );
   }
 
   updateResultMatrix(): void {
@@ -89,11 +95,20 @@ export class SingleTournamentComponent implements OnInit {
         const team1Wins = match.teams[0].totalWins || 0;
         const team2Wins = match.teams[1].totalWins || 0;
         
-        this.resultMatrix[team1Index][team2Index] = `${team1Wins}:${team2Wins}`;
-        this.resultMatrix[team2Index][team1Index] = `${team2Wins}:${team1Wins}`;
+        if (team1Wins !== 0 || team2Wins !== 0) {
+          this.resultMatrix[team1Index][team2Index] = `${team1Wins}:${team2Wins}`;
+          this.resultMatrix[team2Index][team1Index] = `${team2Wins}:${team1Wins}`;
+        } else {
+          this.resultMatrix[team1Index][team2Index] = '';
+          this.resultMatrix[team2Index][team1Index] = '';
+        }
+        
+        this.resultMatrixWithIds[team1Index][team2Index] = match.id;
+        this.resultMatrixWithIds[team2Index][team1Index] = match.id;
       }
     });
     console.log('Updated result matrix:', this.resultMatrix);
+    console.log('Updated result matrix with IDs:', this.resultMatrixWithIds);
   }
 
   createMatch(): void {
@@ -140,6 +155,12 @@ export class SingleTournamentComponent implements OnInit {
           console.error('Error deleting team match:', error);
         }
       );
+    }
+  }
+
+  navigateToTeamMatch(matchId: number | null, result: string): void {
+    if (matchId !== null && result !== '-' && result !== '0:0') {
+      this.router.navigate(['/team-match', matchId]);
     }
   }
 }

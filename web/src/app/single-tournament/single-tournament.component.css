@@ -1,1 +1,10 @@
 /* You can add component-specific styles here */
+
+.clickable-score:hover {
+  color: darkblue !important;
+}
+
+.non-clickable-score {
+  color: #888;
+  cursor: default;
+}

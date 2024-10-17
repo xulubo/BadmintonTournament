@@ -15,7 +15,24 @@
   </tr>
   <tr *ngFor="let row of resultMatrix; let i = index">
     <th style="padding: 10px; border: 1px solid #ddd;">{{ uniqueTeams[i].name }}</th>
-    <td *ngFor="let result of row" style="padding: 10px; border: 1px solid #ddd; text-align: center;">{{ result }}</td>
+    <td *ngFor="let result of row; let j = index" 
+        style="padding: 10px; border: 1px solid #ddd; text-align: center;"
+        [ngStyle]="{'cursor': result && result !== '-' ? 'pointer' : 'default'}"
+        (click)="navigateToTeamMatch(resultMatrixWithIds[i][j], result)">
+      <ng-container *ngIf="result && result !== '-' && result !== '0:0'">
+        <span [ngStyle]="{
+          'color': 'blue',
+          'text-decoration': 'underline',
+          'transition': 'color 0.3s'
+        }"
+        class="clickable-score">
+          {{ result }}
+        </span>
+      </ng-container>
+      <span *ngIf="result === '-'" class="non-clickable-score">
+        -
+      </span>
+    </td>
   </tr>
 </table>
 

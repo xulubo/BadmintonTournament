@@ -54,6 +54,7 @@ public class MatchService {
                     .map(team-> MatchResult.TeamResult.builder()
                             .teamName(team.getTeam().getName())
                             .teamId(team.getTeam().getId())
+                            .totalWins(team.getTotalWins())
                             .build()
                     )
                     .collect(Collectors.toList());

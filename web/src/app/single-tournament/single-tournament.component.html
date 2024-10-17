@@ -7,6 +7,18 @@
   </li>
 </ul>
 
+<h3>Match Result Matrix</h3>
+<table style="border-collapse: collapse; width: 100%;">
+  <tr>
+    <th style="padding: 10px; border: 1px solid #ddd;">Teams</th>
+    <th *ngFor="let team of uniqueTeams" style="padding: 10px; border: 1px solid #ddd;">{{ team.name }}</th>
+  </tr>
+  <tr *ngFor="let row of resultMatrix; let i = index">
+    <th style="padding: 10px; border: 1px solid #ddd;">{{ uniqueTeams[i].name }}</th>
+    <td *ngFor="let result of row" style="padding: 10px; border: 1px solid #ddd; text-align: center;">{{ result }}</td>
+  </tr>
+</table>
+
 <h2>Team Matches</h2>
 <div *ngIf="teamMatches.length === 0">No team matches found.</div>
 <ul>

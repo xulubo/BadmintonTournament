@@ -65,7 +65,8 @@ CREATE TABLE match_players (
 CREATE TABLE team_match_team (
     team_match_team_id SERIAL PRIMARY KEY,
     team_match_id INT REFERENCES team_match(team_match_id) ON DELETE CASCADE,
-    team_id INT REFERENCES team(team_id) ON DELETE CASCADE
+    team_id INT REFERENCES team(team_id) ON DELETE CASCADE,
+    total_wins INT
 );
 
 

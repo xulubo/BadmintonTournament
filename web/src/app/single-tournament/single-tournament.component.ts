@@ -10,6 +10,7 @@ import { TournamentService } from '../services/tournament.service';
 export class SingleTournamentComponent implements OnInit {
   tournamentId: number = 0;
   teams: any[] = [];
+  uniqueTeams: any[] = []; // New property for unique teams
   teamMatches: any[] = [];
   matchTypes: string[] = ['XD', 'MD', 'WD'];
   matchResult: any = {
@@ -19,6 +20,7 @@ export class SingleTournamentComponent implements OnInit {
     teamIds: [null, null]
   };
   successMessage: string = '';
+  resultMatrix: any[][] = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -31,24 +33,10 @@ export class SingleTournamentComponent implements OnInit {
     if (id !== null) {
       this.tournamentId = +id;
       this.matchResult.tournamentId = this.tournamentId;
-      this.loadTeams();
       this.loadTeamMatches();
     } else {
       console.error('Tournament ID is missing');
     }
-  }
-
-  loadTeams(): void {
-    this.tournamentService.getTournamentTeams(this.tournamentId)
-      .subscribe(
-        (data: any[]) => {
-          this.teams = data;
-          console.log('Teams loaded:', this.teams);
-        },
-        (error) => {
-          console.error('Error fetching teams:', error);
-        }
-      );
   }
 
   loadTeamMatches(): void {
@@ -58,12 +46,54 @@ export class SingleTournamentComponent implements OnInit {
         (data: any[]) => {
           console.log('Team matches data received:', data);
           this.teamMatches = data;
+          this.extractTeams();
+          this.initializeResultMatrix();
+          this.updateResultMatrix();
           console.log('Team matches loaded:', this.teamMatches);
         },
         (error) => {
           console.error('Error fetching team matches:', error);
         }
       );
+  }
+
+  extractTeams(): void {
+    const teamsSet = new Set();
+    this.teamMatches.forEach(match => {
+      match.teams.forEach((team: any) => {
+        teamsSet.add(JSON.stringify(team));
+      });
+    });
+    this.teams = Array.from(teamsSet).map(team => JSON.parse(team as string));
+    // Create uniqueTeams array with no duplicate names
+    this.uniqueTeams = Array.from(new Set(this.teams.map(t => t.name)))
+      .map(name => this.teams.find(t => t.name === name));
+    console.log('Extracted teams:', this.teams);
+    console.log('Unique teams:', this.uniqueTeams);
+  }
+
+  initializeResultMatrix(): void {
+    this.resultMatrix = this.uniqueTeams.map(team => 
+      this.uniqueTeams.map(opponent => 
+        team.id === opponent.id ? '-' : '0:0'
+      )
+    );
+  }
+
+  updateResultMatrix(): void {
+    this.teamMatches.forEach(match => {
+      const team1Index = this.uniqueTeams.findIndex(t => t.id === match.teams[0].id);
+      const team2Index = this.uniqueTeams.findIndex(t => t.id === match.teams[1].id);
+      
+      if (team1Index !== -1 && team2Index !== -1) {
+        const team1Wins = match.teams[0].totalWins || 0;
+        const team2Wins = match.teams[1].totalWins || 0;
+        
+        this.resultMatrix[team1Index][team2Index] = `${team1Wins}:${team2Wins}`;
+        this.resultMatrix[team2Index][team1Index] = `${team2Wins}:${team1Wins}`;
+      }
+    });
+    console.log('Updated result matrix:', this.resultMatrix);
   }
 
   createMatch(): void {

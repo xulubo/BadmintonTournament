@@ -57,8 +57,9 @@ export class TournamentService {
         map(matches => matches.map(match => ({
           id: match.id,
           teams: match.teams.map((team: any) => ({
-            id: team.id,
-            name: team.team.name
+            id: team.team.id,
+            name: team.team.name,
+            totalWins: team.totalWins
           }))
         })))
       );

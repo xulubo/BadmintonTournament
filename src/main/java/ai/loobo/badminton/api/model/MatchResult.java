@@ -40,6 +40,8 @@ public class MatchResult {
 
         private String teamName;
 
+        private int totalWins;
+
         // players attending the game, must have 2 elements
         private List<Player> players;
 

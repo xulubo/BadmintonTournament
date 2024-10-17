@@ -16,7 +16,7 @@ public class LoginController {
             @RequestBody LoginRequest loginRequest
     ) {
         var role = loginRequest.getPassword()
-                .equals("8Mondeo123!") ? "ADMIN" : "USER";
+                .equals("yushengroup") ? "ADMIN" : "USER";
         return LoginResponse.builder()
                 .id(1)
                 .role(role)

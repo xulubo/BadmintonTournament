@@ -25,7 +25,7 @@ public class MatchGroupController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<MatchGroup> getMatchGroupById(@PathVariable Long id) {
+    public ResponseEntity<MatchGroup> getMatchGroupById(@PathVariable Integer id) {
         Optional<MatchGroup> matchGroup = matchGroupRepository.findById(id);
         return matchGroup.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
@@ -37,7 +37,7 @@ public class MatchGroupController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<MatchGroup> updateMatchGroup(@PathVariable Long id, @RequestBody MatchGroup matchGroupDetails) {
+    public ResponseEntity<MatchGroup> updateMatchGroup(@PathVariable Integer id, @RequestBody MatchGroup matchGroupDetails) {
         Optional<MatchGroup> matchGroup = matchGroupRepository.findById(id);
         if (matchGroup.isPresent()) {
             MatchGroup updatedMatchGroup = matchGroup.get();
@@ -53,7 +53,7 @@ public class MatchGroupController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteMatchGroup(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteMatchGroup(@PathVariable Integer id) {
         Optional<MatchGroup> matchGroup = matchGroupRepository.findById(id);
         if (matchGroup.isPresent()) {
             matchGroupRepository.delete(matchGroup.get());

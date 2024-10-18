@@ -2,9 +2,11 @@ package ai.loobo.badminton.api.controller;
 
 import ai.loobo.badminton.api.model.TeamScore;
 import ai.loobo.badminton.api.service.MatchService;
+import ai.loobo.badminton.model.MatchGroup;
 import ai.loobo.badminton.model.Team;
 import ai.loobo.badminton.model.TeamMatch;
 import ai.loobo.badminton.model.Tournament;
+import ai.loobo.badminton.repository.MatchGroupRepository;
 import ai.loobo.badminton.repository.TeamMatchRepository;
 import ai.loobo.badminton.repository.TeamMatchTeamRepository;
 import ai.loobo.badminton.repository.TournamentRepository;
@@ -26,6 +28,7 @@ import java.util.Set;
 public class TournamentController {
     private final TournamentRepository tournamentRepository;
     private final TeamMatchRepository teamMatchRepository;
+    private final MatchGroupRepository matchGroupRepository;
     private final MatchService matchService;
 
     @GetMapping("")
@@ -43,6 +46,16 @@ public class TournamentController {
                 .get()
                 .getTeams();
         return ResponseEntity.ok(teams);
+    }
+
+    @GetMapping("/{tournamentId}/match-groups")
+    public Collection<MatchGroup> getMatchGroups(
+            @PathVariable Integer tournamentId
+    ) {
+        var tournament = tournamentRepository.findById(tournamentId).get()
+                ;
+
+        return matchGroupRepository.findAllByTournament(tournament);
     }
 
     @GetMapping("/{tournamentId}/team_match")

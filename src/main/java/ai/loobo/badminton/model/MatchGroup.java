@@ -1,5 +1,6 @@
 package ai.loobo.badminton.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import javax.persistence.*;
 import java.util.Set;
@@ -19,6 +20,7 @@ public class MatchGroup {
     @Column(name = "group_name", nullable = false)
     private String groupName;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "tournament_id", nullable = false)
     private Tournament tournament;

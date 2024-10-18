@@ -11,7 +11,9 @@ public class TeamScore {
     // total wins against opponent team
     private int teamWins;
 
-    private int teamLosts;
+    private int teamLosses;
+
+    private int teamTies;
 
     // total wins of all single matches
     private int matchWins;

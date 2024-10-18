@@ -51,7 +51,7 @@
 
 ### 5.1 Team Standings
 - Display a table of team standings
-- Show rank, team name, team wins, and match wins for each team
+- Show rank, team name, team wins/losses, and match wins for each team
 
 ## 6. Authentication and Authorization
 

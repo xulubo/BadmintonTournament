@@ -32,6 +32,7 @@ public class MatchService {
             " t.team_name team_name, " +
             " sum(case when total_wins>2 then 1 else 0 end) team_wins, " +
             " sum(case when total_wins<2 then 1 else 0 end) team_losts, " +
+            " sum(case when total_wins=2 then 1 else 0 end) team_ties, " +
             " sum(total_wins) match_wins " +
             " FROM tournament.team_match_team tmt " +
             " JOIN tournament.team t on tmt.team_id = t.team_id and t.tournament_id = ?" +
@@ -61,9 +62,10 @@ public class MatchService {
             String teamName = rs.getString("team_name");
             int teamWins = rs.getInt("team_wins");
             int teamLosts = rs.getInt("team_losts");
+            int ties = rs.getInt("team_ties");
             int matchWins = rs.getInt("match_wins");
 
-            return new TeamScore(teamName, teamWins, teamLosts, matchWins);
+            return new TeamScore(teamName, teamWins, teamLosts, ties, matchWins);
         });
     }
 

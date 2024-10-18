@@ -1,0 +1,42 @@
+<h2>Group: {{ group?.groupName }}</h2>
+
+<h3>Sub-Groups</h3>
+<ul>
+  <li *ngFor="let subGroup of subGroups">
+    <a (click)="navigateToSubGroup(subGroup.matchGroupId)" style="cursor: pointer;">
+      {{ subGroup.groupName }}
+    </a> (Order: {{ subGroup.orderNumber }})
+  </li>
+</ul>
+
+<h3 *ngIf="authService.isAdmin()">Add New Sub-Group</h3>
+<form *ngIf="authService.isAdmin()" (ngSubmit)="addSubGroup()">
+  <div>
+    <label for="groupName">Group Name:</label>
+    <input type="text" id="groupName" [(ngModel)]="newSubGroup.groupName" name="groupName" required>
+  </div>
+  <div>
+    <label for="orderNumber">Order Number:</label>
+    <input type="number" id="orderNumber" [(ngModel)]="newSubGroup.orderNumber" name="orderNumber" required>
+  </div>
+  <button type="submit">Add Sub-Group</button>
+</form>
+
+<h3>Associated Teams</h3>
+<ul>
+  <li *ngFor="let team of associatedTeams">
+    {{ team.name }}
+  </li>
+</ul>
+
+<h3 *ngIf="authService.isAdmin()">Associate Team</h3>
+<form *ngIf="authService.isAdmin()">
+  <div>
+    <label for="teamSelect">Select Team:</label>
+    <select id="teamSelect" [(ngModel)]="selectedTeamId" name="teamSelect">
+      <option [ngValue]="null">Select a team</option>
+      <option *ngFor="let team of teams" [ngValue]="team.id">{{ team.name }}</option>
+    </select>
+  </div>
+  <button (click)="associateTeam()">Associate Team</button>
+</form>

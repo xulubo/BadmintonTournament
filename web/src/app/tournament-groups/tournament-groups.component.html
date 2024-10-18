@@ -3,7 +3,7 @@
 <h3>Existing Groups</h3>
 <ul>
   <li *ngFor="let group of matchGroups">
-    {{ group.groupName }} (Order: {{ group.orderNumber }})
+    <a (click)="navigateToSingleGroup(group.matchGroupId)" style="cursor: pointer;">{{ group.groupName }}</a> (Order: {{ group.orderNumber }})
     <span *ngIf="group.parentMatchGroupId"> - Subgroup of {{ group.parentMatchGroupId }}</span>
   </li>
 </ul>

@@ -5,6 +5,8 @@ import lombok.*;
 import javax.persistence.*;
 import java.util.Set;
 
+@EqualsAndHashCode(of = "matchGroupId")
+@ToString(exclude = {"matchGroupTeams", "tournament", "parentMatchGroup", "subGroups"})
 @Entity
 @Table(name = "match_group")
 @Data // Lombok annotation to generate getters, setters, toString, equals, and hashCode
@@ -20,11 +22,15 @@ public class MatchGroup {
     @Column(name = "group_name", nullable = false)
     private String groupName;
 
+    @OneToMany(mappedBy = "matchGroup", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<MatchGroupTeam> matchGroupTeams;
+
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "tournament_id", nullable = false)
     private Tournament tournament;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_match_group_id")
     private MatchGroup parentMatchGroup;

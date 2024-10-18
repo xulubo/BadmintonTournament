@@ -129,4 +129,20 @@ export class TournamentService {
     console.log("matchGroup", matchGroup);
     return this.http.post(`${this.apiUrl}/match-group`, matchGroup, { headers: this.getHeaders() });
   }
+
+  getGroupDetails(groupId: number): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/match-group/${groupId}`, { headers: this.getHeaders() });
+  }
+
+  getSubGroups(groupId: number): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/match-group/${groupId}/sub-groups`, { headers: this.getHeaders() });
+  }
+
+  getGroupTeams(groupId: number): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/match-group/${groupId}/teams`, { headers: this.getHeaders() });
+  }
+
+  associateTeamToGroup(groupId: number, teamId: number): Observable<any> {
+    return this.http.post(`${this.apiUrl}/match-group/${groupId}/team/${teamId}`, {}, { headers: this.getHeaders() });
+  }
 }

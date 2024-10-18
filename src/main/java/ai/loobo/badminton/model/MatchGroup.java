@@ -32,5 +32,8 @@ public class MatchGroup {
 
     @OneToMany(mappedBy = "parentMatchGroup", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<MatchGroup> subGroups;
+
+    @Transient
+    private Integer tournamentId;
 }
 

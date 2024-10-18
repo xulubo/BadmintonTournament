@@ -17,6 +17,7 @@ import { PlayerMatchesComponent } from './player-matches/player-matches.componen
 import { AuthService } from './services/auth.service';
 import { LoginComponent } from './login/login.component';
 import { TeamStandingsComponent } from './team-standings/team-standings.component';
+import { TournamentGroupsComponent } from './tournament-groups/tournament-groups.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { TeamStandingsComponent } from './team-standings/team-standings.componen
     AutoFocusDirective,
     PlayerMatchesComponent,
     LoginComponent,
-    TeamStandingsComponent
+    TeamStandingsComponent,
+    TournamentGroupsComponent
   ],
   imports: [
     BrowserModule,

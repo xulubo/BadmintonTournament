@@ -116,4 +116,17 @@ export class TournamentService {
   getTournamentStandings(tournamentId: number): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/tournament/${tournamentId}/standing`, { headers: this.getHeaders() });
   }
+
+  getTournamentDetails(tournamentId: number): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/tournament/${tournamentId}`, { headers: this.getHeaders() });
+  }
+
+  getMatchGroups(tournamentId: number): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/tournament/${tournamentId}/match-groups`, { headers: this.getHeaders() });
+  }
+
+  addMatchGroup(matchGroup: any): Observable<any> {
+    console.log("matchGroup", matchGroup);
+    return this.http.post(`${this.apiUrl}/match-group`, matchGroup, { headers: this.getHeaders() });
+  }
 }

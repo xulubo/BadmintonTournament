@@ -9,6 +9,7 @@ import { TeamMatchComponent } from './team-match/team-match.component';
 import { PlayerMatchesComponent } from './player-matches/player-matches.component';
 import { LoginComponent } from './login/login.component';
 import { TeamStandingsComponent } from './team-standings/team-standings.component';
+import { TournamentGroupsComponent } from './tournament-groups/tournament-groups.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/tournament', pathMatch: 'full' },
@@ -21,6 +22,7 @@ const routes: Routes = [
   { path: 'team-match/:id', component: TeamMatchComponent },
   { path: 'player-matches/:id', component: PlayerMatchesComponent },
   { path: 'login', component: LoginComponent },
+  { path: 'tournament/:id/groups', component: TournamentGroupsComponent },
 ];
 
 @NgModule({

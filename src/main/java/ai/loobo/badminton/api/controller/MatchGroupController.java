@@ -2,6 +2,8 @@ package ai.loobo.badminton.api.controller;
 
 import ai.loobo.badminton.model.MatchGroup;
 import ai.loobo.badminton.repository.MatchGroupRepository;
+import ai.loobo.badminton.repository.TournamentRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,10 +13,11 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/match-group")
+@RequiredArgsConstructor
 public class MatchGroupController {
 
-    @Autowired
-    private MatchGroupRepository matchGroupRepository;
+    private final MatchGroupRepository matchGroupRepository;
+    private final TournamentRepository tournamentRepository;
 
     @GetMapping
     public List<MatchGroup> getAllMatchGroups() {
@@ -29,6 +32,7 @@ public class MatchGroupController {
 
     @PostMapping
     public MatchGroup createMatchGroup(@RequestBody MatchGroup matchGroup) {
+        matchGroup.setTournament(tournamentRepository.findById(matchGroup.getTournamentId()).get());
         return matchGroupRepository.save(matchGroup);
     }
 

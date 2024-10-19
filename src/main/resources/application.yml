@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: jdbc:postgresql://192.168.2.201:5432/dv
-    username: app
-    password: telus
+    url: jdbc:postgresql://localhost:5432/badminton
+    username: badminton
+    password: 8mondeo
     driver-class-name: org.postgresql.Driver
     database-platform: org.hibernate.dialect.PostgreSQLDialect
 

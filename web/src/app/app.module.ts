@@ -21,6 +21,10 @@ import { TeamStandingsComponent } from './team-standings/team-standings.componen
 import { TournamentGroupsComponent } from './tournament-groups/tournament-groups.component';
 import { SingleGroupComponent } from './single-group/single-group.component';
 import { PlayerEditComponent } from './player-edit/player-edit.component';
+import { PlayerListComponent } from './player-list/player-list.component';
+import { MatchManagementComponent } from './match-management/match-management.component';
+import { AdminPanelComponent } from './admin-panel/admin-panel.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +41,11 @@ import { PlayerEditComponent } from './player-edit/player-edit.component';
     TeamStandingsComponent,
     TournamentGroupsComponent,
     SingleGroupComponent,
-    PlayerEditComponent
+    PlayerEditComponent,
+    PlayerListComponent,
+    MatchManagementComponent,
+    AdminPanelComponent,
+    DashboardComponent
   ],
   imports: [
     BrowserModule,

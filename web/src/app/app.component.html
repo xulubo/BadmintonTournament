@@ -25,9 +25,12 @@
 
 <nav>
   <ul>
-    <li><a routerLink="/tournament">Tournament</a></li>
-    <li><a routerLink="/team">Team</a></li>
-    <li><a routerLink="/player">Player</a></li>
+    <li><a routerLink="/dashboard">Dashboard</a></li>
+    <li><a routerLink="/tournaments">Tournaments</a></li>
+    <li><a routerLink="/teams">Teams</a></li>
+    <li><a routerLink="/players">Players</a></li>
+    <li><a routerLink="/matches">Matches</a></li>
+    <li *ngIf="authService.isAdmin()"><a routerLink="/admin">Admin Panel</a></li>
     <li *ngIf="!authService.currentUserValue"><a routerLink="/login">Login</a></li>
     <li *ngIf="authService.currentUserValue"><a (click)="logout()">Logout</a></li>
   </ul>

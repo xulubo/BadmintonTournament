@@ -171,4 +171,8 @@ export class TournamentService {
     this.logRequest('PUT', `/player/${playerId}`);
     return this.http.put<any>(`${this.apiUrl}/player/${playerId}`, playerData, { headers: this.getHeaders() });
   }
+
+  getAllPlayers(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/players`, { headers: this.getHeaders() });
+  }
 }

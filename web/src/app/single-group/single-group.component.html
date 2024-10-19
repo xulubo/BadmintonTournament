@@ -25,7 +25,7 @@
 <h3>Associated Teams</h3>
 <ul>
   <li *ngFor="let team of associatedTeams">
-    {{ team.name }}
+    {{ team.teamCode }} - {{ team.team.name }} - {{ team.team.id }}
   </li>
 </ul>
 
@@ -40,3 +40,56 @@
   </div>
   <button (click)="associateTeam()">Associate Team</button>
 </form>
+
+<h3>Match Result Matrix</h3>
+<table style="border-collapse: collapse; width: 100%;">
+  <tr>
+    <th style="padding: 10px; border: 1px solid #ddd;">Teams</th>
+    <th *ngFor="let team of associatedTeams" style="padding: 10px; border: 1px solid #ddd;">{{ team.teamCode }}</th>
+  </tr>
+  <tr *ngFor="let row of resultMatrix; let i = index">
+    <th style="padding: 10px; border: 1px solid #ddd;">{{ associatedTeams[i].teamCode }}</th>
+    <td *ngFor="let result of row; let j = index" 
+        style="padding: 10px; border: 1px solid #ddd; text-align: center;"
+        [ngStyle]="{'cursor': result && result !== '-' ? 'pointer' : 'default'}"
+        (click)="navigateToTeamMatch(resultMatrixWithIds[i][j], result)">
+      <ng-container *ngIf="result && result !== '-'">
+        <span [ngStyle]="{
+          'color': 'blue',
+          'text-decoration': 'underline',
+          'transition': 'color 0.3s'
+        }"
+        class="clickable-score">
+          {{ result }}
+        </span>
+      </ng-container>
+      <span *ngIf="result === '-'" class="non-clickable-score">
+        -
+      </span>
+    </td>
+  </tr>
+</table>
+
+<h3>Team Standings</h3>
+<table style="border-collapse: collapse; width: 100%;">
+  <thead>
+    <tr>
+      <th style="padding: 10px; border: 1px solid #ddd;">Rank</th>
+      <th style="padding: 10px; border: 1px solid #ddd;">Team Name</th>
+      <th style="padding: 10px; border: 1px solid #ddd;">Team Wins/Losses/Ties</th>
+      <th style="padding: 10px; border: 1px solid #ddd;">Match Wins</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let team of standings; let i = index">
+      <td style="padding: 10px; border: 1px solid #ddd;">{{ i + 1 }}</td>
+      <td style="padding: 10px; border: 1px solid #ddd;">{{ team.teamName }}</td>
+      <td style="padding: 10px; border: 1px solid #ddd;">
+        <span [ngStyle]="{'color': team.teamWins > 0 ? 'green' : 'inherit'}">{{ team.teamWins }}</span> / 
+        <span [ngStyle]="{'color': team.teamLosses > 0 ? 'red' : 'inherit'}">{{ team.teamLosses }}</span> / 
+        {{ team.teamTies }}
+      </td>
+      <td style="padding: 10px; border: 1px solid #ddd;">{{ team.matchWins }}</td>
+    </tr>
+  </tbody>
+</table>

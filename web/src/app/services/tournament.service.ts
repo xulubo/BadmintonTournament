@@ -36,11 +36,17 @@ export class TournamentService {
     return new HttpHeaders();
   }
 
+  private logRequest(method: string, endpoint: string): void {
+    console.log(`${method} ${this.apiUrl}${endpoint}`);
+  }
+
   getTournaments(): Observable<Tournament[]> {
+    this.logRequest('GET', '/tournament');
     return this.http.get<Tournament[]>(`${this.apiUrl}/tournament`, { headers: this.getHeaders() });
   }
 
   getTournamentTeams(tournamentId: number): Observable<any[]> {
+    this.logRequest('GET', `/tournament/${tournamentId}/team`);
     return this.http.get<any[]>(`${this.apiUrl}/tournament/${tournamentId}/team`, { headers: this.getHeaders() });
   }
 
@@ -144,5 +150,15 @@ export class TournamentService {
 
   associateTeamToGroup(groupId: number, teamId: number): Observable<any> {
     return this.http.post(`${this.apiUrl}/match-group/${groupId}/team/${teamId}`, {}, { headers: this.getHeaders() });
+  }
+
+  getGroupTeamMatches(matchGroupId: number): Observable<any[]> {
+    this.logRequest('GET', `/match-group/${matchGroupId}/team_match`);
+    return this.http.get<any[]>(`${this.apiUrl}/match-group/${matchGroupId}/team_match`, { headers: this.getHeaders() });
+  }
+
+  getGroupStandings(matchGroupId: number): Observable<any[]> {
+    this.logRequest('GET', `/match-group/${matchGroupId}/standing`);
+    return this.http.get<any[]>(`${this.apiUrl}/match-group/${matchGroupId}/standing`, { headers: this.getHeaders() });
   }
 }

@@ -1,9 +1,12 @@
 package ai.loobo.badminton.api.controller;
 
 import ai.loobo.badminton.api.model.Response;
+import ai.loobo.badminton.api.model.TeamScore;
+import ai.loobo.badminton.api.service.MatchService;
 import ai.loobo.badminton.model.MatchGroup;
 import ai.loobo.badminton.model.MatchGroupTeam;
 import ai.loobo.badminton.model.Team;
+import ai.loobo.badminton.model.TeamMatch;
 import ai.loobo.badminton.repository.MatchGroupRepository;
 import ai.loobo.badminton.repository.MatchGroupTeamRepository;
 import ai.loobo.badminton.repository.TeamRepository;
@@ -27,6 +30,7 @@ public class MatchGroupController {
     private final TournamentRepository tournamentRepository;
     private final MatchGroupTeamRepository matchGroupTeamRepository;
     private final TeamRepository teamRepository;
+    private final MatchService matchService;
 
     @GetMapping
     public List<MatchGroup> getAllMatchGroups() {
@@ -72,6 +76,12 @@ public class MatchGroupController {
         }
     }
 
+    @GetMapping("/{id}/sub-groups")
+    public Collection<MatchGroup> getSubGroups(@PathVariable Integer id) {
+        var matchGroup = matchGroupRepository.findById(id).get();
+        return matchGroup.getSubGroups();
+    }
+
     @PostMapping("/{id}/sub-group")
     public ResponseEntity<MatchGroup> addSubGroup(@PathVariable Integer id, @RequestBody MatchGroup subGroup) {
         Optional<MatchGroup> matchGroup = matchGroupRepository.findById(id);
@@ -86,17 +96,12 @@ public class MatchGroupController {
     }
 
     @GetMapping("/{id}/teams")
-    public ResponseEntity<Collection<Team>> getTeams(@PathVariable Integer id) {
-        Optional<MatchGroup> matchGroup = matchGroupRepository.findById(id);
-        if (matchGroup.isPresent()) {
-            return ResponseEntity
-                    .ok(matchGroup.get().getMatchGroupTeams().stream()
-                    .map(MatchGroupTeam::getTeam)
-                    .collect(Collectors.toList())
-            );
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<Collection<MatchGroupTeam>> getTeams(@PathVariable Integer id) {
+        var matchGroupTeams = matchGroupTeamRepository.findAllByMatchGroupOrderByOrderNumber(matchGroupRepository.findById(id).get());
+        return ResponseEntity
+                .ok(matchGroupTeams.stream()
+                .collect(Collectors.toList())
+        );
     }
 
     @PostMapping("/{id}/team/{teamId}")
@@ -111,5 +116,21 @@ public class MatchGroupController {
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @GetMapping("/{id}/team_match")
+    public Collection<TeamMatch> getAllTeamMatches(
+            @PathVariable Integer id
+    ) {
+        var matchGroup = matchGroupRepository.findById(id).get();
+
+        return matchGroup.getTeamMatches();
+    }
+
+    @GetMapping("/{id}/standing")
+    public Collection<TeamScore> getAllTeamScores(
+            @PathVariable Integer id
+    ) {
+        return matchService.getGroupStanding(id);
     }
 }

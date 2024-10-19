@@ -16,6 +16,12 @@ interface Team {
   name: string;
 }
 
+interface MatchGroupTeam {
+  matchGroupTeamId: number;
+  team: Team;
+  teamCode: string;
+}
+
 @Component({
   selector: 'app-single-group',
   templateUrl: './single-group.component.html',
@@ -27,7 +33,7 @@ export class SingleGroupComponent implements OnInit {
   group: MatchGroup | null = null;
   subGroups: MatchGroup[] = [];
   teams: Team[] = [];
-  associatedTeams: Team[] = [];
+  associatedTeams: MatchGroupTeam[] = [];
   newSubGroup: MatchGroup = {
     groupName: '',
     tournamentId: 0,
@@ -35,6 +41,10 @@ export class SingleGroupComponent implements OnInit {
     parentMatchGroupId: 0
   };
   selectedTeamId: number | null = null;
+  teamMatches: any[] = [];
+  resultMatrix: any[][] = [];
+  resultMatrixWithIds: any[][] = [];
+  standings: any[] = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -51,6 +61,8 @@ export class SingleGroupComponent implements OnInit {
       this.loadSubGroups();
       this.loadTeams();
       this.loadAssociatedTeams();
+      this.loadTeamMatches();
+      this.loadGroupStandings();
     });
   }
 
@@ -83,6 +95,7 @@ export class SingleGroupComponent implements OnInit {
     this.tournamentService.getTournamentTeams(this.tournamentId).subscribe(
       (data: Team[]) => {
         this.teams = data;
+        console.log('Teams loaded:', this.teams);
       },
       (error) => {
         console.error('Error fetching teams:', error);
@@ -92,8 +105,10 @@ export class SingleGroupComponent implements OnInit {
 
   loadAssociatedTeams(): void {
     this.tournamentService.getGroupTeams(this.groupId).subscribe(
-      (data: Team[]) => {
+      (data: MatchGroupTeam[]) => {
         this.associatedTeams = data;
+
+        console.log('Associated teams loaded:', this.associatedTeams);
       },
       (error) => {
         console.error('Error fetching associated teams:', error);
@@ -155,5 +170,68 @@ export class SingleGroupComponent implements OnInit {
     } else {
       console.error('Sub-group ID is undefined');
     }
+  }
+
+  loadTeamMatches(): void {
+    this.tournamentService.getGroupTeamMatches(this.groupId).subscribe(
+      (data: any[]) => {
+        console.log('Team matches loaded:', data);
+        this.teamMatches = data;
+        this.initializeResultMatrix();
+        this.updateResultMatrix();
+      },
+      (error) => {
+        console.error('Error fetching team matches:', error);
+      }
+    );
+  }
+
+  initializeResultMatrix(): void {
+    this.resultMatrix = this.associatedTeams.map(team => 
+      this.associatedTeams.map(opponent => 
+        team.team.id === opponent.team.id ? '-' : ''
+      )
+    );
+    this.resultMatrixWithIds = this.associatedTeams.map(team => 
+      this.associatedTeams.map(opponent => 
+        team.team.id === opponent.team.id ? null : null
+      )
+    );
+  }
+
+  updateResultMatrix(): void {
+    this.teamMatches.forEach(match => {
+      const team1Index = this.associatedTeams.findIndex(t => t.team.id === match.teams[0].team.id);
+      const team2Index = this.associatedTeams.findIndex(t => t.team.id === match.teams[1].team.id);
+      
+      if (team1Index !== -1 && team2Index !== -1) {
+        const team1Wins = match.teams[0].totalWins || 0;
+        const team2Wins = match.teams[1].totalWins || 0;
+        
+        this.resultMatrix[team1Index][team2Index] = `${team1Wins}:${team2Wins}`;
+        this.resultMatrix[team2Index][team1Index] = `${team2Wins}:${team1Wins}`;
+        
+        this.resultMatrixWithIds[team1Index][team2Index] = match.id;
+        this.resultMatrixWithIds[team2Index][team1Index] = match.id;
+      }
+    });
+  }
+
+  navigateToTeamMatch(matchId: number | null, result: string): void {
+    if (matchId !== null && result !== '-' && result !== '') {
+      this.router.navigate(['/team-match', matchId]);
+    }
+  }
+
+  loadGroupStandings(): void {
+    this.tournamentService.getGroupStandings(this.groupId).subscribe(
+      (data: any[]) => {
+        this.standings = data;
+        console.log('Group standings loaded:', this.standings);
+      },
+      (error) => {
+        console.error('Error fetching group standings:', error);
+      }
+    );
   }
 }

@@ -8,15 +8,18 @@ import javax.persistence.*;
 @ToString(exclude = {"team", "matchGroup"})
 @Entity
 @Table(name = "match_group_team")
-@Data // Lombok annotation to generate getters, setters, toString, equals, and hashCode
-@NoArgsConstructor // Lombok to generate the default constructor
-@AllArgsConstructor // Lombok to generate the all-args constructor
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class MatchGroupTeam {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "match_group_team_id")
     private Integer matchGroupTeamId;
+
+    @Column(name = "order_number", nullable = false)
+    private Integer orderNumber;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
@@ -27,10 +30,8 @@ public class MatchGroupTeam {
     @JoinColumn(name = "team_id", nullable = false)
     private Team team;
 
-    @Transient
-    private Integer matchGroupId;
-
-    @Transient
-    private Integer teamId;
+    public String getTeamCode() {
+        return matchGroup.getGroupName() + orderNumber;
+    }
 }
 

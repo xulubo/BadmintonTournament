@@ -36,4 +36,9 @@ public class TeamMatch {
     @ManyToOne
     @JoinColumn(name = "tournament_id")
     private Tournament tournament;
+
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "match_group_id")
+    private MatchGroup matchGroup;
 }

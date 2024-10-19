@@ -20,6 +20,7 @@ import { LoginComponent } from './login/login.component';
 import { TeamStandingsComponent } from './team-standings/team-standings.component';
 import { TournamentGroupsComponent } from './tournament-groups/tournament-groups.component';
 import { SingleGroupComponent } from './single-group/single-group.component';
+import { PlayerEditComponent } from './player-edit/player-edit.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import { SingleGroupComponent } from './single-group/single-group.component';
     LoginComponent,
     TeamStandingsComponent,
     TournamentGroupsComponent,
-    SingleGroupComponent
+    SingleGroupComponent,
+    PlayerEditComponent
   ],
   imports: [
     BrowserModule,

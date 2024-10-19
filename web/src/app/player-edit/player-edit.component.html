@@ -1,0 +1,34 @@
+<div class="container">
+  <h2>Edit Player: {{ player.displayName }}</h2>
+
+  <form (ngSubmit)="updatePlayer()" *ngIf="authService.isAdmin()" class="player-form">
+    <div class="form-group">
+      <label for="firstName">First Name:</label>
+      <input type="text" id="firstName" [(ngModel)]="player.firstName" name="firstName" required>
+    </div>
+    <div class="form-group">
+      <label for="lastName">Last Name:</label>
+      <input type="text" id="lastName" [(ngModel)]="player.lastName" name="lastName" required>
+    </div>
+    <div class="form-group">
+      <label for="displayName">Display Name:</label>
+      <input type="text" id="displayName" [(ngModel)]="player.displayName" name="displayName" required>
+    </div>
+    <div class="form-group">
+      <label for="playerGender">Gender:</label>
+      <select id="playerGender" [(ngModel)]="player.gender" name="playerGender" required>
+        <option value="M">Male</option>
+        <option value="F">Female</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="comment">Comment:</label>
+      <textarea id="comment" [(ngModel)]="player.comment" name="comment" rows="4"></textarea>
+    </div>
+    <button type="submit" class="btn-primary">Update Player</button>
+  </form>
+
+  <div *ngIf="!authService.isAdmin()" class="alert alert-warning">
+    You do not have permission to edit player details.
+  </div>
+</div>

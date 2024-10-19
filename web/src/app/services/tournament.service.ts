@@ -58,8 +58,8 @@ export class TournamentService {
     return this.http.get<any[]>(`${this.apiUrl}/team/${teamId}/player`, { headers: this.getHeaders() });
   }
 
-  addPlayer(playerName: string, teamId: number, gender: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/player`, { name: playerName, teamId: teamId, gender: gender }, { headers: this.getHeaders() });
+  addPlayer(playerData: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/player`, playerData, { headers: this.getHeaders() });
   }
 
   deletePlayer(playerId: number): Observable<any> {
@@ -160,5 +160,15 @@ export class TournamentService {
   getGroupStandings(matchGroupId: number): Observable<any[]> {
     this.logRequest('GET', `/match-group/${matchGroupId}/standing`);
     return this.http.get<any[]>(`${this.apiUrl}/match-group/${matchGroupId}/standing`, { headers: this.getHeaders() });
+  }
+
+  getPlayerDetails(playerId: number): Observable<any> {
+    this.logRequest('GET', `/player/${playerId}`);
+    return this.http.get<any>(`${this.apiUrl}/player/${playerId}`, { headers: this.getHeaders() });
+  }
+
+  updatePlayer(playerId: number, playerData: any): Observable<any> {
+    this.logRequest('PUT', `/player/${playerId}`);
+    return this.http.put<any>(`${this.apiUrl}/player/${playerId}`, playerData, { headers: this.getHeaders() });
   }
 }

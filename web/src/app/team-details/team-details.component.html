@@ -1,19 +1,45 @@
-<h1>{{ teamName }}</h1>
+<div class="container">
+  <h1>{{ teamName }}</h1>
 
-<h2>Team Players</h2>
-<ul>
-  <li *ngFor="let player of players">
-    <a [routerLink]="['/player-matches/', player.id]">{{ player.name }}</a> ({{ player.gender === 'M' ? 'Male' : 'Female' }})
-    <button *ngIf="authService.isAdmin()" (click)="deletePlayer(player.id)">Delete</button>
-  </li>
-</ul>
+  <section class="player-list">
+    <h2>Team Players</h2>
+    <ul>
+      <li *ngFor="let player of players" class="player-item">
+        <a [routerLink]="['/player-matches/', player.id]">
+          {{ player.name || (player.firstName + ' ' + player.lastName) }}
+        </a> 
+        <span class="player-gender">({{ player.gender === 'M' ? 'Male' : 'Female' }})</span>
+        <span *ngIf="player.comment" class="player-comment">[{{ player.comment }}]</span>
+        <a [routerLink]="['/player', player.id, 'edit']" title="Edit player" *ngIf="authService.isAdmin()" class="edit-icon">
+          ✏️
+        </a>
+        <button *ngIf="authService.isAdmin()" (click)="deletePlayer(player.id)" class="btn-delete">Delete</button>
+      </li>
+    </ul>
+  </section>
 
-<h3 *ngIf="authService.isAdmin()">Add New Player</h3>
-<form *ngIf="authService.isAdmin()" (ngSubmit)="addPlayer()">
-  <input type="text" [(ngModel)]="newPlayerName" name="newPlayerName" placeholder="Enter player name" required>
-  <select [(ngModel)]="newPlayerGender" name="newPlayerGender">
-    <option value="M">Male</option>
-    <option value="F">Female</option>
-  </select>
-  <button type="submit">Add Player</button>
-</form>
+  <section *ngIf="authService.isAdmin()" class="add-player">
+    <h3>Add New Player</h3>
+    <form (ngSubmit)="addPlayer()" class="player-form">
+      <div class="form-group">
+        <input type="text" [(ngModel)]="newPlayer.firstName" name="newPlayerFirstName" placeholder="Enter first name" required>
+      </div>
+      <div class="form-group">
+        <input type="text" [(ngModel)]="newPlayer.lastName" name="newPlayerLastName" placeholder="Enter last name" required>
+      </div>
+      <div class="form-group">
+        <input type="text" [(ngModel)]="newPlayer.displayName" name="newPlayerDisplayName" placeholder="Enter display name (optional)">
+      </div>
+      <div class="form-group">
+        <select [(ngModel)]="newPlayer.gender" name="newPlayerGender">
+          <option value="M">Male</option>
+          <option value="F">Female</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <textarea [(ngModel)]="newPlayer.comment" name="newPlayerComment" placeholder="Enter comment (optional)"></textarea>
+      </div>
+      <button type="submit" class="btn-primary">Add Player</button>
+    </form>
+  </section>
+</div>

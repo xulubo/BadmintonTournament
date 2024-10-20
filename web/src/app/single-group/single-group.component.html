@@ -150,6 +150,14 @@
         <label for="matchNumber">Match Number:</label>
         <input type="number" id="matchNumber" [(ngModel)]="newMatch.matchNumber" name="matchNumber" required>
       </div>
+      <div>
+        <label for="matchDate">Match Date:</label>
+        <input type="date" id="matchDate" [(ngModel)]="newMatch.matchDate" name="matchDate" required>
+      </div>
+      <div>
+        <label for="matchTime">Match Time:</label>
+        <input type="time" id="matchTime" [(ngModel)]="newMatch.matchTime" name="matchTime" required>
+      </div>
       <button type="submit">Create Match</button>
     </form>
   </mat-tab>

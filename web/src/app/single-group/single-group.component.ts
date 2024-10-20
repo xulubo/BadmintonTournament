@@ -49,7 +49,9 @@ export class SingleGroupComponent implements OnInit {
   newMatch: any = {
     team1Id: null,
     team2Id: null,
-    matchNumber: 1
+    matchNumber: 1,
+    matchDate: '', // Add this line
+    matchTime: ''  // Add this line
   };
 
   constructor(
@@ -247,11 +249,12 @@ export class SingleGroupComponent implements OnInit {
       alert('You do not have permission to perform this action.');
       return;
     }
-    if (this.newMatch.team1Id && this.newMatch.team2Id) {
+    if (this.newMatch.team1Id && this.newMatch.team2Id && this.newMatch.matchDate && this.newMatch.matchTime) {
       const matchData = {
         ...this.newMatch,
         tournamentId: this.tournamentId,
-        matchGroupId: this.groupId
+        matchGroupId: this.groupId,
+        matchDateTime: `${this.newMatch.matchDate}T${this.newMatch.matchTime}` // Combine date and time
       };
       this.tournamentService.createTeamMatch(matchData).subscribe(
         (response) => {
@@ -264,7 +267,7 @@ export class SingleGroupComponent implements OnInit {
         }
       );
     } else {
-      console.error('Both teams must be selected');
+      console.error('All fields must be filled');
     }
   }
 
@@ -272,7 +275,9 @@ export class SingleGroupComponent implements OnInit {
     this.newMatch = {
       team1Id: null,
       team2Id: null,
-      matchNumber: this.teamMatches.length + 1
+      matchNumber: this.teamMatches.length + 1,
+      matchDate: '',
+      matchTime: ''
     };
   }
 

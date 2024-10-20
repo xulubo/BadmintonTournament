@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { TournamentService } from '../services/tournament.service';
 
 @Component({
@@ -7,18 +8,26 @@ import { TournamentService } from '../services/tournament.service';
   styleUrls: ['./player-list.component.css']
 })
 export class PlayerListComponent implements OnInit {
+  tournamentId: number = 0;
   players: any[] = [];
 
-  constructor(private tournamentService: TournamentService) { }
+  constructor(
+    private route: ActivatedRoute,
+    private tournamentService: TournamentService
+  ) { }
 
   ngOnInit(): void {
-    this.loadPlayers();
+    this.route.parent?.params.subscribe(params => {
+      this.tournamentId = +params['id'];
+      this.loadPlayers();
+    });
   }
 
   loadPlayers(): void {
-    this.tournamentService.getAllPlayers().subscribe(
+    this.tournamentService.getTournamentPlayers(this.tournamentId).subscribe(
       (data: any[]) => {
         this.players = data;
+        console.log('Players loaded:', this.players);
       },
       (error) => {
         console.error('Error fetching players:', error);

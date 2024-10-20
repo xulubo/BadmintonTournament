@@ -1,2 +1,26 @@
-<h2>Match Management</h2>
-<!-- Add your match management template here -->
+<h2>Team Matches</h2>
+
+<table *ngIf="teamMatches.length > 0">
+  <thead>
+    <tr>
+      <th>Match Number</th>
+      <th>Team 1</th>
+      <th>Team 2</th>
+      <th>Result</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let match of teamMatches">
+      <td>{{ match.matchNumber }}</td>
+      <td>{{ match.teams[0].team.name }}</td>
+      <td>{{ match.teams[1].team.name }}</td>
+      <td>{{ match.teams[0].totalWins }} - {{ match.teams[1].totalWins }}</td>
+      <td>
+        <button (click)="navigateToTeamMatch(match.id)">View Details</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<p *ngIf="teamMatches.length === 0">No team matches found for this tournament.</p>

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TournamentService } from '../services/tournament.service';
 import { AuthService } from '../services/auth.service';
+import { MatTabsModule } from '@angular/material/tabs';
 
 interface MatchGroup {
   matchGroupId?: number;
@@ -45,6 +46,11 @@ export class SingleGroupComponent implements OnInit {
   resultMatrix: any[][] = [];
   resultMatrixWithIds: any[][] = [];
   standings: any[] = [];
+  newMatch: any = {
+    team1Id: null,
+    team2Id: null,
+    matchNumber: 1
+  };
 
   constructor(
     private route: ActivatedRoute,
@@ -61,7 +67,6 @@ export class SingleGroupComponent implements OnInit {
       this.loadSubGroups();
       this.loadTeams();
       this.loadAssociatedTeams();
-      this.loadTeamMatches();
       this.loadGroupStandings();
     });
   }
@@ -107,8 +112,9 @@ export class SingleGroupComponent implements OnInit {
     this.tournamentService.getGroupTeams(this.groupId).subscribe(
       (data: MatchGroupTeam[]) => {
         this.associatedTeams = data;
-
         console.log('Associated teams loaded:', this.associatedTeams);
+        this.initializeResultMatrix();
+        this.loadTeamMatches();
       },
       (error) => {
         console.error('Error fetching associated teams:', error);
@@ -175,9 +181,8 @@ export class SingleGroupComponent implements OnInit {
   loadTeamMatches(): void {
     this.tournamentService.getGroupTeamMatches(this.groupId).subscribe(
       (data: any[]) => {
-        console.log('Team matches loaded:', data);
         this.teamMatches = data;
-        this.initializeResultMatrix();
+        console.log('Team matches loaded:', this.teamMatches);
         this.updateResultMatrix();
       },
       (error) => {
@@ -217,9 +222,11 @@ export class SingleGroupComponent implements OnInit {
     });
   }
 
-  navigateToTeamMatch(matchId: number | null, result: string): void {
-    if (matchId !== null && result !== '-' && result !== '') {
+  navigateToTeamMatch(matchId: number | null): void {
+    if (matchId !== null) {
       this.router.navigate(['/team-match', matchId]);
+    } else {
+      console.error('Match ID is null');
     }
   }
 
@@ -233,5 +240,43 @@ export class SingleGroupComponent implements OnInit {
         console.error('Error fetching group standings:', error);
       }
     );
+  }
+
+  createMatch(): void {
+    if (!this.authService.isAdmin()) {
+      alert('You do not have permission to perform this action.');
+      return;
+    }
+    if (this.newMatch.team1Id && this.newMatch.team2Id) {
+      const matchData = {
+        ...this.newMatch,
+        tournamentId: this.tournamentId,
+        matchGroupId: this.groupId
+      };
+      this.tournamentService.createTeamMatch(matchData).subscribe(
+        (response) => {
+          console.log('Match created successfully:', response);
+          this.loadTeamMatches();
+          this.resetNewMatch();
+        },
+        (error) => {
+          console.error('Error creating match:', error);
+        }
+      );
+    } else {
+      console.error('Both teams must be selected');
+    }
+  }
+
+  resetNewMatch(): void {
+    this.newMatch = {
+      team1Id: null,
+      team2Id: null,
+      matchNumber: this.teamMatches.length + 1
+    };
+  }
+
+  isResultMatrixReady(): boolean {
+    return this.resultMatrix.length > 0 && this.associatedTeams.length > 0;
   }
 }

@@ -66,8 +66,9 @@ export class TournamentService {
     return this.http.delete(`${this.apiUrl}/player/${playerId}`, { headers: this.getHeaders() });
   }
 
-  createTeamMatch(tournamentId: number, matchResult: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/team_match`, matchResult, { headers: this.getHeaders() });
+  createTeamMatch(matchData: any): Observable<any> {
+    this.logRequest('POST', '/team_match');
+    return this.http.post(`${this.apiUrl}/team_match`, matchData, { headers: this.getHeaders() });
   }
 
   getTournamentTeamMatches(tournamentId: number): Observable<any[]> {
@@ -152,9 +153,9 @@ export class TournamentService {
     return this.http.post(`${this.apiUrl}/match-group/${groupId}/team/${teamId}`, {}, { headers: this.getHeaders() });
   }
 
-  getGroupTeamMatches(matchGroupId: number): Observable<any[]> {
-    this.logRequest('GET', `/match-group/${matchGroupId}/team_match`);
-    return this.http.get<any[]>(`${this.apiUrl}/match-group/${matchGroupId}/team_match`, { headers: this.getHeaders() });
+  getGroupTeamMatches(groupId: number): Observable<any[]> {
+    this.logRequest('GET', `/match-group/${groupId}/team_match`);
+    return this.http.get<any[]>(`${this.apiUrl}/match-group/${groupId}/team_match`, { headers: this.getHeaders() });
   }
 
   getGroupStandings(matchGroupId: number): Observable<any[]> {
@@ -174,5 +175,10 @@ export class TournamentService {
 
   getAllPlayers(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/players`, { headers: this.getHeaders() });
+  }
+
+  getTournamentPlayers(tournamentId: number): Observable<any[]> {
+    this.logRequest('GET', `/tournament/${tournamentId}/players`);
+    return this.http.get<any[]>(`${this.apiUrl}/tournament/${tournamentId}/players`, { headers: this.getHeaders() });
   }
 }

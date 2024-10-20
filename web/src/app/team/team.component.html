@@ -1,2 +1,11 @@
 <h2>Team Management</h2>
-<p>This is where you can manage teams.</p>
+
+<div *ngIf="teams.length === 0">
+  <p>No teams found for this tournament.</p>
+</div>
+
+<ul *ngIf="teams.length > 0">
+  <li *ngFor="let team of teams">
+    <a [routerLink]="['/team', team.id]">{{ team.name }}</a>
+  </li>
+</ul>

@@ -39,6 +39,6 @@ public class Tournament {
     @OneToMany(mappedBy = "tournament")
     private Set<Team> teams;
 
-//    @OneToMany(mappedBy = "tournament")
-//    private Set<TeamMatch> teamMatches;
+    @OneToMany(mappedBy = "tournament")
+    private Set<MatchGroup> matchGroups;
 }

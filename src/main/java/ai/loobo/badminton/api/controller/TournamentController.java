@@ -32,9 +32,16 @@ public class TournamentController {
     private final MatchService matchService;
 
     @GetMapping("")
-    public ResponseEntity<List<Tournament>> list() {
+    public ResponseEntity<List<Tournament>> getAllTournaments() {
         var tournaments = tournamentRepository.findAll();
         return ResponseEntity.ok(tournaments);
+    }
+
+    @GetMapping("/{tournamentId}")
+    public Tournament getTournament(
+            @PathVariable Integer tournamentId
+    ) {
+        return tournamentRepository.findById(tournamentId).get();
     }
 
     @GetMapping("/{tournamentId}/team")

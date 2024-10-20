@@ -35,15 +35,18 @@ export class TournamentGroupsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    const id = this.route.snapshot.paramMap.get('id');
-    if (id !== null) {
-      this.tournamentId = +id;
-      this.newGroup.tournamentId = this.tournamentId;
-      this.loadTournamentDetails();
-      this.loadMatchGroups();
-    } else {
-      console.error('Tournament ID is missing');
-    }
+    // Use the parent route's params to get the tournament ID
+    this.route.parent?.params.subscribe(params => {
+      const id = params['id'];
+      if (id) {
+        this.tournamentId = +id;
+        this.newGroup.tournamentId = this.tournamentId;
+        this.loadTournamentDetails();
+        this.loadMatchGroups();
+      } else {
+        console.error('Tournament ID is missing');
+      }
+    });
   }
 
   loadTournamentDetails(): void {

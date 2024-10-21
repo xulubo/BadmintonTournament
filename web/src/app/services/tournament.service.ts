@@ -106,8 +106,8 @@ private logRequest(method: string, endpoint: string): void {
     return this.http.put(`${this.apiUrl}/team_match/${teamMatchId}/match_number`, { matchNumber }, { headers: this.getHeaders() });
   }
 
-  deleteTeamMatch(teamMatchId: number): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/team_match/${teamMatchId}`, { headers: this.getHeaders() });
+  deleteTeamMatch(matchId: number): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/team_match/${matchId}`, { headers: this.getHeaders() });
   }
 
   getTeamMatchResults(teamMatchId: number): Observable<any[]> {

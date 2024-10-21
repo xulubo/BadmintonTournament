@@ -310,7 +310,11 @@ export class SingleGroupComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.updateTeamMatch(result);
+        if (result.delete) {
+          this.deleteTeamMatch(result.id);
+        } else {
+          this.updateTeamMatch(result);
+        }
       }
     });
   }
@@ -323,6 +327,18 @@ export class SingleGroupComponent implements OnInit {
       },
       (error) => {
         console.error('Error updating match:', error);
+      }
+    );
+  }
+
+  deleteTeamMatch(matchId: number): void {
+    this.tournamentService.deleteTeamMatch(matchId).subscribe(
+      () => {
+        console.log('Match deleted successfully');
+        this.loadTeamMatches(); // Reload matches to reflect changes
+      },
+      (error) => {
+        console.error('Error deleting match:', error);
       }
     );
   }

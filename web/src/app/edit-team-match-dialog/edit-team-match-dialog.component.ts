@@ -19,4 +19,10 @@ export class EditTeamMatchDialogComponent {
   onSave(): void {
     this.dialogRef.close(this.data);
   }
+
+  onDelete(): void {
+    if (confirm('Are you sure you want to delete this team match?')) {
+      this.dialogRef.close({ delete: true, id: this.data.id });
+    }
+  }
 }

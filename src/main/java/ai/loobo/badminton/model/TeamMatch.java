@@ -25,7 +25,8 @@ public class TeamMatch {
     @Column(name = "time")
     private LocalDateTime matchDateTime;
 
-    @OneToMany(mappedBy = "teamMatch")
+    @OneToMany(mappedBy = "teamMatch", cascade=CascadeType.REMOVE)
+    @OrderBy("id ASC")
     private Set<TeamMatchTeam> teams;
 
     @JsonIgnore

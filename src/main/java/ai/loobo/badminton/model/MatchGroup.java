@@ -9,9 +9,9 @@ import java.util.Set;
 @ToString(exclude = {"matchGroupTeams", "tournament", "parentMatchGroup", "subGroups"})
 @Entity
 @Table(name = "match_group")
-@Data // Lombok annotation to generate getters, setters, toString, equals, and hashCode
-@NoArgsConstructor // Lombok to generate the default constructor
-@AllArgsConstructor // Lombok to generate the all-args constructor
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class MatchGroup {
 
     @Id
@@ -41,6 +41,7 @@ public class MatchGroup {
     @OneToMany(mappedBy = "parentMatchGroup", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<MatchGroup> subGroups;
 
+    @OrderBy("matchDateTime ASC, id ASC")
     @OneToMany(mappedBy = "matchGroup")
     private Set<TeamMatch> teamMatches;
 

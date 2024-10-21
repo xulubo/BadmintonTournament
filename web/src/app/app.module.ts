@@ -5,6 +5,10 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -27,6 +31,7 @@ import { MatchManagementComponent } from './match-management/match-management.co
 import { AdminPanelComponent } from './admin-panel/admin-panel.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { EditTeamMatchDialogComponent } from './edit-team-match-dialog/edit-team-match-dialog.component';
 
 @NgModule({
   declarations: [
@@ -47,7 +52,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     PlayerListComponent,
     MatchManagementComponent,
     AdminPanelComponent,
-    DashboardComponent
+    DashboardComponent,
+    EditTeamMatchDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -57,7 +63,11 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     CommonModule,
     RouterModule,
     MatTabsModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    MatDialogModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule
   ],
   providers: [AuthService],
   bootstrap: [AppComponent]

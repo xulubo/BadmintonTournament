@@ -1,18 +1,16 @@
 package ai.loobo.badminton.api.controller;
 
 import ai.loobo.badminton.api.model.Response;
-import ai.loobo.badminton.api.model.TeamScore;
+import ai.loobo.badminton.api.model.TeamRankingScores;
 import ai.loobo.badminton.api.service.MatchService;
 import ai.loobo.badminton.model.MatchGroup;
 import ai.loobo.badminton.model.MatchGroupTeam;
-import ai.loobo.badminton.model.Team;
 import ai.loobo.badminton.model.TeamMatch;
 import ai.loobo.badminton.repository.MatchGroupRepository;
 import ai.loobo.badminton.repository.MatchGroupTeamRepository;
 import ai.loobo.badminton.repository.TeamRepository;
 import ai.loobo.badminton.repository.TournamentRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -118,6 +116,11 @@ public class MatchGroupController {
         }
     }
 
+    /**
+     * Get all matches between two teams in this group identified by {id}
+     * @param id
+     * @return
+     */
     @GetMapping("/{id}/team_match")
     public Collection<TeamMatch> getAllTeamMatches(
             @PathVariable Integer id
@@ -128,7 +131,7 @@ public class MatchGroupController {
     }
 
     @GetMapping("/{id}/standing")
-    public Collection<TeamScore> getAllTeamScores(
+    public Collection<TeamRankingScores> getAllTeamScores(
             @PathVariable Integer id
     ) {
         return matchService.getGroupStanding(id);

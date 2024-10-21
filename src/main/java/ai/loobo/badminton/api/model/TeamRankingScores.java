@@ -3,9 +3,13 @@ package ai.loobo.badminton.api.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+/**
+ * Used for team ranking
+ *
+ */
 @Data
 @AllArgsConstructor
-public class TeamScore {
+public class TeamRankingScores {
     private String teamName;
 
     // total wins against opponent team

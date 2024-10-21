@@ -3,6 +3,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { TournamentService } from '../services/tournament.service';
 import { AuthService } from '../services/auth.service';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatDialog } from '@angular/material/dialog';
+import { EditTeamMatchDialogComponent } from '../edit-team-match-dialog/edit-team-match-dialog.component';
 
 interface MatchGroup {
   matchGroupId?: number;
@@ -21,6 +23,16 @@ interface MatchGroupTeam {
   matchGroupTeamId: number;
   team: Team;
   teamCode: string;
+}
+
+interface TeamMatch {
+  id: number;
+  matchNumber: number; // Add this line
+  teams: {
+    team: Team;
+    totalWins: number;
+  }[];
+  matchDateTime: string; // Add this line
 }
 
 @Component({
@@ -42,7 +54,7 @@ export class SingleGroupComponent implements OnInit {
     parentMatchGroupId: 0
   };
   selectedTeamId: number | null = null;
-  teamMatches: any[] = [];
+  teamMatches: TeamMatch[] = []; // Update the type
   resultMatrix: any[][] = [];
   resultMatrixWithIds: any[][] = [];
   standings: any[] = [];
@@ -58,7 +70,8 @@ export class SingleGroupComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private tournamentService: TournamentService,
-    public authService: AuthService
+    public authService: AuthService,
+    private dialog: MatDialog
   ) { }
 
   ngOnInit(): void {
@@ -182,8 +195,11 @@ export class SingleGroupComponent implements OnInit {
 
   loadTeamMatches(): void {
     this.tournamentService.getGroupTeamMatches(this.groupId).subscribe(
-      (data: any[]) => {
-        this.teamMatches = data;
+      (data: TeamMatch[]) => {
+        this.teamMatches = data.map((match, index) => ({
+          ...match,
+          matchNumber: match.matchNumber || index + 1 // Ensure matchNumber exists
+        }));
         console.log('Team matches loaded:', this.teamMatches);
         this.updateResultMatrix();
       },
@@ -252,6 +268,7 @@ export class SingleGroupComponent implements OnInit {
     if (this.newMatch.team1Id && this.newMatch.team2Id && this.newMatch.matchDate && this.newMatch.matchTime) {
       const matchData = {
         ...this.newMatch,
+        teamIds: [this.newMatch.team1Id, this.newMatch.team2Id],
         tournamentId: this.tournamentId,
         matchGroupId: this.groupId,
         matchDateTime: `${this.newMatch.matchDate}T${this.newMatch.matchTime}` // Combine date and time
@@ -283,5 +300,30 @@ export class SingleGroupComponent implements OnInit {
 
   isResultMatrixReady(): boolean {
     return this.resultMatrix.length > 0 && this.associatedTeams.length > 0;
+  }
+
+  openEditMatchDialog(match: TeamMatch): void {
+    const dialogRef = this.dialog.open(EditTeamMatchDialogComponent, {
+      width: '400px',
+      data: { ...match }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.updateTeamMatch(result);
+      }
+    });
+  }
+
+  updateTeamMatch(updatedMatch: TeamMatch): void {
+    this.tournamentService.updateTeamMatch(updatedMatch).subscribe(
+      (response) => {
+        console.log('Match updated successfully:', response);
+        this.loadTeamMatches(); // Reload matches to reflect changes
+      },
+      (error) => {
+        console.error('Error updating match:', error);
+      }
+    );
   }
 }

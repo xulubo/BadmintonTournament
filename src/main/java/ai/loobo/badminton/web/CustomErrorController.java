@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
 
-@Controller
+//@Controller
 public class CustomErrorController implements ErrorController {
 
     // Handle 404 error and forward to index.html

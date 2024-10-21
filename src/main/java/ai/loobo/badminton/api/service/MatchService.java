@@ -2,20 +2,15 @@ package ai.loobo.badminton.api.service;
 
 import ai.loobo.badminton.api.model.MatchResult;
 import ai.loobo.badminton.api.model.PlayerMatches;
-import ai.loobo.badminton.api.model.TeamScore;
+import ai.loobo.badminton.api.model.TeamRankingScores;
 import ai.loobo.badminton.model.*;
 import ai.loobo.badminton.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PathVariable;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -72,28 +67,28 @@ public class MatchService {
                 .build();
     }
 
-    public List<TeamScore> getStanding(int tournamentId) {
-        return jdbcTemplate.query(SQL_STANDING, new Object[]{tournamentId}, (RowMapper<TeamScore>) (rs, rowNum) -> {
+    public List<TeamRankingScores> getStanding(int tournamentId) {
+        return jdbcTemplate.query(SQL_STANDING, new Object[]{tournamentId}, (RowMapper<TeamRankingScores>) (rs, rowNum) -> {
             String teamName = rs.getString("team_name");
             int teamWins = rs.getInt("team_wins");
             int teamLosts = rs.getInt("team_losts");
             int ties = rs.getInt("team_ties");
             int matchWins = rs.getInt("match_wins");
 
-            return new TeamScore(teamName, teamWins, teamLosts, ties, matchWins);
+            return new TeamRankingScores(teamName, teamWins, teamLosts, ties, matchWins);
         });
     }
 
-    public List<TeamScore> getGroupStanding(int matchGroupId) {
+    public List<TeamRankingScores> getGroupStanding(int matchGroupId) {
         log.debug("SQL_GROUP_STANDING {}", SQL_GROUP_STANDING);
-        return jdbcTemplate.query(SQL_GROUP_STANDING, new Object[]{matchGroupId}, (RowMapper<TeamScore>) (rs, rowNum) -> {
+        return jdbcTemplate.query(SQL_GROUP_STANDING, new Object[]{matchGroupId}, (RowMapper<TeamRankingScores>) (rs, rowNum) -> {
             String teamName = rs.getString("team_name");
             int teamWins = rs.getInt("team_wins");
             int teamLosts = rs.getInt("team_losts");
             int ties = rs.getInt("team_ties");
             int matchWins = rs.getInt("match_wins");
 
-            return new TeamScore(teamName, teamWins, teamLosts, ties, matchWins);
+            return new TeamRankingScores(teamName, teamWins, teamLosts, ties, matchWins);
         });
     }
 

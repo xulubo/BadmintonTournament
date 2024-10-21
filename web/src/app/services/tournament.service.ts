@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { Tournament } from '../models/tournament';
 import { tap, map } from 'rxjs/operators';
 import { AuthService } from './auth.service';
+import { TeamMatch } from '../models/team-match.model';
 
 @Injectable({
   providedIn: 'root'
@@ -36,7 +37,7 @@ export class TournamentService {
     return new HttpHeaders();
   }
 
-  private logRequest(method: string, endpoint: string): void {
+private logRequest(method: string, endpoint: string): void {
     console.log(`${method} ${this.apiUrl}${endpoint}`);
   }
 
@@ -68,6 +69,7 @@ export class TournamentService {
 
   createTeamMatch(matchData: any): Observable<any> {
     this.logRequest('POST', '/team_match');
+    console.log("matchData", matchData)
     return this.http.post(`${this.apiUrl}/team_match`, matchData, { headers: this.getHeaders() });
   }
 
@@ -180,5 +182,10 @@ export class TournamentService {
   getTournamentPlayers(tournamentId: number): Observable<any[]> {
     this.logRequest('GET', `/tournament/${tournamentId}/players`);
     return this.http.get<any[]>(`${this.apiUrl}/tournament/${tournamentId}/players`, { headers: this.getHeaders() });
+  }
+
+  updateTeamMatch(match: TeamMatch): Observable<TeamMatch> {
+    console.log("update team match", match)
+    return this.http.put<TeamMatch>(`${this.apiUrl}/team_match/${match.id}`, match);
   }
 }

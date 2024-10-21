@@ -1,6 +1,6 @@
 package ai.loobo.badminton.api.controller;
 
-import ai.loobo.badminton.api.model.TeamScore;
+import ai.loobo.badminton.api.model.TeamRankingScores;
 import ai.loobo.badminton.api.service.MatchService;
 import ai.loobo.badminton.model.MatchGroup;
 import ai.loobo.badminton.model.Team;
@@ -8,10 +8,8 @@ import ai.loobo.badminton.model.TeamMatch;
 import ai.loobo.badminton.model.Tournament;
 import ai.loobo.badminton.repository.MatchGroupRepository;
 import ai.loobo.badminton.repository.TeamMatchRepository;
-import ai.loobo.badminton.repository.TeamMatchTeamRepository;
 import ai.loobo.badminton.repository.TournamentRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -76,7 +74,7 @@ public class TournamentController {
     }
 
     @GetMapping("/{tournamentId}/standing")
-    public Collection<TeamScore> getAllTeamScores(
+    public Collection<TeamRankingScores> getAllTeamScores(
             @PathVariable Integer tournamentId
     ) {
         return matchService.getStanding(tournamentId);

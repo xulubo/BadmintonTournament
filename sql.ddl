@@ -13,6 +13,7 @@ CREATE TABLE team (
     team_id SERIAL PRIMARY KEY,
     team_name VARCHAR(255) NOT NULL,
     tournament_id INT REFERENCES tournament(tournament_id) ON DELETE CASCADE,
+    order_number INT NOT NULL DEFAULT 0
 );
 
 -- 3. Player Table

@@ -36,6 +36,7 @@ public class Tournament {
     @Column(name = "prize")
     private String prize;
 
+    @OrderBy("order ASC, name ASC")
     @OneToMany(mappedBy = "tournament")
     private Set<Team> teams;
 

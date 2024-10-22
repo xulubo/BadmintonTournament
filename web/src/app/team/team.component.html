@@ -2,7 +2,18 @@
 
 <ul>
   <li *ngFor="let team of teams">
-    {{ team.name }}
+    <ng-container *ngIf="editingTeam && editingTeam.id === team.id; else displayTeam">
+      <input [(ngModel)]="editingTeam.name" placeholder="Team Name">
+      <input type="number" [(ngModel)]="editingTeam.order" placeholder="Order">
+      <button (click)="saveTeam()">Save</button>
+      <button (click)="cancelEditing()">Cancel</button>
+    </ng-container>
+    <ng-template #displayTeam>
+      <span (click)="viewTeamPlayers(team.id)" style="cursor: pointer;">
+        {{ team.order }}. {{ team.name }}
+      </span>
+      <button *ngIf="authService.isAdmin()" (click)="startEditing(team)">Edit</button>
+    </ng-template>
   </li>
 </ul>
 

@@ -37,19 +37,42 @@ public class PlayerController {
         return ResponseEntity.ok(players);
     }
 
+    @GetMapping("/{playerId}")
+    public Player getPlayer(@PathVariable Integer playerId) {
+        var player = playerRepository.findById(playerId)
+                .orElseThrow(() -> new RuntimeException("Player not found with id: " + playerId));
+
+        return playerRepository.findById(playerId).get();
+    }
+
     @PostMapping("")
     public ResponseEntity<Response> createPlayer(
             @RequestBody PlayerVO playerVO
     ) {
         var player = Player.builder()
                 .team(teamRepository.findById(playerVO.teamId).get())
-                .name(playerVO.name)
+                .displayName(playerVO.name)
                 .gender(playerVO.gender)
                 .build();
 
         playerRepository.save(player);
 
         return ResponseEntity.ok(Response.builder().status("SUCCESS").build());
+    }
+
+    @PutMapping("/{playerId}")
+    public Response updatePlayer(
+            @PathVariable Integer playerId,
+            @RequestBody Player playerVO
+    ) {
+        var player = playerRepository.findById(playerId).get();
+        player.setDisplayName(playerVO.getDisplayName());
+        player.setFirstName(playerVO.getFirstName());
+        player.setLastName(playerVO.getLastName());
+        player.setGender(playerVO.getGender());
+        playerRepository.save(player);
+
+        return Response.SUCCESS;
     }
 
     @GetMapping("/{playerId}/matches")

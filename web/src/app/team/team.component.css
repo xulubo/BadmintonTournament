@@ -17,3 +17,12 @@ a {
 a:hover {
   text-decoration: underline;
 }
+
+.editable {
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.editable:hover {
+  color: blue;
+}

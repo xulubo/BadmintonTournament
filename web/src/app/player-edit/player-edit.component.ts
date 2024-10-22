@@ -10,13 +10,7 @@ import { AuthService } from '../services/auth.service';
 })
 export class PlayerEditComponent implements OnInit {
   playerId: number = 0;
-  player: any = {
-    firstName: '',
-    lastName: '',
-    displayName: '',
-    gender: '',
-    comment: ''
-  };
+  player: any = {};
 
   constructor(
     private route: ActivatedRoute,
@@ -36,9 +30,6 @@ export class PlayerEditComponent implements OnInit {
     this.tournamentService.getPlayerDetails(this.playerId).subscribe(
       (data: any) => {
         this.player = data;
-        if (!this.player.displayName) {
-          this.player.displayName = `${this.player.firstName} ${this.player.lastName}`;
-        }
       },
       (error) => {
         console.error('Error fetching player details:', error);
@@ -52,9 +43,15 @@ export class PlayerEditComponent implements OnInit {
       return;
     }
     this.tournamentService.updatePlayer(this.playerId, this.player).subscribe(
-      (response) => {
+      (response: any) => {
         console.log('Player updated successfully:', response);
-        this.router.navigate(['/team', this.player.teamId]);
+        // Navigate back to the player list or details page
+        if (this.player.teamId) {
+          this.router.navigate(['/team', this.player.teamId]);
+        } else {
+          // If teamId is not available, navigate to a default route
+          this.router.navigate(['/tournaments']);
+        }
       },
       (error) => {
         console.error('Error updating player:', error);

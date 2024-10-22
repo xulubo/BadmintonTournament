@@ -1,5 +1,5 @@
 <div class="container">
-  <h2>Edit Player: {{ player.displayName }}</h2>
+  <h2>Edit Player</h2>
 
   <form (ngSubmit)="updatePlayer()" *ngIf="authService.isAdmin()" class="player-form">
     <div class="form-group">
@@ -28,7 +28,5 @@
     <button type="submit" class="btn-primary">Update Player</button>
   </form>
 
-  <div *ngIf="!authService.isAdmin()" class="alert alert-warning">
-    You do not have permission to edit player details.
-  </div>
+  <p *ngIf="!authService.isAdmin()">You do not have permission to edit player details.</p>
 </div>

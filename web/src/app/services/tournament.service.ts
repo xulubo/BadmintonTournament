@@ -172,6 +172,7 @@ private logRequest(method: string, endpoint: string): void {
 
   updatePlayer(playerId: number, playerData: any): Observable<any> {
     this.logRequest('PUT', `/player/${playerId}`);
+    console.log("playerData", playerData)
     return this.http.put<any>(`${this.apiUrl}/player/${playerId}`, playerData, { headers: this.getHeaders() });
   }
 
@@ -197,5 +198,9 @@ private logRequest(method: string, endpoint: string): void {
   addTeamToTournament(tournamentId: number, teamData: any): Observable<any> {
     console.log("teamData", teamData)
     return this.http.post(`${this.apiUrl}/tournament/${tournamentId}/team`, teamData, { headers: this.getHeaders() });
+  }
+
+  updateTeam(teamId: number, teamData: any): Observable<any> {
+    return this.http.put(`${this.apiUrl}/team/${teamId}`, teamData, { headers: this.getHeaders() });
   }
 }

@@ -33,6 +33,7 @@ public class MatchService {
             " sum(total_wins) match_wins " +
             " FROM tournament.team_match_team tmt " +
             " JOIN tournament.team t on tmt.team_id = t.team_id and t.tournament_id = ?" +
+            " AND tmt.total_wins is not null " +
             " GROUP BY team_name " +
             " order by team_wins DESC, match_wins DESC";
 
@@ -46,6 +47,7 @@ public class MatchService {
             " tournament.team_match tm " +
             " JOIN tournament.team_match_team tmt ON tm.team_match_id = tmt.team_match_id AND tm.match_group_id = ?" +
             " JOIN tournament.team t on tmt.team_id = t.team_id " +
+            " AND tmt.total_wins is not null " +
             " GROUP BY team_name " +
             " order by team_wins DESC, match_wins DESC";
 
@@ -68,6 +70,7 @@ public class MatchService {
     }
 
     public List<TeamRankingScores> getStanding(int tournamentId) {
+        log.info("SQL_STANDING {}", SQL_STANDING);
         return jdbcTemplate.query(SQL_STANDING, new Object[]{tournamentId}, (RowMapper<TeamRankingScores>) (rs, rowNum) -> {
             String teamName = rs.getString("team_name");
             int teamWins = rs.getInt("team_wins");

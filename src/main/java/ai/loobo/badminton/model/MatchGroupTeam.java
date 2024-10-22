@@ -18,7 +18,7 @@ public class MatchGroupTeam {
     @Column(name = "match_group_team_id")
     private Integer matchGroupTeamId;
 
-    @Column(name = "order_number", nullable = false)
+    @Column(name = "order_number")
     private Integer orderNumber;
 
     @JsonIgnore

@@ -188,4 +188,14 @@ private logRequest(method: string, endpoint: string): void {
     console.log("update team match", match)
     return this.http.put<TeamMatch>(`${this.apiUrl}/team_match/${match.id}`, match);
   }
+
+  getUpcomingTournamentMatches(tournamentId: number): Observable<TeamMatch[]> {
+    this.logRequest('GET', `/tournament/${tournamentId}/upcoming-matches`);
+    return this.http.get<TeamMatch[]>(`${this.apiUrl}/tournament/${tournamentId}/upcoming-matches`, { headers: this.getHeaders() });
+  }
+
+  addTeamToTournament(tournamentId: number, teamData: any): Observable<any> {
+    console.log("teamData", teamData)
+    return this.http.post(`${this.apiUrl}/tournament/${tournamentId}/team`, teamData, { headers: this.getHeaders() });
+  }
 }

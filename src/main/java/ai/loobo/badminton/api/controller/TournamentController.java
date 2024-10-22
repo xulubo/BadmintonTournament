@@ -1,5 +1,6 @@
 package ai.loobo.badminton.api.controller;
 
+import ai.loobo.badminton.api.model.Response;
 import ai.loobo.badminton.api.model.TeamRankingScores;
 import ai.loobo.badminton.api.service.MatchService;
 import ai.loobo.badminton.model.MatchGroup;
@@ -8,17 +9,17 @@ import ai.loobo.badminton.model.TeamMatch;
 import ai.loobo.badminton.model.Tournament;
 import ai.loobo.badminton.repository.MatchGroupRepository;
 import ai.loobo.badminton.repository.TeamMatchRepository;
+import ai.loobo.badminton.repository.TeamRepository;
 import ai.loobo.badminton.repository.TournamentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/tournament")
@@ -28,6 +29,7 @@ public class TournamentController {
     private final TeamMatchRepository teamMatchRepository;
     private final MatchGroupRepository matchGroupRepository;
     private final MatchService matchService;
+    private final TeamRepository teamRepository;
 
     @GetMapping("")
     public ResponseEntity<List<Tournament>> getAllTournaments() {
@@ -53,6 +55,20 @@ public class TournamentController {
         return ResponseEntity.ok(teams);
     }
 
+    @PostMapping("/{tournamentId}/team")
+    public ResponseEntity<Response> addTeam(
+            @PathVariable Integer tournamentId,
+            @RequestBody TeamController.TeamVO team
+            ) {
+        teamRepository.save(Team
+                .builder()
+                .name(team.getName())
+                .tournament(tournamentRepository.findById(tournamentId).get())
+                .build()
+        );
+        return ResponseEntity.ok(Response.builder().status("SUCCESS").build());
+    }
+
     @GetMapping("/{tournamentId}/match-groups")
     public Collection<MatchGroup> getMatchGroups(
             @PathVariable Integer tournamentId
@@ -71,6 +87,20 @@ public class TournamentController {
                 ;
 
         return teamMatchRepository.findAllByTournament(tournament);
+    }
+
+    @GetMapping("/{tournamentId}/upcoming-matches")
+    public Collection<TeamMatch> getUpcomingTeamMatches(
+            @PathVariable Integer tournamentId
+    ) {
+        var tournament = tournamentRepository.findById(tournamentId).get()
+                ;
+
+        return teamMatchRepository.findAllByTournament(tournament)
+                .stream()
+                .filter(m->m.getMatchDateTime().isAfter(LocalDateTime.now().minusDays(-1)))
+                .collect(Collectors.toList());
+
     }
 
     @GetMapping("/{tournamentId}/standing")

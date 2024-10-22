@@ -22,7 +22,7 @@ public class TeamMatch {
     @Column(name = "team_match_id")
     private Integer id;
 
-    @Column(name = "time")
+    @Column(name = "time", nullable = false)
     private LocalDateTime matchDateTime;
 
     @OneToMany(mappedBy = "teamMatch", cascade=CascadeType.REMOVE)

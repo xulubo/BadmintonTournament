@@ -33,7 +33,7 @@ public class TeamController {
     ) {
         teamRepository.save(Team
                 .builder()
-                        .name(team.getTeamName())
+                        .name(team.getName())
                         .tournament(tournamentRepository.findById(team.getTournamentId()).get())
                 .build()
         );
@@ -58,7 +58,7 @@ public class TeamController {
 
     @Data
     public static class TeamVO {
-        private String teamName;
+        private String name;
         private Integer tournamentId;
     }
 }

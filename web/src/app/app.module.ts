@@ -32,6 +32,7 @@ import { AdminPanelComponent } from './admin-panel/admin-panel.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { EditTeamMatchDialogComponent } from './edit-team-match-dialog/edit-team-match-dialog.component';
+import { UpcomingMatchesComponent } from './upcoming-matches/upcoming-matches.component';
 
 @NgModule({
   declarations: [
@@ -53,7 +54,8 @@ import { EditTeamMatchDialogComponent } from './edit-team-match-dialog/edit-team
     MatchManagementComponent,
     AdminPanelComponent,
     DashboardComponent,
-    EditTeamMatchDialogComponent
+    EditTeamMatchDialogComponent,
+    UpcomingMatchesComponent
   ],
   imports: [
     BrowserModule,

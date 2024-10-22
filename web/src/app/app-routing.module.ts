@@ -17,6 +17,7 @@ import { TeamStandingsComponent } from './team-standings/team-standings.componen
 import { TournamentGroupsComponent } from './tournament-groups/tournament-groups.component';
 import { SingleGroupComponent } from './single-group/single-group.component';
 import { PlayerEditComponent } from './player-edit/player-edit.component';
+import { UpcomingMatchesComponent } from './upcoming-matches/upcoming-matches.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
@@ -26,11 +27,13 @@ const routes: Routes = [
     path: 'tournament/:id', 
     component: SingleTournamentComponent,
     children: [
-      { path: '', redirectTo: 'teams', pathMatch: 'full' },
+      { path: '', redirectTo: 'upcoming-matches', pathMatch: 'full' },
+      { path: 'upcoming-matches', component: UpcomingMatchesComponent },
       { path: 'teams', component: TeamComponent },
       { path: 'players', component: PlayerListComponent },
       { path: 'standings', component: TeamStandingsComponent },
       { path: 'groups', component: TournamentGroupsComponent },
+      { path: 'matches', component: MatchManagementComponent },
     ]
   },
   { path: 'tournament/:tournamentId/group/:groupId', component: SingleGroupComponent },

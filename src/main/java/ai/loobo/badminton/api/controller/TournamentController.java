@@ -86,7 +86,7 @@ public class TournamentController {
         var tournament = tournamentRepository.findById(tournamentId).get()
                 ;
 
-        return teamMatchRepository.findAllByTournament(tournament);
+        return teamMatchRepository.findAllByTournamentOrderByMatchDateTime(tournament);
     }
 
     @GetMapping("/{tournamentId}/upcoming-matches")
@@ -96,7 +96,7 @@ public class TournamentController {
         var tournament = tournamentRepository.findById(tournamentId).get()
                 ;
 
-        return teamMatchRepository.findAllByTournament(tournament)
+        return teamMatchRepository.findAllByTournamentOrderByMatchDateTime(tournament)
                 .stream()
                 .filter(m->m.getMatchDateTime().isAfter(LocalDateTime.now().minusDays(-1)))
                 .collect(Collectors.toList());

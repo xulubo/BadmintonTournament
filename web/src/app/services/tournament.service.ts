@@ -75,6 +75,7 @@ private logRequest(method: string, endpoint: string): void {
 
   getTournamentTeamMatches(tournamentId: number): Observable<any[]> {
     console.log(`Fetching team matches for tournament ${tournamentId}`);
+    var matchNumber=1;
     return this.http.get<any[]>(`${this.apiUrl}/tournament/${tournamentId}/team_match`)
       .pipe(
         tap(
@@ -82,12 +83,8 @@ private logRequest(method: string, endpoint: string): void {
           error => console.error('Error fetching team matches:', error)
         ),
         map(matches => matches.map(match => ({
-          id: match.id,
-          teams: match.teams.map((team: any) => ({
-            id: team.team.id,
-            name: team.team.name,
-            totalWins: team.totalWins
-          }))
+          matchNumber: matchNumber++,
+          ...match
         })))
       );
   }

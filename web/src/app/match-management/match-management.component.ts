@@ -3,6 +3,18 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { TournamentService } from '../services/tournament.service';
 import { AuthService } from '../services/auth.service';
 
+interface TeamMatch {
+  id: number;
+  matchNumber?: number;
+  teams: {
+    team: {
+      id: number;
+      name: string;
+    };
+    totalWins: number;
+  }[];
+}
+
 @Component({
   selector: 'app-match-management',
   templateUrl: './match-management.component.html',
@@ -10,7 +22,7 @@ import { AuthService } from '../services/auth.service';
 })
 export class MatchManagementComponent implements OnInit {
   tournamentId: number = 0;
-  teamMatches: any[] = [];
+  teamMatches: TeamMatch[] = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -28,8 +40,14 @@ export class MatchManagementComponent implements OnInit {
 
   loadTeamMatches(): void {
     this.tournamentService.getTournamentTeamMatches(this.tournamentId).subscribe(
-      (data: any[]) => {
-        this.teamMatches = data;
+      (data: TeamMatch[]) => {
+        this.teamMatches = data.map(match => ({
+          ...match,
+          teams: match.teams.map(team => ({
+            ...team,
+            //team: team.team || { id: 0, name: 'Unknown' }
+          }))
+        }));
         console.log('Team matches loaded:', this.teamMatches);
       },
       (error) => {
@@ -40,5 +58,9 @@ export class MatchManagementComponent implements OnInit {
 
   navigateToTeamMatch(matchId: number): void {
     this.router.navigate(['/team-match', matchId]);
+  }
+
+  getTeamName(team: any): string {
+    return team && team.team && team.team.name ? team.team.name : 'Unknown';
   }
 }

@@ -12,10 +12,10 @@
   </thead>
   <tbody>
     <tr *ngFor="let match of teamMatches">
-      <td>{{ match.matchNumber }}</td>
-      <td>{{ match.teams[0].team.name }}</td>
-      <td>{{ match.teams[1].team.name }}</td>
-      <td>{{ match.teams[0].totalWins }} - {{ match.teams[1].totalWins }}</td>
+      <td>{{ match.matchNumber || 'N/A' }}</td>
+      <td>{{ getTeamName(match.teams[0]) }}</td>
+      <td>{{ getTeamName(match.teams[1]) }}</td>
+      <td>{{ match.teams[0]?.totalWins || 0 }} - {{ match.teams[1]?.totalWins || 0 }}</td>
       <td>
         <button (click)="navigateToTeamMatch(match.id)">View Details</button>
       </td>

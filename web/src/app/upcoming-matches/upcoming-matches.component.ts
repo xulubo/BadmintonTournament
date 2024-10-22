@@ -86,4 +86,8 @@ export class UpcomingMatchesComponent implements OnInit {
   navigateToTeamMatch(matchId: number): void {
     this.router.navigate(['/team-match', matchId]);
   }
+
+  viewTeamPlayers(teamId: number): void {
+    this.router.navigate(['/team', teamId]);
+  }
 }

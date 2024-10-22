@@ -6,7 +6,7 @@
     <ul>
       <li *ngFor="let player of players" class="player-item">
         <a [routerLink]="['/player-matches/', player.id]">
-          {{ player.name || (player.firstName + ' ' + player.lastName) }}
+          {{ player.displayName || (player.firstName + ' ' + player.lastName) }}
         </a> 
         <span class="player-gender">({{ player.gender === 'M' ? 'Male' : 'Female' }})</span>
         <span *ngIf="player.comment" class="player-comment">[{{ player.comment }}]</span>

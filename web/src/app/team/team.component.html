@@ -10,7 +10,7 @@
     </ng-container>
     <ng-template #displayTeam>
       <span (click)="viewTeamPlayers(team.id)" style="cursor: pointer;">
-        {{ team.order }}. {{ team.name }}
+        {{ team.name }}
       </span>
       <button *ngIf="authService.isAdmin()" (click)="startEditing(team)">Edit</button>
     </ng-template>

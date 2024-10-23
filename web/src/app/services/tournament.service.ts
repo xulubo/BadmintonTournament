@@ -55,6 +55,10 @@ private logRequest(method: string, endpoint: string): void {
     return this.http.get<any>(`${this.apiUrl}/team/${teamId}`, { headers: this.getHeaders() });
   }
 
+  getTeamMatchTeamDetails(teamId: number): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/team_match_team/${teamId}`, { headers: this.getHeaders() });
+  }
+
   getTeamPlayers(teamId: number): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/team/${teamId}/player`, { headers: this.getHeaders() });
   }

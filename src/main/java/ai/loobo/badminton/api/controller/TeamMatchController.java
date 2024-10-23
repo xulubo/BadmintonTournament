@@ -41,7 +41,7 @@ public class TeamMatchController {
 
     @Transactional
     @PostMapping
-    public Response create(
+    public Response createTeamMatch(
             @RequestBody TeamMatchData matchData
     ) {
         var teamMatch = TeamMatch.builder()

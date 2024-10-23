@@ -23,7 +23,7 @@ export class TeamMatchComponent implements OnInit {
     teamMatchId: 0,
     matchNumber: 0,
     matchType: '',
-    teams: [
+    teamMatchTeams: [
       { id: null, players: [new Player(), new Player()], scores: [new GameScore(), new GameScore(), new GameScore()] },
       { id: null, players: [new Player(), new Player()], scores: [new GameScore(), new GameScore(), new GameScore()] }
     ]
@@ -52,8 +52,8 @@ export class TeamMatchComponent implements OnInit {
       (data: any) => {
         this.teams = data.teams;
         this.matchNumber = data.matchNumber;
-        this.singleMatchData.teams[0].id = this.teams[0].team.id;
-        this.singleMatchData.teams[1].id = this.teams[1].team.id;
+        this.singleMatchData.teamMatchTeams[0].id = this.teams[0].id;
+        this.singleMatchData.teamMatchTeams[1].id = this.teams[1].id;
         this.teamNames[0] = this.teams[0].team.name;
         this.teamNames[1] = this.teams[1].team.name;
         this.loadTeamPlayers();
@@ -65,8 +65,8 @@ export class TeamMatchComponent implements OnInit {
   }
 
   loadTeamPlayers(): void {
-    const team1Request = this.tournamentService.getTeamDetails(this.singleMatchData.teams[0].id);
-    const team2Request = this.tournamentService.getTeamDetails(this.singleMatchData.teams[1].id);
+    const team1Request = this.tournamentService.getTeamMatchTeamDetails(this.singleMatchData.teamMatchTeams[0].id);
+    const team2Request = this.tournamentService.getTeamMatchTeamDetails(this.singleMatchData.teamMatchTeams[1].id);
 
     forkJoin([team1Request, team2Request]).subscribe(
       ([team1Data, team2Data]) => {

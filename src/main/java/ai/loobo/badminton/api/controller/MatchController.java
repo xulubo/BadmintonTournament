@@ -4,7 +4,7 @@ import ai.loobo.badminton.api.model.MatchResult;
 import ai.loobo.badminton.api.model.Response;
 import ai.loobo.badminton.model.GameScore;
 import ai.loobo.badminton.model.Match;
-import ai.loobo.badminton.model.MatchPlayers;
+import ai.loobo.badminton.model.MatchPlayer;
 import ai.loobo.badminton.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 public class MatchController {
     private final TeamMatchRepository teamMatchRepository;
     private final GameScoreRepository gameScoreRepository;
-    private final TeamRepository teamRepository;
+    private final TeamMatchTeamRepository teamMatchTeamRepository;
     private final MatchRepository matchRepository;
     private final MatchPlayersRepository matchPlayersRepository;
     private final PlayerRepository playerRepository;
@@ -39,13 +39,13 @@ public class MatchController {
         );
 
         for(var teamData: matchResult.getTeamResults()) {
-            var team = teamRepository.findById(teamData.getTeamId()).get();
+            var teamMatchTeam = teamMatchTeamRepository.findById(teamData.getTeamMatchTeamId()).get();
 
             for(var playerId: teamData.getPlayers()
                     .stream().map(p->p.getId()).collect(Collectors.toList())
             ) {
                 var player = playerRepository.findById(playerId).get();
-                var matchPlayer = new MatchPlayers(match,team, player);
+                var matchPlayer = new MatchPlayer(match,teamMatchTeam, player);
                 matchPlayersRepository.save(
                         matchPlayer
                 );
@@ -57,7 +57,7 @@ public class MatchController {
             ) {
                 if (score == null) continue;
 
-                var gameScore = GameScore.create(match,team, score);
+                var gameScore = GameScore.create(match,teamMatchTeam, score);
                 gameScore.setGameNumber(i++);
                 gameScoreRepository.save(
                         gameScore

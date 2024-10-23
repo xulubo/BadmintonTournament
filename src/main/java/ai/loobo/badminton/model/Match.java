@@ -27,6 +27,9 @@ public class Match {
     @Column(name = "type")
     private String type;
 
+    @Column(name = "comment")
+    private String comment;
+
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "team_match_id")
@@ -36,5 +39,5 @@ public class Match {
     private Set<GameScore> gameScores;
 
     @OneToMany(mappedBy = "match")
-    private Set<MatchPlayers> matchPlayers;
+    private Set<MatchPlayer> matchPlayers;
 }

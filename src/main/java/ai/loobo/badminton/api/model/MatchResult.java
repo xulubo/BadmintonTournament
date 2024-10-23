@@ -26,7 +26,7 @@ public class MatchResult {
     private Integer matchNumber;
     private String matchType;
 
-    @JsonProperty("teams")
+    @JsonProperty("teamMatchTeams")
     private List<TeamResult> teamResults;
 
     /**
@@ -36,6 +36,8 @@ public class MatchResult {
     @Data
     public static class TeamResult {
         @JsonProperty("id")
+        private int teamMatchTeamId;
+
         private int teamId;
 
         private String teamName;

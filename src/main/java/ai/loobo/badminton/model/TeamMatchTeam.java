@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.Set;
 
 /**
  * Represent a team attending a particular team match.
@@ -16,7 +17,7 @@ import javax.persistence.*;
  *      +-- teamMatchTeam2
  *                + -- team
  */
-@EqualsAndHashCode(exclude = {"teamMatch"})
+@EqualsAndHashCode(of = {"id"})
 @Builder
 @Entity
 @Table(name = "team_match_team", schema = "tournament")
@@ -40,4 +41,7 @@ public class TeamMatchTeam {
     @ManyToOne
     @JoinColumn(name = "team_match_id")
     private TeamMatch teamMatch;
+
+    @OneToMany(mappedBy = "teamMatchTeam")
+    private Set<MatchPlayer> matchPlayers;
 }

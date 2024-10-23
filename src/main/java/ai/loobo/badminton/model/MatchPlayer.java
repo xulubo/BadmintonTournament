@@ -12,7 +12,7 @@ import javax.persistence.*;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class MatchPlayers {
+public class MatchPlayer {
 
     @EmbeddedId
     private MatchPlayersId id;
@@ -34,10 +34,16 @@ public class MatchPlayers {
     @JoinColumn(name = "player_id")
     private Player player;
 
-    public MatchPlayers(Match match, Team team, Player player) {
-        this.id = new MatchPlayersId(match.getId(), team.getId(), player.getId());
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "team_match_team_id")
+    private TeamMatchTeam teamMatchTeam;
+
+    public MatchPlayer(Match match, TeamMatchTeam teamMatchTeam, Player player) {
+        this.id = new MatchPlayersId(match.getId(), teamMatchTeam.getTeam().getId(), player.getId());
         this.match = match;
-        this.team = team;
+        this.teamMatchTeam = teamMatchTeam;
+        this.team = teamMatchTeam.getTeam();
         this.player = player;
     }
 }

@@ -1,7 +1,9 @@
 <button (click)="goBack()">Back to Tournament</button>
 
 <h2>Team Match Details</h2>
-<h3>{{ teamNames[0] }} vs {{ teamNames[1] }}</h3>
+<ng-container *ngIf="teams.length > 0">
+  <h3>{{ teamNames[0] }}({{teams[0].id}}) vs {{ teamNames[1] }}({{teams[1].id}})</h3>
+</ng-container>
 
 <h3>Single Matches</h3>
 <div *ngIf="singleMatches.length === 0">No single matches found.</div>
@@ -23,21 +25,21 @@
   <tr>
     <td style="padding: 10px; border: 1px solid #ddd;">{{ match.matchType }}</td>
     <td style="padding: 10px; border: 1px solid #ddd;">
-      <a [routerLink]="['/player-matches', match.teams[0].players[0].id]">{{ match.teams[0].players[0].name }}</a><br>
-      <a [routerLink]="['/player-matches', match.teams[0].players[1].id]">{{ match.teams[0].players[1].name }}</a>
+      <a [routerLink]="['/player-matches', match.teamMatchTeams[0].players[0].id]">{{ match.teamMatchTeams[0].players[0].displayName }}</a><br>
+      <a [routerLink]="['/player-matches', match.teamMatchTeams[0].players[1].id]">{{ match.teamMatchTeams[0].players[1].displayName }}</a>
     </td>
     <td style="padding: 10px; border: 1px solid #ddd;">
-      <a [routerLink]="['/player-matches', match.teams[1].players[0].id]">{{ match.teams[1].players[0].name }}</a><br>
-      <a [routerLink]="['/player-matches', match.teams[1].players[1].id]">{{ match.teams[1].players[1].name }}</a>
+      <a [routerLink]="['/player-matches', match.teamMatchTeams[1].players[0].id]">{{ match.teamMatchTeams[1].players[0].displayName }}</a><br>
+      <a [routerLink]="['/player-matches', match.teamMatchTeams[1].players[1].id]">{{ match.teamMatchTeams[1].players[1].displayName }}</a>
     </td>
     <td style="padding: 10px; border: 1px solid #ddd;">
-      {{ match.teams[0].scores[0].teamScore }}:{{ match.teams[1].scores[0].teamScore }}
+      {{ match.teamMatchTeams[0].scores[0].teamScore }}:{{ match.teamMatchTeams[1].scores[0].teamScore }}
     </td>
     <td style="padding: 10px; border: 1px solid #ddd;">
-      {{ match.teams[0].scores[1].teamScore }}:{{ match.teams[1].scores[1].teamScore }}
+      {{ match.teamMatchTeams[0].scores[1].teamScore }}:{{ match.teamMatchTeams[1].scores[1].teamScore }}
     </td>
     <td style="padding: 10px; border: 1px solid #ddd;">
-      {{ match.teams[0].scores[2].teamScore }}:{{ match.teams[1].scores[2].teamScore }}
+      {{ match.teamMatchTeams[0].scores[2].teamScore }}:{{ match.teamMatchTeams[1].scores[2].teamScore }}
     </td>
   </tr>
 </table>
@@ -58,7 +60,7 @@
     </select>
   </div>
 
-  <div *ngFor="let team of singleMatchData.teams; let i = index">
+  <div *ngFor="let team of singleMatchData.teamMatchTeams; let i = index">
     <h4>{{ teamNames[i] }}</h4>
     <div *ngFor="let player of team.players; let j = index">
       <label for="team{{i+1}}Player{{j+1}}">Player {{j+1}}:</label>

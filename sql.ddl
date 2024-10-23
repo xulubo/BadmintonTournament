@@ -78,6 +78,7 @@ CREATE TABLE game_score (
     game_number INT,
     match_id INT REFERENCES match(match_id) ON DELETE CASCADE,
     team_id INT REFERENCES team(team_id) ON DELETE CASCADE,
+    team_match_team_id INT REFERENCES team_match_team(team_match_team_id) ON DELETE CASCADE,
     team_score INT NOT NULL
 );
 

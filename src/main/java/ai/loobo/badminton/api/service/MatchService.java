@@ -105,10 +105,11 @@ public class MatchService {
             var teamResults = teamMatch
                     .getTeams()
                     .stream()
-                    .map(team-> MatchResult.TeamResult.builder()
-                            .teamName(team.getTeam().getName())
-                            .teamId(team.getTeam().getId())
-                            .totalWins(Optional.ofNullable(team.getTotalWins()).orElse(0))
+                    .map(teamMatchTeam-> MatchResult.TeamResult.builder()
+                            .teamName(teamMatchTeam.getTeam().getName())
+                            .teamMatchTeamId(teamMatchTeam.getId())
+                            .teamId(teamMatchTeam.getTeam().getId())
+                            .totalWins(Optional.ofNullable(teamMatchTeam.getTotalWins()).orElse(0))
                             .build()
                     )
                     .collect(Collectors.toList());
@@ -117,6 +118,7 @@ public class MatchService {
                 teamResult.setPlayers(
                         allMatches.stream()
                                 .flatMap(m->m.getMatchPlayers().stream())
+                                .filter(p->p.getTeamMatchTeam() == null || p.getTeamMatchTeam().getId() == teamResult.getTeamMatchTeamId())
                                 .filter(p->p.getTeam().getId() == teamResult.getTeamId())
                                 .filter(p->p.getMatch().getId() == match.getId())
                                 .map(p->p.getPlayer())

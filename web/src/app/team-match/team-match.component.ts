@@ -70,6 +70,8 @@ export class TeamMatchComponent implements OnInit {
 
     forkJoin([team1Request, team2Request]).subscribe(
       ([team1Data, team2Data]) => {
+        console.log("team1Data", team1Data)
+        console.log("team2Data", team2Data)
         this.teamPlayers[0] = team1Data.players;
         this.teamPlayers[1] = team2Data.players;
       },

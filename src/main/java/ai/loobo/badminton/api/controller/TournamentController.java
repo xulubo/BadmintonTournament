@@ -37,6 +37,13 @@ public class TournamentController {
         return ResponseEntity.ok(tournaments);
     }
 
+    @PostMapping
+    public Response createTournament(
+            @RequestBody Tournament tournament
+    ) {
+        tournamentRepository.save(tournament);
+        return Response.SUCCESS;
+    }
     @GetMapping("/{tournamentId}")
     public Tournament getTournament(
             @PathVariable Integer tournamentId

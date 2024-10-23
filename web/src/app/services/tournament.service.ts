@@ -60,6 +60,7 @@ private logRequest(method: string, endpoint: string): void {
   }
 
   addPlayer(playerData: any): Observable<any> {
+    console.log("playerData", playerData)
     return this.http.post(`${this.apiUrl}/player`, playerData, { headers: this.getHeaders() });
   }
 
@@ -199,5 +200,10 @@ private logRequest(method: string, endpoint: string): void {
 
   updateTeam(teamId: number, teamData: any): Observable<any> {
     return this.http.put(`${this.apiUrl}/team/${teamId}`, teamData, { headers: this.getHeaders() });
+  }
+
+  createTournament(tournamentData: any): Observable<any> {
+    this.logRequest('POST', '/tournament');
+    return this.http.post(`${this.apiUrl}/tournament`, tournamentData, { headers: this.getHeaders() });
   }
 }

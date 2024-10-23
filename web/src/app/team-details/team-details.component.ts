@@ -66,25 +66,23 @@ export class TeamDetailsComponent implements OnInit {
       alert('You do not have permission to perform this action.');
       return;
     }
-    if (this.newPlayer.firstName.trim() && this.newPlayer.lastName.trim()) {
-      const playerData = {
-        ...this.newPlayer,
-        teamId: this.teamId,
-      };
-      if (!playerData.displayName) {
-        playerData.displayName = `${playerData.firstName} ${playerData.lastName}`;
-      }
-      this.tournamentService.addPlayer(playerData).subscribe(
-        (response) => {
-          console.log('Player added successfully:', response);
-          this.resetNewPlayer();
-          this.loadPlayers();
-        },
-        (error) => {
-          console.error('Error adding player:', error);
-        }
-      );
+    const playerData = {
+      ...this.newPlayer,
+      teamId: this.teamId,
+    };
+    if (!playerData.displayName) {
+      playerData.displayName = `${playerData.firstName} ${playerData.lastName}`;
     }
+    this.tournamentService.addPlayer(playerData).subscribe(
+      (response) => {
+        console.log('Player added successfully:', response);
+        this.players.push(response);
+        this.resetNewPlayer();
+      },
+      (error) => {
+        console.error('Error adding player:', error);
+      }
+    );
   }
 
   resetNewPlayer(): void {

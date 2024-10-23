@@ -51,7 +51,7 @@ public class PlayerController {
     ) {
         var player = Player.builder()
                 .team(teamRepository.findById(playerVO.teamId).get())
-                .displayName(playerVO.name)
+                .displayName(playerVO.displayName)
                 .gender(playerVO.gender)
                 .build();
 
@@ -93,7 +93,7 @@ public class PlayerController {
 
     @Data
     public static class PlayerVO {
-        private String name;
+        private String displayName;
         private Integer teamId;
         private char gender;
     }

@@ -64,7 +64,7 @@
       <label for="team{{i+1}}Player{{j+1}}">Player {{j+1}}:</label>
       <select id="team{{i+1}}Player{{j+1}}" [(ngModel)]="team.players[j].id" name="team{{i+1}}Player{{j+1}}" required>
         <option value="">Select player</option>
-        <option *ngFor="let player of teamPlayers[i]" [value]="player.id">{{ player.name }}</option>
+        <option *ngFor="let player of teamPlayers[i]" [value]="player.id">{{ player.displayName }}</option>
       </select>
     </div>
     <div *ngFor="let score of team.scores; let j = index">

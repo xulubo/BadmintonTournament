@@ -17,4 +17,9 @@ export class AppComponent {
     this.authService.logout();
     this.router.navigate(['/login']);
   }
+
+  get currentUserRole(): string {
+    const currentUser = this.authService.currentUserValue;
+    return currentUser ? currentUser.role : 'Guest';
+  }
 }

@@ -17,13 +17,15 @@ export class TeamStandingsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    const id = this.route.snapshot.paramMap.get('id');
-    if (id !== null) {
-      this.tournamentId = +id;
-      this.loadStandings();
-    } else {
-      console.error('Tournament ID is missing');
-    }
+    this.route.parent?.params.subscribe(params => {
+      const id = params['id'];
+      if (id) {
+        this.tournamentId = +id;
+        this.loadStandings();
+      } else {
+        console.error('Tournament ID is missing');
+      }
+    });
   }
 
   loadStandings(): void {

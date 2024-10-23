@@ -32,14 +32,20 @@ public class GameScore {
     @JoinColumn(name = "team_id")
     private Team team;
 
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "team_match_team_id")
+    private TeamMatchTeam teamMatchTeam;
+
     @Column(name = "team_score", nullable = false)
     private Integer teamScore;
 
-    public static GameScore create(Match match, Team team, int score) {
+    public static GameScore create(Match match, TeamMatchTeam teamMatchTeam, int score) {
         return GameScore.builder()
                 .teamScore(score)
                 .match(match)
-                .team(team)
+                .teamMatchTeam(teamMatchTeam)
+                .team(teamMatchTeam.getTeam())
                 .build();
     }
 }

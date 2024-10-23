@@ -33,7 +33,7 @@ public class TeamController {
     ) {
         teamRepository.save(Team
                 .builder()
-                        .name(team.getTeamName())
+                        .name(team.getName())
                         .tournament(tournamentRepository.findById(team.getTournamentId()).get())
                 .build()
         );
@@ -48,6 +48,21 @@ public class TeamController {
         return teamRepository.findById(teamId).get();
     }
 
+    @PutMapping("/{teamId}")
+    public Team updateTeam(
+            @PathVariable Integer teamId,
+            @RequestBody TeamVO teamVO
+    ) {
+
+        var team = teamRepository.findById(teamId).get();
+        team.setName(teamVO.getName());
+        team.setOrder(teamVO.getOrder());
+        teamRepository.save(team);
+
+        return teamRepository.findById(teamId).get();
+    }
+
+
     @GetMapping("/{teamId}/player")
     public ResponseEntity<Collection<Player>> getPlayerList(
             @PathVariable int teamId
@@ -58,7 +73,8 @@ public class TeamController {
 
     @Data
     public static class TeamVO {
-        private String teamName;
+        private String name;
+        private int order;
         private Integer tournamentId;
     }
 }

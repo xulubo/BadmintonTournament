@@ -13,6 +13,7 @@ CREATE TABLE team (
     team_id SERIAL PRIMARY KEY,
     team_name VARCHAR(255) NOT NULL,
     tournament_id INT REFERENCES tournament(tournament_id) ON DELETE CASCADE,
+    order_number INT NOT NULL DEFAULT 0
 );
 
 -- 3. Player Table
@@ -77,6 +78,7 @@ CREATE TABLE game_score (
     game_number INT,
     match_id INT REFERENCES match(match_id) ON DELETE CASCADE,
     team_id INT REFERENCES team(team_id) ON DELETE CASCADE,
+    team_match_team_id INT REFERENCES team_match_team(team_match_team_id) ON DELETE CASCADE,
     team_score INT NOT NULL
 );
 
@@ -85,6 +87,7 @@ CREATE TABLE match_players (
     match_id INT REFERENCES match(match_id) ON DELETE CASCADE,
     team_id INT REFERENCES team(team_id) ON DELETE CASCADE,
     player_id INT REFERENCES player(player_id) ON DELETE CASCADE,
+    team_match_team_id INT REFERENCES team_match_team(team_match_team_id) ON DELETE CASCADE,
     PRIMARY KEY (match_id, team_id, player_id)
 );
 

@@ -1,0 +1,7 @@
+<h2>Player List</h2>
+<ul>
+  <li *ngFor="let player of players">
+    {{ player.name }} ({{ player.gender }})
+    <a [routerLink]="['/player', player.id, 'edit']">Edit</a>
+  </li>
+</ul>

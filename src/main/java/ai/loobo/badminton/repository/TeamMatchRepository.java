@@ -10,5 +10,5 @@ import java.util.List;
 @Repository
 public interface TeamMatchRepository extends JpaRepository<TeamMatch, Integer> {
 
-    List<TeamMatch> findAllByTournament(Tournament tournament);
+    List<TeamMatch> findAllByTournamentOrderByMatchDateTime(Tournament tournament);
 }

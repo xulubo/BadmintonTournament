@@ -1,8 +1,39 @@
-<h2>Tournament List</h2>
-<ul>
-  <li *ngFor="let tournament of tournaments">
-    <a [routerLink]="['/tournament', tournament.id]">
-      {{ tournament.name }} ({{ tournament.startDate }} - {{ tournament.endDate }})
-    </a>
-  </li>
-</ul>
+<div class="tournament-container">
+  <h2 class="page-title">Tournament List</h2>
+  <ul class="tournament-list">
+    <li *ngFor="let tournament of tournaments" class="tournament-item">
+      <a [routerLink]="['/tournament', tournament.id]" class="tournament-link">
+        <span class="tournament-name">{{ tournament.name }}</span>
+        <span class="tournament-date">
+          {{ tournament.startDate | date:'mediumDate' }} - {{ tournament.endDate | date:'mediumDate' }}
+        </span>
+        <span *ngIf="tournament.location" class="tournament-location">
+          <i class="fas fa-map-marker-alt"></i> {{ tournament.location }}
+        </span>
+      </a>
+    </li>
+  </ul>
+
+  <div *ngIf="authService.isAdmin()" class="create-tournament-section">
+    <h3 class="section-title">Create New Tournament</h3>
+    <form (ngSubmit)="createTournament()" class="tournament-form">
+      <div class="form-group">
+        <label for="tournamentName">Tournament Name:</label>
+        <input type="text" id="tournamentName" [(ngModel)]="newTournament.name" name="tournamentName" required>
+      </div>
+      <div class="form-group">
+        <label for="location">Location:</label>
+        <input type="text" id="location" [(ngModel)]="newTournament.location" name="location" required>
+      </div>
+      <div class="form-group">
+        <label for="startDate">Start Date:</label>
+        <input type="date" id="startDate" [(ngModel)]="newTournament.startDate" name="startDate" required>
+      </div>
+      <div class="form-group">
+        <label for="endDate">End Date:</label>
+        <input type="date" id="endDate" [(ngModel)]="newTournament.endDate" name="endDate" required>
+      </div>
+      <button type="submit" class="btn-create">Create Tournament</button>
+    </form>
+  </div>
+</div>

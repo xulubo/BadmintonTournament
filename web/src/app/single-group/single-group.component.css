@@ -1,0 +1,106 @@
+/* Add your component-specific styles here */
+
+/* General styles */
+h2, h3 {
+  color: #333;
+  margin-bottom: 15px;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+li {
+  margin-bottom: 10px;
+}
+
+/* Form styles */
+form {
+  margin-top: 20px;
+  margin-bottom: 30px;
+}
+
+label {
+  display: inline-block;
+  width: 120px;
+  margin-bottom: 5px;
+}
+
+input, select {
+  width: 200px;
+  padding: 5px;
+  margin-bottom: 10px;
+}
+
+button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+/* Table styles */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+th, td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+th {
+  background-color: #f2f2f2;
+}
+
+/* Material tab styles */
+:host ::ng-deep .mat-tab-label {
+  color: #000000 !important;
+  opacity: 1 !important;
+  background-color: #f0f0f0 !important;
+  font-weight: bold !important;
+  font-size: 16px !important;
+}
+
+:host ::ng-deep .mat-tab-label-active {
+  color: #000000 !important;
+  background-color: #ffffff !important;
+  border-bottom: 2px solid #007bff !important;
+}
+
+:host ::ng-deep .mat-tab-label:hover {
+  color: #000000 !important;
+  background-color: #e0e0e0 !important;
+}
+
+:host ::ng-deep .mat-tab-group {
+  margin-top: 20px;
+}
+
+:host ::ng-deep .mat-tab-header {
+  background-color: #f0f0f0;
+  border-bottom: 2px solid #007bff;
+}
+
+:host ::ng-deep .mat-tab-body-content {
+  color: #000000 !important;
+}
+
+/* Specific styles for the result matrix */
+.clickable-score:hover {
+  color: darkblue !important;
+}
+
+.non-clickable-score {
+  color: #888;
+  cursor: default;
+}

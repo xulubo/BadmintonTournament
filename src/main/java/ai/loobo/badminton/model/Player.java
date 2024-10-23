@@ -21,7 +21,7 @@ public class Player {
     private Integer id;
 
     @Column(name = "player_name", nullable = false)
-    private String name;
+    private String displayName;
 
     @Column(name = "first_name", nullable = true)
     private String firstName;

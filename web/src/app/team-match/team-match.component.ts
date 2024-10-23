@@ -5,6 +5,9 @@ import { Location } from '@angular/common';
 import { forkJoin } from 'rxjs';
 import { Player } from '../models/player';
 import { GameScore } from '../models/game_score';
+import { MatDialog } from '@angular/material/dialog';
+import { EditTeamMatchDialogComponent } from '../edit-team-match-dialog/edit-team-match-dialog.component';
+import { EditSingleMatchDialogComponent } from '../edit-single-match-dialog/edit-single-match-dialog.component';
 
 @Component({
   selector: 'app-team-match',
@@ -23,7 +26,7 @@ export class TeamMatchComponent implements OnInit {
     teamMatchId: 0,
     matchNumber: 0,
     matchType: '',
-    teams: [
+    teamMatchTeams: [
       { id: null, players: [new Player(), new Player()], scores: [new GameScore(), new GameScore(), new GameScore()] },
       { id: null, players: [new Player(), new Player()], scores: [new GameScore(), new GameScore(), new GameScore()] }
     ]
@@ -33,7 +36,8 @@ export class TeamMatchComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private tournamentService: TournamentService,
-    private location: Location
+    private location: Location,
+    private dialog: MatDialog
   ) { }
 
   ngOnInit(): void {
@@ -52,8 +56,8 @@ export class TeamMatchComponent implements OnInit {
       (data: any) => {
         this.teams = data.teams;
         this.matchNumber = data.matchNumber;
-        this.singleMatchData.teams[0].id = this.teams[0].team.id;
-        this.singleMatchData.teams[1].id = this.teams[1].team.id;
+        this.singleMatchData.teamMatchTeams[0].id = this.teams[0].id;
+        this.singleMatchData.teamMatchTeams[1].id = this.teams[1].id;
         this.teamNames[0] = this.teams[0].team.name;
         this.teamNames[1] = this.teams[1].team.name;
         this.loadTeamPlayers();
@@ -65,11 +69,13 @@ export class TeamMatchComponent implements OnInit {
   }
 
   loadTeamPlayers(): void {
-    const team1Request = this.tournamentService.getTeamDetails(this.singleMatchData.teams[0].id);
-    const team2Request = this.tournamentService.getTeamDetails(this.singleMatchData.teams[1].id);
+    const team1Request = this.tournamentService.getTeamMatchTeamDetails(this.singleMatchData.teamMatchTeams[0].id);
+    const team2Request = this.tournamentService.getTeamMatchTeamDetails(this.singleMatchData.teamMatchTeams[1].id);
 
     forkJoin([team1Request, team2Request]).subscribe(
       ([team1Data, team2Data]) => {
+        console.log("team1Data", team1Data)
+        console.log("team2Data", team2Data)
         this.teamPlayers[0] = team1Data.players;
         this.teamPlayers[1] = team2Data.players;
       },
@@ -153,5 +159,60 @@ export class TeamMatchComponent implements OnInit {
         }
       );
     }
+  }
+
+  editTeamMatch(): void {
+    const dialogRef = this.dialog.open(EditTeamMatchDialogComponent, {
+      width: '400px',
+      data: {
+        id: this.teamMatchId,
+        matchNumber: this.matchNumber,
+        matchDateTime: this.teams[0]?.matchDateTime, // Assuming matchDateTime is stored in the teams array
+        teams: this.teams
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.updateTeamMatch(result);
+      }
+    });
+  }
+
+  updateTeamMatch(updatedMatch: any): void {
+    this.tournamentService.updateTeamMatch(updatedMatch).subscribe(
+      (response) => {
+        console.log('Team match updated successfully:', response);
+        this.loadTeamMatchDetails(); // Reload the match details
+      },
+      (error) => {
+        console.error('Error updating team match:', error);
+      }
+    );
+  }
+
+  editSingleMatch(match: any): void {
+    const dialogRef = this.dialog.open(EditSingleMatchDialogComponent, {
+      width: '400px',
+      data: { ...match, teamNames: this.teamNames }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.updateSingleMatch(result);
+      }
+    });
+  }
+
+  updateSingleMatch(updatedMatch: any): void {
+    this.tournamentService.updateSingleMatch(updatedMatch).subscribe(
+      (response) => {
+        console.log('Single match updated successfully:', response);
+        this.loadSingleMatches(); // Reload the single matches
+      },
+      (error) => {
+        console.error('Error updating single match:', error);
+      }
+    );
   }
 }

@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: jdbc:postgresql://192.168.2.201:5432/dv
-    username: app
-    password: telus
+    url: jdbc:postgresql://localhost:5432/badminton
+    username: badminton
+    password: 8mondeo
     driver-class-name: org.postgresql.Driver
     database-platform: org.hibernate.dialect.PostgreSQLDialect
 
@@ -20,9 +20,9 @@ spring:
     pathmatch:
       matching-strategy: ant_path_matcher
 
-server:
-  error:
-    whitelabel:
-      enabled: false   # Disable the default Whitelabel error page
-    include-stacktrace: never # Do not include stack traces in the error response
-    path: /error  # Map all errors to the /error path (handled by the CustomErrorController)
+#server:
+#  error:
+#    whitelabel:
+#      enabled: false   # Disable the default Whitelabel error page
+#    include-stacktrace: never # Do not include stack traces in the error response
+#    path: /error  # Map all errors to the /error path (handled by the CustomErrorController)

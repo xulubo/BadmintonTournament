@@ -2,19 +2,20 @@ package ai.loobo.badminton.api.controller;
 
 import ai.loobo.badminton.api.model.MatchResult;
 import ai.loobo.badminton.api.model.Response;
+import ai.loobo.badminton.api.model.TeamMatchVO;
 import ai.loobo.badminton.api.service.MatchService;
-import ai.loobo.badminton.model.*;
+import ai.loobo.badminton.model.TeamMatch;
+import ai.loobo.badminton.model.TeamMatchTeam;
 import ai.loobo.badminton.repository.*;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Collection;
-import java.util.Comparator;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/team_match")
@@ -29,6 +30,7 @@ public class TeamMatchController {
     private final PlayerRepository playerRepository;
     private final TournamentRepository tournamentRepository;
     private final MatchService matchService;
+    private final MatchGroupRepository matchGroupRepository;
 
     @GetMapping("/{teamMatchId}")
     public TeamMatch get(
@@ -39,11 +41,13 @@ public class TeamMatchController {
 
     @Transactional
     @PostMapping
-    public Response create(
+    public Response createTeamMatch(
             @RequestBody TeamMatchData matchData
     ) {
         var teamMatch = TeamMatch.builder()
                 .tournament(tournamentRepository.findById(matchData.tournamentId).get())
+                .matchGroup(matchGroupRepository.findById(matchData.matchGroupId).get())
+                .matchDateTime(LocalDateTime.of(matchData.matchDate, matchData.matchTime))
                 .build();
         teamMatchRepository.save(teamMatch);
 
@@ -57,6 +61,38 @@ public class TeamMatchController {
             teamMatchTeamRepository.save(teamMatchTeam);
         }
 
+
+        return Response.builder().status("SUCCESS").build();
+    }
+
+    /**
+     * Update matchTime and teamWins
+     *
+     * @param teamMatchId
+     * @param teamMatchVO
+     * @return
+     */
+    @PutMapping("/{teamMatchId}")
+    public Response updateTeamMatch(
+            @PathVariable int teamMatchId,
+            @RequestBody TeamMatchVO teamMatchVO
+    ) {
+        var teamMatch = teamMatchRepository.findById(teamMatchId).get();
+
+        teamMatch.setMatchDateTime(teamMatchVO.getMatchDateTime());
+
+        if (teamMatchVO.getTeams() != null) {
+            for(var teamMatchTeamVo: teamMatchVO.getTeams()) {
+                var teamMatchTeam = teamMatch.getTeams()
+                        .stream()
+                        .filter(t->t.getId() == teamMatchTeamVo.getId())
+                        .findFirst()
+                        .get();
+                teamMatchTeam.setTotalWins(teamMatchTeamVo.getTotalWins());
+            }
+        }
+
+        teamMatchRepository.save(teamMatch);
 
         return Response.builder().status("SUCCESS").build();
     }
@@ -77,9 +113,13 @@ public class TeamMatchController {
         return matchService.getMatchResults(teamMatchId);
     }
 
+    // should be replaced by TeamMatchVO
     @Data
     public static class TeamMatchData {
         private int tournamentId;
         private int[] teamIds;
+        private int matchGroupId;
+        private LocalDate matchDate;
+        private LocalTime matchTime;
     }
 }

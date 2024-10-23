@@ -1,2 +1,27 @@
-<h2>Team Management</h2>
-<p>This is where you can manage teams.</p>
+<h2>Teams</h2>
+
+<ul>
+  <li *ngFor="let team of teams">
+    <ng-container *ngIf="editingTeam && editingTeam.id === team.id; else displayTeam">
+      <input [(ngModel)]="editingTeam.name" placeholder="Team Name">
+      <input type="number" [(ngModel)]="editingTeam.order" placeholder="Order">
+      <button (click)="saveTeam()">Save</button>
+      <button (click)="cancelEditing()">Cancel</button>
+    </ng-container>
+    <ng-template #displayTeam>
+      <span (click)="viewTeamPlayers(team.id)" style="cursor: pointer;">
+        {{ team.name }}
+      </span>
+      <button *ngIf="authService.isAdmin()" (click)="startEditing(team)">Edit</button>
+    </ng-template>
+  </li>
+</ul>
+
+<h3 *ngIf="authService.isAdmin()">Add New Team</h3>
+<form *ngIf="authService.isAdmin()" (ngSubmit)="addTeam()">
+  <div>
+    <label for="teamName">Team Name:</label>
+    <input type="text" id="teamName" [(ngModel)]="newTeam.name" name="teamName" required>
+  </div>
+  <button type="submit">Add Team</button>
+</form>

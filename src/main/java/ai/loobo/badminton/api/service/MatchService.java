@@ -2,22 +2,19 @@ package ai.loobo.badminton.api.service;
 
 import ai.loobo.badminton.api.model.MatchResult;
 import ai.loobo.badminton.api.model.PlayerMatches;
-import ai.loobo.badminton.api.model.TeamScore;
+import ai.loobo.badminton.api.model.TeamRankingScores;
 import ai.loobo.badminton.model.*;
 import ai.loobo.badminton.repository.*;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PathVariable;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class MatchService {
@@ -36,6 +33,21 @@ public class MatchService {
             " sum(total_wins) match_wins " +
             " FROM tournament.team_match_team tmt " +
             " JOIN tournament.team t on tmt.team_id = t.team_id and t.tournament_id = ?" +
+            " AND tmt.total_wins is not null " +
+            " GROUP BY team_name " +
+            " order by team_wins DESC, match_wins DESC";
+
+    private static String SQL_GROUP_STANDING = "SELECT " +
+            " t.team_name team_name, " +
+            " sum(case when total_wins>2 then 1 else 0 end) team_wins, " +
+            " sum(case when total_wins<2 then 1 else 0 end) team_losts, " +
+            " sum(case when total_wins=2 then 1 else 0 end) team_ties, " +
+            " sum(total_wins) match_wins " +
+            " FROM " +
+            " tournament.team_match tm " +
+            " JOIN tournament.team_match_team tmt ON tm.team_match_id = tmt.team_match_id AND tm.match_group_id = ?" +
+            " JOIN tournament.team t on tmt.team_id = t.team_id " +
+            " AND tmt.total_wins is not null " +
             " GROUP BY team_name " +
             " order by team_wins DESC, match_wins DESC";
 
@@ -57,15 +69,29 @@ public class MatchService {
                 .build();
     }
 
-    public List<TeamScore> getStanding(int tournamentId) {
-        return jdbcTemplate.query(SQL_STANDING, new Object[]{tournamentId}, (RowMapper<TeamScore>) (rs, rowNum) -> {
+    public List<TeamRankingScores> getStanding(int tournamentId) {
+        log.info("SQL_STANDING {}", SQL_STANDING);
+        return jdbcTemplate.query(SQL_STANDING, new Object[]{tournamentId}, (RowMapper<TeamRankingScores>) (rs, rowNum) -> {
             String teamName = rs.getString("team_name");
             int teamWins = rs.getInt("team_wins");
             int teamLosts = rs.getInt("team_losts");
             int ties = rs.getInt("team_ties");
             int matchWins = rs.getInt("match_wins");
 
-            return new TeamScore(teamName, teamWins, teamLosts, ties, matchWins);
+            return new TeamRankingScores(teamName, teamWins, teamLosts, ties, matchWins);
+        });
+    }
+
+    public List<TeamRankingScores> getGroupStanding(int matchGroupId) {
+        log.debug("SQL_GROUP_STANDING {}", SQL_GROUP_STANDING);
+        return jdbcTemplate.query(SQL_GROUP_STANDING, new Object[]{matchGroupId}, (RowMapper<TeamRankingScores>) (rs, rowNum) -> {
+            String teamName = rs.getString("team_name");
+            int teamWins = rs.getInt("team_wins");
+            int teamLosts = rs.getInt("team_losts");
+            int ties = rs.getInt("team_ties");
+            int matchWins = rs.getInt("match_wins");
+
+            return new TeamRankingScores(teamName, teamWins, teamLosts, ties, matchWins);
         });
     }
 
@@ -79,10 +105,11 @@ public class MatchService {
             var teamResults = teamMatch
                     .getTeams()
                     .stream()
-                    .map(team-> MatchResult.TeamResult.builder()
-                            .teamName(team.getTeam().getName())
-                            .teamId(team.getTeam().getId())
-                            .totalWins(team.getTotalWins())
+                    .map(teamMatchTeam-> MatchResult.TeamResult.builder()
+                            .teamName(teamMatchTeam.getTeam().getName())
+                            .teamMatchTeamId(teamMatchTeam.getId())
+                            .teamId(teamMatchTeam.getTeam().getId())
+                            .totalWins(Optional.ofNullable(teamMatchTeam.getTotalWins()).orElse(0))
                             .build()
                     )
                     .collect(Collectors.toList());
@@ -91,6 +118,7 @@ public class MatchService {
                 teamResult.setPlayers(
                         allMatches.stream()
                                 .flatMap(m->m.getMatchPlayers().stream())
+                                .filter(p->p.getTeamMatchTeam() == null || p.getTeamMatchTeam().getId() == teamResult.getTeamMatchTeamId())
                                 .filter(p->p.getTeam().getId() == teamResult.getTeamId())
                                 .filter(p->p.getMatch().getId() == match.getId())
                                 .map(p->p.getPlayer())
@@ -113,6 +141,7 @@ public class MatchService {
                     .matchId(match.getId())
                     .matchType(match.getType())
                     .matchNumber(match.getMatchNumber())
+                    .comment(match.getComment())
                     .teamResults(teamResults)
                     .build();
 

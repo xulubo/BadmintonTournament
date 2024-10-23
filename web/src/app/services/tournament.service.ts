@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { Tournament } from '../models/tournament';
 import { tap, map } from 'rxjs/operators';
 import { AuthService } from './auth.service';
+import { TeamMatch } from '../models/team-match.model';
 
 @Injectable({
   providedIn: 'root'
@@ -36,11 +37,17 @@ export class TournamentService {
     return new HttpHeaders();
   }
 
+private logRequest(method: string, endpoint: string): void {
+    console.log(`${method} ${this.apiUrl}${endpoint}`);
+  }
+
   getTournaments(): Observable<Tournament[]> {
+    this.logRequest('GET', '/tournament');
     return this.http.get<Tournament[]>(`${this.apiUrl}/tournament`, { headers: this.getHeaders() });
   }
 
   getTournamentTeams(tournamentId: number): Observable<any[]> {
+    this.logRequest('GET', `/tournament/${tournamentId}/team`);
     return this.http.get<any[]>(`${this.apiUrl}/tournament/${tournamentId}/team`, { headers: this.getHeaders() });
   }
 
@@ -48,24 +55,32 @@ export class TournamentService {
     return this.http.get<any>(`${this.apiUrl}/team/${teamId}`, { headers: this.getHeaders() });
   }
 
+  getTeamMatchTeamDetails(teamId: number): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/team_match_team/${teamId}`, { headers: this.getHeaders() });
+  }
+
   getTeamPlayers(teamId: number): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/team/${teamId}/player`, { headers: this.getHeaders() });
   }
 
-  addPlayer(playerName: string, teamId: number, gender: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/player`, { name: playerName, teamId: teamId, gender: gender }, { headers: this.getHeaders() });
+  addPlayer(playerData: any): Observable<any> {
+    console.log("playerData", playerData)
+    return this.http.post(`${this.apiUrl}/player`, playerData, { headers: this.getHeaders() });
   }
 
   deletePlayer(playerId: number): Observable<any> {
     return this.http.delete(`${this.apiUrl}/player/${playerId}`, { headers: this.getHeaders() });
   }
 
-  createTeamMatch(tournamentId: number, matchResult: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/team_match`, matchResult, { headers: this.getHeaders() });
+  createTeamMatch(matchData: any): Observable<any> {
+    this.logRequest('POST', '/team_match');
+    console.log("matchData", matchData)
+    return this.http.post(`${this.apiUrl}/team_match`, matchData, { headers: this.getHeaders() });
   }
 
   getTournamentTeamMatches(tournamentId: number): Observable<any[]> {
     console.log(`Fetching team matches for tournament ${tournamentId}`);
+    var matchNumber=1;
     return this.http.get<any[]>(`${this.apiUrl}/tournament/${tournamentId}/team_match`)
       .pipe(
         tap(
@@ -73,12 +88,8 @@ export class TournamentService {
           error => console.error('Error fetching team matches:', error)
         ),
         map(matches => matches.map(match => ({
-          id: match.id,
-          teams: match.teams.map((team: any) => ({
-            id: team.team.id,
-            name: team.team.name,
-            totalWins: team.totalWins
-          }))
+          matchNumber: matchNumber++,
+          ...match
         })))
       );
   }
@@ -97,8 +108,8 @@ export class TournamentService {
     return this.http.put(`${this.apiUrl}/team_match/${teamMatchId}/match_number`, { matchNumber }, { headers: this.getHeaders() });
   }
 
-  deleteTeamMatch(teamMatchId: number): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/team_match/${teamMatchId}`, { headers: this.getHeaders() });
+  deleteTeamMatch(matchId: number): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/team_match/${matchId}`, { headers: this.getHeaders() });
   }
 
   getTeamMatchResults(teamMatchId: number): Observable<any[]> {
@@ -128,5 +139,80 @@ export class TournamentService {
   addMatchGroup(matchGroup: any): Observable<any> {
     console.log("matchGroup", matchGroup);
     return this.http.post(`${this.apiUrl}/match-group`, matchGroup, { headers: this.getHeaders() });
+  }
+
+  getGroupDetails(groupId: number): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/match-group/${groupId}`, { headers: this.getHeaders() });
+  }
+
+  getSubGroups(groupId: number): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/match-group/${groupId}/sub-groups`, { headers: this.getHeaders() });
+  }
+
+  getGroupTeams(groupId: number): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/match-group/${groupId}/teams`, { headers: this.getHeaders() });
+  }
+
+  associateTeamToGroup(groupId: number, teamId: number): Observable<any> {
+    return this.http.post(`${this.apiUrl}/match-group/${groupId}/team/${teamId}`, {}, { headers: this.getHeaders() });
+  }
+
+  getGroupTeamMatches(groupId: number): Observable<any[]> {
+    this.logRequest('GET', `/match-group/${groupId}/team_match`);
+    return this.http.get<any[]>(`${this.apiUrl}/match-group/${groupId}/team_match`, { headers: this.getHeaders() });
+  }
+
+  getGroupStandings(matchGroupId: number): Observable<any[]> {
+    this.logRequest('GET', `/match-group/${matchGroupId}/standing`);
+    return this.http.get<any[]>(`${this.apiUrl}/match-group/${matchGroupId}/standing`, { headers: this.getHeaders() });
+  }
+
+  getPlayerDetails(playerId: number): Observable<any> {
+    this.logRequest('GET', `/player/${playerId}`);
+    return this.http.get<any>(`${this.apiUrl}/player/${playerId}`, { headers: this.getHeaders() });
+  }
+
+  updatePlayer(playerId: number, playerData: any): Observable<any> {
+    this.logRequest('PUT', `/player/${playerId}`);
+    console.log("playerData", playerData)
+    return this.http.put<any>(`${this.apiUrl}/player/${playerId}`, playerData, { headers: this.getHeaders() });
+  }
+
+  getAllPlayers(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/players`, { headers: this.getHeaders() });
+  }
+
+  getTournamentPlayers(tournamentId: number): Observable<any[]> {
+    this.logRequest('GET', `/tournament/${tournamentId}/players`);
+    return this.http.get<any[]>(`${this.apiUrl}/tournament/${tournamentId}/players`, { headers: this.getHeaders() });
+  }
+
+  updateTeamMatch(match: TeamMatch): Observable<TeamMatch> {
+    console.log("update team match", match)
+    return this.http.put<TeamMatch>(`${this.apiUrl}/team_match/${match.id}`, match);
+  }
+
+  getUpcomingTournamentMatches(tournamentId: number): Observable<TeamMatch[]> {
+    this.logRequest('GET', `/tournament/${tournamentId}/upcoming-matches`);
+    return this.http.get<TeamMatch[]>(`${this.apiUrl}/tournament/${tournamentId}/upcoming-matches`, { headers: this.getHeaders() });
+  }
+
+  addTeamToTournament(tournamentId: number, teamData: any): Observable<any> {
+    console.log("teamData", teamData)
+    return this.http.post(`${this.apiUrl}/tournament/${tournamentId}/team`, teamData, { headers: this.getHeaders() });
+  }
+
+  updateTeam(teamId: number, teamData: any): Observable<any> {
+    return this.http.put(`${this.apiUrl}/team/${teamId}`, teamData, { headers: this.getHeaders() });
+  }
+
+  createTournament(tournamentData: any): Observable<any> {
+    this.logRequest('POST', '/tournament');
+    return this.http.post(`${this.apiUrl}/tournament`, tournamentData, { headers: this.getHeaders() });
+  }
+
+  updateSingleMatch(matchData: any): Observable<any> {
+    console.log("updateSingleMatch", matchData)
+    return this.http.put(`${this.apiUrl}/match/${matchData.matchId}`, matchData, { headers: this.getHeaders() });
   }
 }

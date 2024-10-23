@@ -23,6 +23,9 @@ public class Team {
     @Column(name = "team_name", nullable = false)
     private String name;
 
+    @Column(name = "order_number")
+    private Integer order = 0;
+
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "tournament_id")

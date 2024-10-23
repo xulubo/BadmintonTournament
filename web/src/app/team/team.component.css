@@ -1,1 +1,28 @@
 /* Add team-specific styles here */
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+li {
+  margin-bottom: 10px;
+}
+
+a {
+  text-decoration: none;
+  color: #007bff;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+.editable {
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.editable:hover {
+  color: blue;
+}

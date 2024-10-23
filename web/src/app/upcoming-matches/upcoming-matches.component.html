@@ -1,0 +1,38 @@
+<h3>Upcoming Matches</h3>
+<table *ngIf="upcomingMatches.length > 0" style="border-collapse: collapse; width: 100%;">
+  <thead>
+    <tr>
+      <th style="padding: 10px; border: 1px solid #ddd;">Match Number</th>
+      <th style="padding: 10px; border: 1px solid #ddd;">Team 1</th>
+      <th style="padding: 10px; border: 1px solid #ddd;">Team 2</th>
+      <th style="padding: 10px; border: 1px solid #ddd;">Date and Time</th>
+      <th style="padding: 10px; border: 1px solid #ddd;">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let match of upcomingMatches">
+      <td style="padding: 10px; border: 1px solid #ddd;">
+        <a (click)="openEditMatchDialog(match)" style="cursor: pointer; color: blue; text-decoration: underline;">
+                {{ match.matchNumber }}
+            
+        </a>
+      </td>
+      <td style="padding: 10px; border: 1px solid #ddd;">
+        <span (click)="viewTeamPlayers(match.teams[0].team.id)" style="cursor: pointer;">
+        {{ match.teams[0].team.name }}
+        </span>
+
+    </td>
+      <td style="padding: 10px; border: 1px solid #ddd;">
+        <span (click)="viewTeamPlayers(match.teams[0].team.id)" style="cursor: pointer;">
+            {{ match.teams[1].team.name }}
+        </span>
+    </td>
+      <td style="padding: 10px; border: 1px solid #ddd;">{{ match.matchDateTime | date:'medium' }}</td>
+      <td style="padding: 10px; border: 1px solid #ddd;">
+        <button (click)="navigateToTeamMatch(match.id)">View Details</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p *ngIf="upcomingMatches.length === 0">No upcoming matches found for this tournament.</p>

@@ -12,8 +12,13 @@ export class TeamDetailsComponent implements OnInit {
   teamId: number = 0;
   teamName: string = '';
   players: any[] = [];
-  newPlayerName: string = '';
-  newPlayerGender: string = 'M'; // Default to Male
+  newPlayer: any = {
+    firstName: '',
+    lastName: '',
+    displayName: '',
+    gender: 'M',
+    comment: ''
+  };
 
   constructor(
     private route: ActivatedRoute,
@@ -61,20 +66,33 @@ export class TeamDetailsComponent implements OnInit {
       alert('You do not have permission to perform this action.');
       return;
     }
-    if (this.newPlayerName.trim()) {
-      this.tournamentService.addPlayer(this.newPlayerName, this.teamId, this.newPlayerGender)
-        .subscribe(
-          (response) => {
-            console.log('Player added successfully:', response);
-            this.newPlayerName = ''; // Clear the input field
-            this.newPlayerGender = 'M'; // Reset to default
-            this.loadPlayers(); // Reload the player list
-          },
-          (error) => {
-            console.error('Error adding player:', error);
-          }
-        );
+    const playerData = {
+      ...this.newPlayer,
+      teamId: this.teamId,
+    };
+    if (!playerData.displayName) {
+      playerData.displayName = `${playerData.firstName} ${playerData.lastName}`;
     }
+    this.tournamentService.addPlayer(playerData).subscribe(
+      (response) => {
+        console.log('Player added successfully:', response);
+        this.players.push(response);
+        this.resetNewPlayer();
+      },
+      (error) => {
+        console.error('Error adding player:', error);
+      }
+    );
+  }
+
+  resetNewPlayer(): void {
+    this.newPlayer = {
+      firstName: '',
+      lastName: '',
+      displayName: '',
+      gender: 'M',
+      comment: ''
+    };
   }
 
   deletePlayer(playerId: number): void {

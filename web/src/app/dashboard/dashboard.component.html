@@ -1,0 +1,26 @@
+<h1>Badminton Tournament Management Dashboard</h1>
+
+<section *ngIf="authService.isAdmin()">
+  <h2>Quick Actions</h2>
+  <button routerLink="/tournaments/new">Create Tournament</button>
+  <button routerLink="/teams/new">Create Team</button>
+  <button routerLink="/players/new">Create Player</button>
+</section>
+
+<section>
+  <h2>Ongoing Tournaments</h2>
+  <ul>
+    <li *ngFor="let tournament of ongoingTournaments">
+      <a [routerLink]="['/tournament', tournament.id]">{{ tournament.name }}</a>
+    </li>
+  </ul>
+</section>
+
+<section>
+  <h2>Recent Matches</h2>
+  <ul>
+    <li *ngFor="let match of recentMatches">
+      {{ match.team1 }} vs {{ match.team2 }} - {{ match.result }}
+    </li>
+  </ul>
+</section>

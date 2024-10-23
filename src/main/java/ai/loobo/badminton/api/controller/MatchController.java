@@ -6,6 +6,7 @@ import ai.loobo.badminton.model.GameScore;
 import ai.loobo.badminton.model.Match;
 import ai.loobo.badminton.model.MatchPlayer;
 import ai.loobo.badminton.repository.*;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -70,6 +71,20 @@ public class MatchController {
     }
 
     @Transactional
+    @PutMapping("/{matchId}")
+    public Response update(
+            @PathVariable Integer matchId,
+            @RequestBody MatchEditVO matchEditVO
+    ) {
+        var match = matchRepository.findById(matchId).get();
+        match.setComment(matchEditVO.getComment());
+        match.setType(matchEditVO.getMatchType());
+        matchRepository.save(match);
+
+        return Response.SUCCESS;
+    }
+
+    @Transactional
     @DeleteMapping("/{matchId}")
     public Response deleteMatch(
             @PathVariable Integer matchId
@@ -77,5 +92,12 @@ public class MatchController {
         matchRepository.deleteById(matchId);
 
         return Response.builder().status("SUCCESS").build();
+    }
+
+    @Data
+    public static class MatchEditVO {
+        private Integer matchId;
+        private String matchType;
+        private String comment;
     }
 }

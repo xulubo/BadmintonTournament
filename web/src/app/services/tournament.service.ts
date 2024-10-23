@@ -210,4 +210,9 @@ private logRequest(method: string, endpoint: string): void {
     this.logRequest('POST', '/tournament');
     return this.http.post(`${this.apiUrl}/tournament`, tournamentData, { headers: this.getHeaders() });
   }
+
+  updateSingleMatch(matchData: any): Observable<any> {
+    console.log("updateSingleMatch", matchData)
+    return this.http.put(`${this.apiUrl}/match/${matchData.matchId}`, matchData, { headers: this.getHeaders() });
+  }
 }

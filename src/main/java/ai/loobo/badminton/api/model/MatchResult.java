@@ -25,6 +25,7 @@ public class MatchResult {
     private Integer matchId;
     private Integer matchNumber;
     private String matchType;
+    private String comment;
 
     @JsonProperty("teamMatchTeams")
     private List<TeamResult> teamResults;

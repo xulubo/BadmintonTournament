@@ -141,6 +141,7 @@ public class MatchService {
                     .matchId(match.getId())
                     .matchType(match.getType())
                     .matchNumber(match.getMatchNumber())
+                    .comment(match.getComment())
                     .teamResults(teamResults)
                     .build();
 

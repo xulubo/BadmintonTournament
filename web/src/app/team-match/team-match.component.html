@@ -1,6 +1,12 @@
 <button (click)="goBack()">Back to Tournament</button>
 
 <h2>Team Match Details</h2>
+<div>
+  <label for="matchNumber">Match Number:</label>
+  <input type="number" id="matchNumber" [(ngModel)]="matchNumber" (change)="updateMatchNumber()">
+  <button (click)="editTeamMatch()">Edit Match</button>
+</div>
+
 <ng-container *ngIf="teams.length > 0">
   <h3>{{ teamNames[0] }}({{teams[0].id}}) vs {{ teamNames[1] }}({{teams[1].id}})</h3>
 </ng-container>
@@ -10,7 +16,11 @@
 <table *ngFor="let match of singleMatches" style="margin-bottom: 20px; border-collapse: collapse; width: 100%;">
   <tr>
     <th colspan="6" style="text-align: center; padding: 10px; background-color: #f2f2f2;">
-      {{ teamNames[0] }} vs {{ teamNames[1] }}
+      <div>
+      <div>{{ teamNames[0] }} vs {{ teamNames[1] }}</div>
+        <div style="font-size: 12px;font-weight: normal;">{{ match.comment }}</div>
+      </div>
+      <button (click)="editSingleMatch(match)" style="float: right; margin-right: 10px;">Edit</button>
       <button (click)="deleteSingleMatch(match.matchId)" style="float: right; margin-right: 10px;">Delete</button>
     </th>
   </tr>

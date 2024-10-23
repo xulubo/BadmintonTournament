@@ -86,6 +86,7 @@ CREATE TABLE match_players (
     match_id INT REFERENCES match(match_id) ON DELETE CASCADE,
     team_id INT REFERENCES team(team_id) ON DELETE CASCADE,
     player_id INT REFERENCES player(player_id) ON DELETE CASCADE,
+    team_match_team_id INT REFERENCES team_match_team(team_match_team_id) ON DELETE CASCADE,
     PRIMARY KEY (match_id, team_id, player_id)
 );
 

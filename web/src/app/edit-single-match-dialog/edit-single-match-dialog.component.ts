@@ -14,6 +14,10 @@ export class EditSingleMatchDialogComponent {
     if (!this.data.comment) {
       this.data.comment = '';
     }
+    // Initialize matchNumber if it doesn't exist
+    if (!this.data.matchNumber) {
+      this.data.matchNumber = 1;
+    }
   }
 
   onNoClick(): void {

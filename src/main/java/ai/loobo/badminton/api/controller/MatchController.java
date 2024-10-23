@@ -79,6 +79,7 @@ public class MatchController {
         var match = matchRepository.findById(matchId).get();
         match.setComment(matchEditVO.getComment());
         match.setType(matchEditVO.getMatchType());
+        match.setMatchNumber(matchEditVO.getMatchNumber());
         matchRepository.save(match);
 
         return Response.SUCCESS;
@@ -98,6 +99,7 @@ public class MatchController {
     public static class MatchEditVO {
         private Integer matchId;
         private String matchType;
+        private Integer matchNumber;
         private String comment;
     }
 }

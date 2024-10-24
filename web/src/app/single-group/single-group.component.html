@@ -1,5 +1,16 @@
 <h2>Group: {{ group?.groupName }}</h2>
 
+<nav>
+  <ul>
+    <li><a [routerLink]="['./']">Team Matches</a></li>
+    <li><a [routerLink]="['associated-teams']">Associated Teams</a></li>
+    <li><a [routerLink]="['match-result-matrix']">Match Result Matrix</a></li>
+    <li><a [routerLink]="['team-standings']">Team Standings</a></li>
+  </ul>
+</nav>
+
+<router-outlet></router-outlet>
+
 <ng-container *ngIf="subGroups.length > 0">
   <h3>Sub-Groups</h3>
   <ul>
@@ -24,117 +35,3 @@
   <button type="submit">Add Sub-Group</button>
 </form>
 
-<mat-tab-group>
-  <mat-tab label="Team Matches">
-    <h3>Team Matches</h3>
-    <table *ngIf="teamMatches.length > 0" style="border-collapse: collapse; width: 100%;">
-      <thead>
-        <tr>
-          <th style="padding: 10px; border: 1px solid #ddd;">Match Number</th>
-          <th style="padding: 10px; border: 1px solid #ddd;">Team 1</th>
-          <th style="padding: 10px; border: 1px solid #ddd;">Team 2</th>
-          <th style="padding: 10px; border: 1px solid #ddd;">Date and Time</th>
-          <th style="padding: 10px; border: 1px solid #ddd;">Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let match of teamMatches">
-          <td style="padding: 10px; border: 1px solid #ddd;">
-            <a (click)="openEditMatchDialog(match)" style="cursor: pointer; color: blue; text-decoration: underline;">
-              {{ match.matchNumber }}
-            </a>
-          </td>
-          <td style="padding: 10px; border: 1px solid #ddd;">{{ match.teams[0].team.name }}</td>
-          <td style="padding: 10px; border: 1px solid #ddd;">{{ match.teams[1].team.name }}</td>
-          <td style="padding: 10px; border: 1px solid #ddd;">{{ match.matchDateTime | date:'medium' }}</td>
-          <td style="padding: 10px; border: 1px solid #ddd;">
-            <button (click)="navigateToTeamMatch(match.id)">View Details</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-    <p *ngIf="teamMatches.length === 0">No team matches found for this group.</p>
-    <router-outlet></router-outlet>
-  </mat-tab>
-
-  <mat-tab label="Associated Teams">
-    <h3>Associated Teams</h3>
-    <ul>
-      <li *ngFor="let team of associatedTeams">
-        {{ team.teamCode }} - {{ team.team.name }} - {{ team.team.id }}
-      </li>
-    </ul>
-
-    <h3 *ngIf="authService.isAdmin()">Associate Team</h3>
-    <form *ngIf="authService.isAdmin()">
-      <div>
-        <label for="teamSelect">Select Team:</label>
-        <select id="teamSelect" [(ngModel)]="selectedTeamId" name="teamSelect">
-          <option [ngValue]="null">Select a team</option>
-          <option *ngFor="let team of teams" [ngValue]="team.id">{{ team.name }}</option>
-        </select>
-      </div>
-      <button (click)="associateTeam()">Associate Team</button>
-    </form>
-  </mat-tab>
-
-  <mat-tab label="Match Result Matrix" [ngStyle]="{'color': 'black'}">
-    <h3>Match Result Matrix</h3>
-    <table *ngIf="isResultMatrixReady()" style="border-collapse: collapse; width: 100%;">
-      <tr>
-        <th style="padding: 10px; border: 1px solid #ddd;">Teams</th>
-        <th *ngFor="let team of associatedTeams" style="padding: 10px; border: 1px solid #ddd;">{{ team.teamCode }}</th>
-      </tr>
-      <tr *ngFor="let row of resultMatrix; let i = index">
-        <th style="padding: 10px; border: 1px solid #ddd;">{{ associatedTeams[i].teamCode }}</th>
-        <td *ngFor="let result of row; let j = index" 
-            style="padding: 10px; border: 1px solid #ddd; text-align: center;"
-            [ngStyle]="{'cursor': result && result !== '-' ? 'pointer' : 'default'}"
-            (click)="navigateToTeamMatch(resultMatrixWithIds[i][j])">
-          <ng-container *ngIf="result && result !== '-'">
-            <span [ngStyle]="{
-              'color': 'blue',
-              'text-decoration': 'underline',
-              'transition': 'color 0.3s'
-            }"
-            class="clickable-score">
-              {{ result }}
-            </span>
-          </ng-container>
-          <span *ngIf="result === '-'" class="non-clickable-score">
-            -
-          </span>
-        </td>
-      </tr>
-    </table>
-    <p *ngIf="!isResultMatrixReady()">Loading match result matrix...</p>
-  </mat-tab>
-
-  <mat-tab label="Team Standings">
-    <h3>Team Standings</h3>
-    <table style="border-collapse: collapse; width: 100%;">
-      <thead>
-        <tr>
-          <th style="padding: 10px; border: 1px solid #ddd;">Rank</th>
-          <th style="padding: 10px; border: 1px solid #ddd;">Team Name</th>
-          <th style="padding: 10px; border: 1px solid #ddd;">Team Wins/Losses/Ties</th>
-          <th style="padding: 10px; border: 1px solid #ddd;">Match Wins</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let team of standings; let i = index">
-          <td style="padding: 10px; border: 1px solid #ddd;">{{ i + 1 }}</td>
-          <td style="padding: 10px; border: 1px solid #ddd;">{{ team.teamName }}</td>
-          <td style="padding: 10px; border: 1px solid #ddd;">
-            <span [ngStyle]="{'color': team.teamWins > 0 ? 'green' : 'inherit'}">{{ team.teamWins }}</span> / 
-            <span [ngStyle]="{'color': team.teamLosses > 0 ? 'red' : 'inherit'}">{{ team.teamLosses }}</span> / 
-            {{ team.teamTies }}
-          </td>
-          <td style="padding: 10px; border: 1px solid #ddd;">{{ team.matchWins }}</td>
-        </tr>
-      </tbody>
-    </table>
-  </mat-tab>
-
-
-</mat-tab-group>

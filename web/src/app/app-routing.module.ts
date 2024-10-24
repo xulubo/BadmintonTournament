@@ -20,6 +20,9 @@ import { PlayerEditComponent } from './player-edit/player-edit.component';
 import { UpcomingMatchesComponent } from './upcoming-matches/upcoming-matches.component';
 import { GroupListComponent } from './group-list/group-list.component';
 import { TeamMatchListComponent } from './team-match-list/team-match-list.component';
+import { AssociatedTeamsComponent } from './associated-teams/associated-teams.component';
+import { MatchResultMatrixComponent } from './match-result-matrix/match-result-matrix.component';
+import { GroupTeamStandingsComponent } from './group-team-standings/group-team-standings.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
@@ -47,6 +50,9 @@ const routes: Routes = [
             data: { breadcrumb: 'Group Details' },
             children: [
               { path: '', component: TeamMatchListComponent },
+              { path: 'associated-teams', component: AssociatedTeamsComponent, data: { breadcrumb: 'Associated Teams' } },
+              { path: 'match-result-matrix', component: MatchResultMatrixComponent, data: { breadcrumb: 'Match Result Matrix' } },
+              { path: 'team-standings', component: GroupTeamStandingsComponent, data: { breadcrumb: 'Team Standings' } },
               {
                 path: 'team-match/:matchId',
                 component: TeamMatchComponent,

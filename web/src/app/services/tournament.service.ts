@@ -215,4 +215,8 @@ private logRequest(method: string, endpoint: string): void {
     console.log("updateSingleMatch", matchData)
     return this.http.put(`${this.apiUrl}/match/${matchData.matchId}`, matchData, { headers: this.getHeaders() });
   }
+
+  getAvailableTeamsForGroup(groupId: number): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/match-group/${groupId}/available-teams`, { headers: this.getHeaders() });
+  }
 }

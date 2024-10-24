@@ -35,23 +35,27 @@ export class GroupListComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.route.parent?.params.subscribe(params => {
-      const id = params['id'];
-      if (id) {
-        this.tournamentId = +id;
+    console.log('GroupListComponent initialized');
+    this.route.pathFromRoot.forEach(route => {
+      if (route.snapshot.paramMap.has('id')) {
+        this.tournamentId = +route.snapshot.paramMap.get('id')!;
         this.newGroup.tournamentId = this.tournamentId;
+        console.log('Tournament ID:', this.tournamentId);
         this.loadTournamentDetails();
         this.loadMatchGroups();
-      } else {
-        console.error('Tournament ID is missing');
       }
     });
+    if (this.tournamentId === 0) {
+      console.error('Tournament ID is missing');
+    }
   }
 
   loadTournamentDetails(): void {
+    console.log('Loading tournament details for ID:', this.tournamentId);
     this.tournamentService.getTournamentDetails(this.tournamentId).subscribe(
       (data: any) => {
         this.tournamentName = data.name;
+        console.log('Tournament name:', this.tournamentName);
       },
       (error) => {
         console.error('Error fetching tournament details:', error);
@@ -60,9 +64,11 @@ export class GroupListComponent implements OnInit {
   }
 
   loadMatchGroups(): void {
+    console.log('Loading match groups for tournament ID:', this.tournamentId);
     this.tournamentService.getMatchGroups(this.tournamentId).subscribe(
       (data: MatchGroup[]) => {
         this.matchGroups = data;
+        console.log('Match groups loaded:', this.matchGroups);
       },
       (error) => {
         console.error('Error fetching match groups:', error);

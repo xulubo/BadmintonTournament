@@ -27,66 +27,34 @@
 <mat-tab-group>
   <mat-tab label="Team Matches">
     <h3>Team Matches</h3>
-    <table *ngIf="teamMatches.length > 0">
+    <table *ngIf="teamMatches.length > 0" style="border-collapse: collapse; width: 100%;">
       <thead>
         <tr>
-          <th>Match Number</th>
-          <th>Team 1</th>
-          <th>Team 2</th>
-          <th>Result</th>
-          <th>Date and Time</th>
-          <th>View Details</th>
+          <th style="padding: 10px; border: 1px solid #ddd;">Match Number</th>
+          <th style="padding: 10px; border: 1px solid #ddd;">Team 1</th>
+          <th style="padding: 10px; border: 1px solid #ddd;">Team 2</th>
+          <th style="padding: 10px; border: 1px solid #ddd;">Date and Time</th>
+          <th style="padding: 10px; border: 1px solid #ddd;">Actions</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let match of teamMatches">
-          <td>
+          <td style="padding: 10px; border: 1px solid #ddd;">
             <a (click)="openEditMatchDialog(match)" style="cursor: pointer; color: blue; text-decoration: underline;">
               {{ match.matchNumber }}
             </a>
           </td>
-          <td>{{ match.teams[0].team.name }}</td>
-          <td>{{ match.teams[1].team.name }}</td>
-          <td>{{ match.teams[0].totalWins }}:{{ match.teams[1].totalWins }}</td>
-          <td>{{ match.matchDateTime | date:'medium' }}</td>
-          <td>
+          <td style="padding: 10px; border: 1px solid #ddd;">{{ match.teams[0].team.name }}</td>
+          <td style="padding: 10px; border: 1px solid #ddd;">{{ match.teams[1].team.name }}</td>
+          <td style="padding: 10px; border: 1px solid #ddd;">{{ match.matchDateTime | date:'medium' }}</td>
+          <td style="padding: 10px; border: 1px solid #ddd;">
             <button (click)="navigateToTeamMatch(match.id)">View Details</button>
           </td>
         </tr>
       </tbody>
     </table>
     <p *ngIf="teamMatches.length === 0">No team matches found for this group.</p>
-
-    <h3 *ngIf="authService.isAdmin()">Create New Match</h3>
-    <form *ngIf="authService.isAdmin()" (ngSubmit)="createMatch()">
-      <div>
-        <label for="team1">Team 1:</label>
-        <select id="team1" [(ngModel)]="newMatch.team1Id" name="team1" required>
-          <option [ngValue]="null">Select Team 1</option>
-          <option *ngFor="let team of associatedTeams" [ngValue]="team.team.id">{{ team.team.name }}</option>
-        </select>
-      </div>
-      <div>
-        <label for="team2">Team 2:</label>
-        <select id="team2" [(ngModel)]="newMatch.team2Id" name="team2" required>
-          <option [ngValue]="null">Select Team 2</option>
-          <option *ngFor="let team of associatedTeams" [ngValue]="team.team.id">{{ team.team.name }}</option>
-        </select>
-      </div>
-      <div>
-        <label for="matchNumber">Match Number:</label>
-        <input type="number" id="matchNumber" [(ngModel)]="newMatch.matchNumber" name="matchNumber" required>
-      </div>
-      <div>
-        <label for="matchDate">Match Date:</label>
-        <input type="date" id="matchDate" [(ngModel)]="newMatch.matchDate" name="matchDate" required>
-      </div>
-      <div>
-        <label for="matchTime">Match Time:</label>
-        <input type="time" id="matchTime" [(ngModel)]="newMatch.matchTime" name="matchTime" required>
-      </div>
-      <button type="submit">Create Match</button>
-    </form>
+    <router-outlet></router-outlet>
   </mat-tab>
 
   <mat-tab label="Associated Teams">

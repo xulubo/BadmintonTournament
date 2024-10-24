@@ -41,14 +41,11 @@ export class TeamMatchComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    const id = this.route.snapshot.paramMap.get('id');
-    if (id !== null) {
-      this.teamMatchId = +id;
+    this.route.params.subscribe(params => {
+      this.teamMatchId = +params['matchId'];
       this.loadTeamMatchDetails();
-      this.loadSingleMatches(); // New method to load single matches
-    } else {
-      console.error('Team Match ID is missing');
-    }
+      this.loadSingleMatches();
+    });
   }
 
   loadTeamMatchDetails(): void {
@@ -124,7 +121,7 @@ export class TeamMatchComponent implements OnInit {
   }
 
   goBack(): void {
-    this.location.back();
+    this.router.navigate(['..'], { relativeTo: this.route });
   }
 
   updateScore(teamIndex: number, scoreIndex: number, event: Event): void {

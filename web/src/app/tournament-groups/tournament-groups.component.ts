@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
 import { TournamentService } from '../services/tournament.service';
 import { AuthService } from '../services/auth.service';
+import { filter } from 'rxjs/operators';
 
 interface MatchGroup {
   matchGroupId?: number;
@@ -26,6 +27,7 @@ export class TournamentGroupsComponent implements OnInit {
     orderNumber: 1,
     parentMatchGroupId: undefined
   };
+  showGroupList: boolean = true;
 
   constructor(
     private route: ActivatedRoute,
@@ -35,7 +37,6 @@ export class TournamentGroupsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    // Use the parent route's params to get the tournament ID
     this.route.parent?.params.subscribe(params => {
       const id = params['id'];
       if (id) {
@@ -46,6 +47,12 @@ export class TournamentGroupsComponent implements OnInit {
       } else {
         console.error('Tournament ID is missing');
       }
+    });
+
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    ).subscribe(() => {
+      this.showGroupList = !this.route.firstChild;
     });
   }
 
@@ -99,7 +106,7 @@ export class TournamentGroupsComponent implements OnInit {
 
   navigateToSingleGroup(groupId: number | undefined): void {
     if (groupId !== undefined) {
-      this.router.navigate(['/tournament', this.tournamentId, 'group', groupId]);
+      this.router.navigate([groupId], { relativeTo: this.route });
     } else {
       console.error('Group ID is undefined');
     }

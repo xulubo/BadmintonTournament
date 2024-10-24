@@ -34,6 +34,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { EditTeamMatchDialogComponent } from './edit-team-match-dialog/edit-team-match-dialog.component';
 import { UpcomingMatchesComponent } from './upcoming-matches/upcoming-matches.component';
 import { EditSingleMatchDialogComponent } from './edit-single-match-dialog/edit-single-match-dialog.component';
+import { BreadcrumbComponent } from './breadcrumb/breadcrumb.component';
 
 @NgModule({
   declarations: [
@@ -57,7 +58,8 @@ import { EditSingleMatchDialogComponent } from './edit-single-match-dialog/edit-
     DashboardComponent,
     EditTeamMatchDialogComponent,
     UpcomingMatchesComponent,
-    EditSingleMatchDialogComponent
+    EditSingleMatchDialogComponent,
+    BreadcrumbComponent
   ],
   imports: [
     BrowserModule,

@@ -54,7 +54,7 @@ export class SingleGroupComponent implements OnInit {
     parentMatchGroupId: 0
   };
   selectedTeamId: number | null = null;
-  teamMatches: TeamMatch[] = []; // Update the type
+  teamMatches: any[] = []; // Update the type
   resultMatrix: any[][] = [];
   resultMatrixWithIds: any[][] = [];
   standings: any[] = [];
@@ -195,13 +195,8 @@ export class SingleGroupComponent implements OnInit {
 
   loadTeamMatches(): void {
     this.tournamentService.getGroupTeamMatches(this.groupId).subscribe(
-      (data: TeamMatch[]) => {
-        this.teamMatches = data.map((match, index) => ({
-          ...match,
-          matchNumber: match.matchNumber || index + 1 // Ensure matchNumber exists
-        }));
-        console.log('Team matches loaded:', this.teamMatches);
-        this.updateResultMatrix();
+      (data: any[]) => {
+        this.teamMatches = data;
       },
       (error) => {
         console.error('Error fetching team matches:', error);
@@ -240,12 +235,8 @@ export class SingleGroupComponent implements OnInit {
     });
   }
 
-  navigateToTeamMatch(matchId: number | null): void {
-    if (matchId !== null) {
-      this.router.navigate(['/team-match', matchId]);
-    } else {
-      console.error('Match ID is null');
-    }
+  navigateToTeamMatch(matchId: number): void {
+    this.router.navigate(['team-match', matchId], { relativeTo: this.route });
   }
 
   loadGroupStandings(): void {

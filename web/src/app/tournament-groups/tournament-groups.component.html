@@ -1,7 +1,7 @@
 <div class="tournament-groups-container">
   <h2 class="page-title">Match Groups for {{ tournamentName }}</h2>
 
-  <div class="groups-list">
+  <div *ngIf="showGroupList" class="groups-list">
     <h3 class="section-title">Existing Groups</h3>
     <ul class="groups">
       <li *ngFor="let group of matchGroups" class="group-item">
@@ -14,29 +14,31 @@
         </span>
       </li>
     </ul>
+
+    <div *ngIf="authService.isAdmin()" class="add-group-form">
+      <h3 class="section-title">Add New Group</h3>
+      <form (ngSubmit)="addGroup()" class="group-form">
+        <div class="form-group">
+          <label for="groupName">Group Name:</label>
+          <input type="text" id="groupName" [(ngModel)]="newGroup.groupName" name="groupName" required>
+        </div>
+        <div class="form-group">
+          <label for="orderNumber">Order Number:</label>
+          <input type="number" id="orderNumber" [(ngModel)]="newGroup.orderNumber" name="orderNumber" required>
+        </div>
+        <div class="form-group">
+          <label for="parentGroup">Parent Group:</label>
+          <select id="parentGroup" [(ngModel)]="newGroup.parentMatchGroupId" name="parentGroup">
+            <option [ngValue]="undefined">None (Top-level group)</option>
+            <option *ngFor="let group of matchGroups" [ngValue]="group.matchGroupId">
+              {{ group.groupName }}
+            </option>
+          </select>
+        </div>
+        <button type="submit" class="btn-submit">Add Group</button>
+      </form>
+    </div>
   </div>
 
-  <div *ngIf="authService.isAdmin()" class="add-group-form">
-    <h3 class="section-title">Add New Group</h3>
-    <form (ngSubmit)="addGroup()" class="group-form">
-      <div class="form-group">
-        <label for="groupName">Group Name:</label>
-        <input type="text" id="groupName" [(ngModel)]="newGroup.groupName" name="groupName" required>
-      </div>
-      <div class="form-group">
-        <label for="orderNumber">Order Number:</label>
-        <input type="number" id="orderNumber" [(ngModel)]="newGroup.orderNumber" name="orderNumber" required>
-      </div>
-      <div class="form-group">
-        <label for="parentGroup">Parent Group:</label>
-        <select id="parentGroup" [(ngModel)]="newGroup.parentMatchGroupId" name="parentGroup">
-          <option [ngValue]="undefined">None (Top-level group)</option>
-          <option *ngFor="let group of matchGroups" [ngValue]="group.matchGroupId">
-            {{ group.groupName }}
-          </option>
-        </select>
-      </div>
-      <button type="submit" class="btn-submit">Add Group</button>
-    </form>
-  </div>
+  <router-outlet></router-outlet>
 </div>

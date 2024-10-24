@@ -1,0 +1,95 @@
+.tournament-groups-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.page-title {
+  color: #333;
+  border-bottom: 2px solid #3498db;
+  padding-bottom: 10px;
+}
+
+.section-title {
+  color: #2c3e50;
+  margin-top: 30px;
+}
+
+.groups {
+  list-style-type: none;
+  padding: 0;
+}
+
+.group-item {
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  margin-bottom: 10px;
+  padding: 15px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+}
+
+.group-link {
+  color: #3498db;
+  text-decoration: none;
+  font-weight: bold;
+  cursor: pointer;
+  margin-right: 15px;
+}
+
+.group-link:hover {
+  text-decoration: underline;
+}
+
+.group-order, .group-parent {
+  font-size: 0.9em;
+  color: #7f8c8d;
+  margin-right: 15px;
+}
+
+.add-group-form {
+  background-color: #ecf0f1;
+  padding: 20px;
+  border-radius: 5px;
+  margin-top: 30px;
+}
+
+.group-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  color: #34495e;
+}
+
+.form-group input, .form-group select {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #bdc3c7;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.btn-submit {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+.btn-submit:hover {
+  background-color: #2980b9;
+}

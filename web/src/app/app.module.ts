@@ -35,6 +35,7 @@ import { EditTeamMatchDialogComponent } from './edit-team-match-dialog/edit-team
 import { UpcomingMatchesComponent } from './upcoming-matches/upcoming-matches.component';
 import { EditSingleMatchDialogComponent } from './edit-single-match-dialog/edit-single-match-dialog.component';
 import { BreadcrumbComponent } from './breadcrumb/breadcrumb.component';
+import { GroupListComponent } from './group-list/group-list.component';
 
 @NgModule({
   declarations: [
@@ -59,7 +60,8 @@ import { BreadcrumbComponent } from './breadcrumb/breadcrumb.component';
     EditTeamMatchDialogComponent,
     UpcomingMatchesComponent,
     EditSingleMatchDialogComponent,
-    BreadcrumbComponent
+    BreadcrumbComponent,
+    GroupListComponent
   ],
   imports: [
     BrowserModule,

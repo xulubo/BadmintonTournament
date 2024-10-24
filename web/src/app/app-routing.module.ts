@@ -49,7 +49,8 @@ const routes: Routes = [
             component: SingleGroupComponent,
             data: { breadcrumb: 'Group Details' },
             children: [
-              { path: '', component: TeamMatchListComponent },
+              { path: '', redirectTo: 'team-matches', pathMatch: 'full' },
+              { path: 'team-matches', component: TeamMatchListComponent, data: { breadcrumb: 'Team Matches' } },
               { path: 'associated-teams', component: AssociatedTeamsComponent, data: { breadcrumb: 'Associated Teams' } },
               { path: 'match-result-matrix', component: MatchResultMatrixComponent, data: { breadcrumb: 'Match Result Matrix' } },
               { path: 'team-standings', component: GroupTeamStandingsComponent, data: { breadcrumb: 'Team Standings' } },

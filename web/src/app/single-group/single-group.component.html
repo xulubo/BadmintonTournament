@@ -1,37 +1,43 @@
-<h2>Group: {{ group?.groupName }}</h2>
+<div class="single-group-container">
+  <h2 class="group-title">Group: {{ group?.groupName }}</h2>
 
-<nav>
-  <ul>
-    <li><a [routerLink]="['./']">Team Matches</a></li>
-    <li><a [routerLink]="['associated-teams']">Associated Teams</a></li>
-    <li><a [routerLink]="['match-result-matrix']">Match Result Matrix</a></li>
-    <li><a [routerLink]="['team-standings']">Team Standings</a></li>
-  </ul>
-</nav>
+  <nav class="group-nav">
+    <ul>
+      <li><a [routerLink]="['./']" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Team Matches</a></li>
+      <li><a [routerLink]="['associated-teams']" routerLinkActive="active">Associated Teams</a></li>
+      <li><a [routerLink]="['match-result-matrix']" routerLinkActive="active">Match Result Matrix</a></li>
+      <li><a [routerLink]="['team-standings']" routerLinkActive="active">Team Standings</a></li>
+    </ul>
+  </nav>
 
-<router-outlet></router-outlet>
-
-<ng-container *ngIf="subGroups.length > 0">
-  <h3>Sub-Groups</h3>
-  <ul>
-    <li *ngFor="let subGroup of subGroups">
-      <a (click)="navigateToSubGroup(subGroup.matchGroupId)" style="cursor: pointer;">
-        {{ subGroup.groupName }}
-      </a> (Order: {{ subGroup.orderNumber }})
-    </li>
-  </ul>
-</ng-container>
-
-<h3 *ngIf="authService.isAdmin()">Add New Sub-Group</h3>
-<form *ngIf="authService.isAdmin()" (ngSubmit)="addSubGroup()">
-  <div>
-    <label for="groupName">Group Name:</label>
-    <input type="text" id="groupName" [(ngModel)]="newSubGroup.groupName" name="groupName" required>
+  <div class="group-content">
+    <router-outlet></router-outlet>
   </div>
-  <div>
-    <label for="orderNumber">Order Number:</label>
-    <input type="number" id="orderNumber" [(ngModel)]="newSubGroup.orderNumber" name="orderNumber" required>
-  </div>
-  <button type="submit">Add Sub-Group</button>
-</form>
 
+  <ng-container *ngIf="subGroups.length > 0">
+    <h3 class="sub-groups-title">Sub-Groups</h3>
+    <ul class="sub-groups-list">
+      <li *ngFor="let subGroup of subGroups" class="sub-group-item">
+        <a (click)="navigateToSubGroup(subGroup.matchGroupId)" class="sub-group-link">
+          {{ subGroup.groupName }}
+        </a>
+        <span class="sub-group-order">(Order: {{ subGroup.orderNumber }})</span>
+      </li>
+    </ul>
+  </ng-container>
+
+  <div *ngIf="authService.isAdmin()" class="add-sub-group-form">
+    <h3 class="form-title">Add New Sub-Group</h3>
+    <form (ngSubmit)="addSubGroup()">
+      <div class="form-group">
+        <label for="groupName">Group Name:</label>
+        <input type="text" id="groupName" [(ngModel)]="newSubGroup.groupName" name="groupName" required>
+      </div>
+      <div class="form-group">
+        <label for="orderNumber">Order Number:</label>
+        <input type="number" id="orderNumber" [(ngModel)]="newSubGroup.orderNumber" name="orderNumber" required>
+      </div>
+      <button type="submit" class="btn-submit">Add Sub-Group</button>
+    </form>
+  </div>
+</div>

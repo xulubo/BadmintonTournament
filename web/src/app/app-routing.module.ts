@@ -19,6 +19,7 @@ import { SingleGroupComponent } from './single-group/single-group.component';
 import { PlayerEditComponent } from './player-edit/player-edit.component';
 import { UpcomingMatchesComponent } from './upcoming-matches/upcoming-matches.component';
 import { GroupListComponent } from './group-list/group-list.component';
+import { TeamMatchListComponent } from './team-match-list/team-match-list.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
@@ -45,6 +46,7 @@ const routes: Routes = [
             component: SingleGroupComponent,
             data: { breadcrumb: 'Group Details' },
             children: [
+              { path: '', component: TeamMatchListComponent },
               {
                 path: 'team-match/:matchId',
                 component: TeamMatchComponent,

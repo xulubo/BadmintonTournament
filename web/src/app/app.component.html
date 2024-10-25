@@ -31,8 +31,8 @@
     <li><a routerLink="/players">Players</a></li>
     <li><a routerLink="/matches">Matches</a></li>
     <li *ngIf="authService.isAdmin()"><a routerLink="/admin">Admin Panel</a></li>
-    <li *ngIf="!authService.currentUserValue"><a routerLink="/login">Login</a></li>
-    <li *ngIf="authService.currentUserValue"><a (click)="logout()">Logout</a></li>
+    <li *ngIf="!authService.currentUserValue" class="right-align"><a routerLink="/login">Login</a></li>
+    <li *ngIf="authService.currentUserValue" class="right-align"><a (click)="logout()">Logout</a></li>
   </ul>
 </nav>
 

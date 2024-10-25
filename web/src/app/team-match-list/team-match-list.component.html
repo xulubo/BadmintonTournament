@@ -1,24 +1,7 @@
 <h3>Team Matches</h3>
-<table *ngIf="teamMatches.length > 0" style="border-collapse: collapse; width: 100%;">
-  <thead>
-    <tr>
-      <th style="padding: 10px; border: 1px solid #ddd;">Match Number</th>
-      <th style="padding: 10px; border: 1px solid #ddd;">Team 1</th>
-      <th style="padding: 10px; border: 1px solid #ddd;">Team 2</th>
-      <th style="padding: 10px; border: 1px solid #ddd;">Date and Time</th>
-      <th style="padding: 10px; border: 1px solid #ddd;">Actions</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let match of teamMatches">
-      <td style="padding: 10px; border: 1px solid #ddd;">{{ match.matchNumber }}</td>
-      <td style="padding: 10px; border: 1px solid #ddd;">{{ match.teams[0].team.name }}</td>
-      <td style="padding: 10px; border: 1px solid #ddd;">{{ match.teams[1].team.name }}</td>
-      <td style="padding: 10px; border: 1px solid #ddd;">{{ match.matchDateTime | date:'medium' }}</td>
-      <td style="padding: 10px; border: 1px solid #ddd;">
-        <button (click)="navigateToTeamMatch(match.id)">View Details</button>
-      </td>
-    </tr>
-  </tbody>
-</table>
-<p *ngIf="teamMatches.length === 0">No team matches found for this group.</p>
+<app-match-matrix 
+  [matches]="teamMatches"
+  (editMatch)="openEditMatchDialog($event)"
+  (viewDetails)="navigateToTeamMatch($event)"
+  (viewTeamPlayers)="viewTeamPlayers($event)">
+</app-match-matrix>

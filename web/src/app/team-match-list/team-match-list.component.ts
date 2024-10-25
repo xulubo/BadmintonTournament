@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TournamentService } from '../services/tournament.service';
 import { AuthService } from '../services/auth.service';
+import { TeamMatch } from '../models/team-match.model';
+import { MatDialog } from '@angular/material/dialog';
+import { EditTeamMatchDialogComponent } from '../edit-team-match-dialog/edit-team-match-dialog.component';
 
 @Component({
   selector: 'app-team-match-list',
@@ -9,13 +12,14 @@ import { AuthService } from '../services/auth.service';
 })
 export class TeamMatchListComponent implements OnInit {
   groupId: number = 0;
-  teamMatches: any[] = [];
+  teamMatches: TeamMatch[] = [];
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private tournamentService: TournamentService,
-    public authService: AuthService
+    public authService: AuthService,
+    private dialog: MatDialog
   ) { }
 
   ngOnInit(): void {
@@ -27,7 +31,7 @@ export class TeamMatchListComponent implements OnInit {
 
   loadTeamMatches(): void {
     this.tournamentService.getGroupTeamMatches(this.groupId).subscribe(
-      (data: any[]) => {
+      (data: TeamMatch[]) => {
         this.teamMatches = data;
         console.log('Team matches loaded:', this.teamMatches);
       },
@@ -37,7 +41,52 @@ export class TeamMatchListComponent implements OnInit {
     );
   }
 
+  openEditMatchDialog(match: TeamMatch): void {
+    const dialogRef = this.dialog.open(EditTeamMatchDialogComponent, {
+      width: '400px',
+      data: { ...match }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        if (result.delete) {
+          this.deleteTeamMatch(result.id);
+        } else {
+          this.updateTeamMatch(result);
+        }
+      }
+    });
+  }
+
+  updateTeamMatch(updatedMatch: TeamMatch): void {
+    this.tournamentService.updateTeamMatch(updatedMatch).subscribe(
+      (response) => {
+        console.log('Match updated successfully:', response);
+        this.loadTeamMatches();
+      },
+      (error) => {
+        console.error('Error updating match:', error);
+      }
+    );
+  }
+
+  deleteTeamMatch(matchId: number): void {
+    this.tournamentService.deleteTeamMatch(matchId).subscribe(
+      () => {
+        console.log('Match deleted successfully');
+        this.loadTeamMatches();
+      },
+      (error) => {
+        console.error('Error deleting match:', error);
+      }
+    );
+  }
+
   navigateToTeamMatch(matchId: number): void {
     this.router.navigate(['team-match', matchId], { relativeTo: this.route });
+  }
+
+  viewTeamPlayers(teamId: number): void {
+    this.router.navigate(['/team', teamId]);
   }
 }

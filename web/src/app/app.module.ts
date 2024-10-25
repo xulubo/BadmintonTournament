@@ -40,6 +40,7 @@ import { TeamMatchListComponent } from './team-match-list/team-match-list.compon
 import { AssociatedTeamsComponent } from './associated-teams/associated-teams.component';
 import { MatchResultMatrixComponent } from './match-result-matrix/match-result-matrix.component';
 import { GroupTeamStandingsComponent } from './group-team-standings/group-team-standings.component';
+import { MatchMatrixComponent } from './match-matrix/match-matrix.component';
 
 @NgModule({
   declarations: [
@@ -69,7 +70,8 @@ import { GroupTeamStandingsComponent } from './group-team-standings/group-team-s
     TeamMatchListComponent,
     AssociatedTeamsComponent,
     MatchResultMatrixComponent,
-    GroupTeamStandingsComponent
+    GroupTeamStandingsComponent,
+    MatchMatrixComponent
   ],
   imports: [
     BrowserModule,

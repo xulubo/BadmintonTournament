@@ -32,7 +32,7 @@ export class UpcomingMatchesComponent implements OnInit {
       (data: TeamMatch[]) => {
         this.upcomingMatches = data.map((match, index) => ({
           ...match,
-          matchNumber: match.matchNumber || index + 1 // Assign a number if not provided
+          matchNumber: match.matchNumber || index + 1
         }));
         console.log('Upcoming matches loaded:', this.upcomingMatches);
       },
@@ -63,7 +63,7 @@ export class UpcomingMatchesComponent implements OnInit {
     this.tournamentService.updateTeamMatch(updatedMatch).subscribe(
       (response) => {
         console.log('Match updated successfully:', response);
-        this.loadUpcomingMatches(); // Reload matches to reflect changes
+        this.loadUpcomingMatches();
       },
       (error) => {
         console.error('Error updating match:', error);
@@ -75,7 +75,7 @@ export class UpcomingMatchesComponent implements OnInit {
     this.tournamentService.deleteTeamMatch(matchId).subscribe(
       () => {
         console.log('Match deleted successfully');
-        this.loadUpcomingMatches(); // Reload matches to reflect changes
+        this.loadUpcomingMatches();
       },
       (error) => {
         console.error('Error deleting match:', error);
@@ -84,7 +84,7 @@ export class UpcomingMatchesComponent implements OnInit {
   }
 
   navigateToTeamMatch(matchId: number): void {
-    this.router.navigate(['/team-match', matchId]);
+    this.router.navigate([matchId], { relativeTo: this.route });
   }
 
   viewTeamPlayers(teamId: number): void {

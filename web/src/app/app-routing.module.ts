@@ -34,7 +34,15 @@ const routes: Routes = [
     data: { breadcrumb: 'Tournament Details' },
     children: [
       { path: '', redirectTo: 'upcoming-matches', pathMatch: 'full' },
-      { path: 'upcoming-matches', component: UpcomingMatchesComponent, data: { breadcrumb: 'Upcoming Matches' } },
+      { 
+        path: 'upcoming-matches', 
+        component: UpcomingMatchesComponent, 
+        data: { breadcrumb: 'Upcoming Matches' },
+        children: [
+          { path: '', component: UpcomingMatchesComponent },
+          { path: ':matchId', component: TeamMatchComponent, data: { breadcrumb: 'Team Match Details' } }
+        ]
+      },
       { path: 'teams', component: TeamComponent, data: { breadcrumb: 'Teams' } },
       { path: 'players', component: PlayerListComponent, data: { breadcrumb: 'Players' } },
       { path: 'standings', component: TeamStandingsComponent, data: { breadcrumb: 'Standings' } },

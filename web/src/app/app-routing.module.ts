@@ -18,31 +18,93 @@ import { TournamentGroupsComponent } from './tournament-groups/tournament-groups
 import { SingleGroupComponent } from './single-group/single-group.component';
 import { PlayerEditComponent } from './player-edit/player-edit.component';
 import { UpcomingMatchesComponent } from './upcoming-matches/upcoming-matches.component';
+import { GroupListComponent } from './group-list/group-list.component';
+import { TeamMatchListComponent } from './team-match-list/team-match-list.component';
+import { AssociatedTeamsComponent } from './associated-teams/associated-teams.component';
+import { MatchResultMatrixComponent } from './match-result-matrix/match-result-matrix.component';
+import { GroupTeamStandingsComponent } from './group-team-standings/group-team-standings.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
-  { path: 'dashboard', component: DashboardComponent },
-  { path: 'tournaments', component: TournamentComponent },
+  { path: 'dashboard', component: DashboardComponent, data: { breadcrumb: 'Dashboard' } },
+  { path: 'tournaments', component: TournamentComponent, data: { breadcrumb: 'Tournaments' } },
   { 
     path: 'tournament/:id', 
     component: SingleTournamentComponent,
+    data: { breadcrumb: 'Tournament Details' },
     children: [
       { path: '', redirectTo: 'upcoming-matches', pathMatch: 'full' },
-      { path: 'upcoming-matches', component: UpcomingMatchesComponent },
-      { path: 'teams', component: TeamComponent },
-      { path: 'players', component: PlayerListComponent },
-      { path: 'standings', component: TeamStandingsComponent },
-      { path: 'groups', component: TournamentGroupsComponent },
-      { path: 'matches', component: MatchManagementComponent },
+      { 
+        path: 'upcoming-matches', 
+        component: UpcomingMatchesComponent, 
+        data: { breadcrumb: 'Upcoming Matches' },
+        children: [
+          { path: '', component: UpcomingMatchesComponent },
+          { path: ':matchId', component: TeamMatchComponent, data: { breadcrumb: 'Team Match Details' } }
+        ]
+      },
+      { path: 'teams', component: TeamComponent, data: { breadcrumb: 'Teams' } },
+      { path: 'players', component: PlayerListComponent, data: { breadcrumb: 'Players' } },
+      { path: 'standings', component: TeamStandingsComponent, data: { breadcrumb: 'Standings' } },
+      { 
+        path: 'group', 
+        component: TournamentGroupsComponent, 
+        data: { breadcrumb: 'Groups' },
+        children: [
+          { path: '', component: GroupListComponent },
+          { 
+            path: ':groupId', 
+            component: SingleGroupComponent,
+            data: { breadcrumb: 'Group Details' },
+            children: [
+              { path: '', redirectTo: 'team-matches', pathMatch: 'full' },
+              { 
+                path: 'team-matches', 
+                component: TeamMatchListComponent, 
+                data: { breadcrumb: 'Team Matches' }
+              },
+              { path: 'associated-teams', component: AssociatedTeamsComponent, data: { breadcrumb: 'Associated Teams' } },
+              { path: 'match-result-matrix', component: MatchResultMatrixComponent, data: { breadcrumb: 'Match Result Matrix' } },
+              { path: 'team-standings', component: GroupTeamStandingsComponent, data: { breadcrumb: 'Team Standings' } },
+              {
+                path: 'team-match/:matchId',
+                component: TeamMatchComponent,
+                data: { breadcrumb: 'Team Match Details' }
+              }
+            ]
+          }
+        ]
+      },
+      { path: 'matches', component: MatchManagementComponent, data: { breadcrumb: 'Matches' } },
+      {
+        path: 'team-match/:matchId',
+        component: TeamMatchComponent,
+        data: { breadcrumb: 'Team Match Details' }
+      }
     ]
   },
-  { path: 'tournament/:tournamentId/group/:groupId', component: SingleGroupComponent },
-  { path: 'team/:id', component: TeamDetailsComponent },
-  { path: 'team-match/:id', component: TeamMatchComponent },
-  { path: 'player-matches/:id', component: PlayerMatchesComponent },
-  { path: 'player/:id/edit', component: PlayerEditComponent },
+  { 
+    path: 'team/:id', 
+    component: TeamDetailsComponent,
+    data: { breadcrumb: 'Team Details' }
+  },
+  { 
+    path: 'player-matches/:id', 
+    component: PlayerMatchesComponent,
+    data: { breadcrumb: 'Player Matches' }
+  },
+  { 
+    path: 'player/:id/edit', 
+    component: PlayerEditComponent,
+    data: { breadcrumb: 'Edit Player' }
+  },
   { path: 'login', component: LoginComponent },
-  { path: 'admin', component: AdminPanelComponent, canActivate: [AuthGuard, AdminGuard] },
+  { 
+    path: 'admin', 
+    component: AdminPanelComponent, 
+    canActivate: [AuthGuard, AdminGuard],
+    data: { breadcrumb: 'Admin Panel' }
+  },
 ];
 
 @NgModule({

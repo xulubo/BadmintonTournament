@@ -1,7 +1,7 @@
 .tournament-groups-container {
   max-width: 800px;
   margin: 0 auto;
-  padding: 0px;
+  padding: 20px;
   font-family: Arial, sans-serif;
 }
 
@@ -93,4 +93,3 @@
 .btn-submit:hover {
   background-color: #2980b9;
 }
-

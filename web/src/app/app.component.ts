@@ -9,8 +9,8 @@ import { AuthService } from './services/auth.service';
 })
 export class AppComponent {
   constructor(
-    private router: Router,
-    public authService: AuthService
+    public authService: AuthService,
+    private router: Router
   ) { }
 
   logout() {
@@ -19,7 +19,6 @@ export class AppComponent {
   }
 
   get currentUserRole(): string {
-    const currentUser = this.authService.currentUserValue;
-    return currentUser ? currentUser.role : 'Guest';
+    return this.authService.currentUserValue?.role || 'Guest';
   }
 }

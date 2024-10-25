@@ -1,43 +1,42 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TournamentService } from '../services/tournament.service';
+import { AuthService } from '../services/auth.service';
 import { TeamMatch } from '../models/team-match.model';
 import { MatDialog } from '@angular/material/dialog';
 import { EditTeamMatchDialogComponent } from '../edit-team-match-dialog/edit-team-match-dialog.component';
 
 @Component({
-  selector: 'app-upcoming-matches',
-  templateUrl: './upcoming-matches.component.html'
+  selector: 'app-team-match-list',
+  templateUrl: './team-match-list.component.html'
 })
-export class UpcomingMatchesComponent implements OnInit {
-  tournamentId: number = 0;
-  upcomingMatches: TeamMatch[] = [];
+export class TeamMatchListComponent implements OnInit {
+  groupId: number = 0;
+  teamMatches: TeamMatch[] = [];
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private tournamentService: TournamentService,
+    public authService: AuthService,
     private dialog: MatDialog
   ) { }
 
   ngOnInit(): void {
     this.route.parent?.params.subscribe(params => {
-      this.tournamentId = +params['id'];
-      this.loadUpcomingMatches();
+      this.groupId = +params['groupId'];
+      this.loadTeamMatches();
     });
   }
 
-  loadUpcomingMatches(): void {
-    this.tournamentService.getUpcomingTournamentMatches(this.tournamentId).subscribe(
+  loadTeamMatches(): void {
+    this.tournamentService.getGroupTeamMatches(this.groupId).subscribe(
       (data: TeamMatch[]) => {
-        this.upcomingMatches = data.map((match, index) => ({
-          ...match,
-          matchNumber: match.matchNumber || index + 1
-        }));
-        console.log('Upcoming matches loaded:', this.upcomingMatches);
+        this.teamMatches = data;
+        console.log('Team matches loaded:', this.teamMatches);
       },
       (error) => {
-        console.error('Error fetching upcoming matches:', error);
+        console.error('Error fetching team matches:', error);
       }
     );
   }
@@ -63,7 +62,7 @@ export class UpcomingMatchesComponent implements OnInit {
     this.tournamentService.updateTeamMatch(updatedMatch).subscribe(
       (response) => {
         console.log('Match updated successfully:', response);
-        this.loadUpcomingMatches();
+        this.loadTeamMatches();
       },
       (error) => {
         console.error('Error updating match:', error);
@@ -75,7 +74,7 @@ export class UpcomingMatchesComponent implements OnInit {
     this.tournamentService.deleteTeamMatch(matchId).subscribe(
       () => {
         console.log('Match deleted successfully');
-        this.loadUpcomingMatches();
+        this.loadTeamMatches();
       },
       (error) => {
         console.error('Error deleting match:', error);
@@ -84,7 +83,7 @@ export class UpcomingMatchesComponent implements OnInit {
   }
 
   navigateToTeamMatch(matchId: number): void {
-    this.router.navigate([matchId], { relativeTo: this.route });
+    this.router.navigate(['..','team-match', matchId], { relativeTo: this.route });
   }
 
   viewTeamPlayers(teamId: number): void {

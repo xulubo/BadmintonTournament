@@ -34,6 +34,13 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { EditTeamMatchDialogComponent } from './edit-team-match-dialog/edit-team-match-dialog.component';
 import { UpcomingMatchesComponent } from './upcoming-matches/upcoming-matches.component';
 import { EditSingleMatchDialogComponent } from './edit-single-match-dialog/edit-single-match-dialog.component';
+import { BreadcrumbComponent } from './breadcrumb/breadcrumb.component';
+import { GroupListComponent } from './group-list/group-list.component';
+import { TeamMatchListComponent } from './team-match-list/team-match-list.component';
+import { AssociatedTeamsComponent } from './associated-teams/associated-teams.component';
+import { MatchResultMatrixComponent } from './match-result-matrix/match-result-matrix.component';
+import { GroupTeamStandingsComponent } from './group-team-standings/group-team-standings.component';
+import { MatchMatrixComponent } from './match-matrix/match-matrix.component';
 
 @NgModule({
   declarations: [
@@ -57,7 +64,14 @@ import { EditSingleMatchDialogComponent } from './edit-single-match-dialog/edit-
     DashboardComponent,
     EditTeamMatchDialogComponent,
     UpcomingMatchesComponent,
-    EditSingleMatchDialogComponent
+    EditSingleMatchDialogComponent,
+    BreadcrumbComponent,
+    GroupListComponent,
+    TeamMatchListComponent,
+    AssociatedTeamsComponent,
+    MatchResultMatrixComponent,
+    GroupTeamStandingsComponent,
+    MatchMatrixComponent
   ],
   imports: [
     BrowserModule,

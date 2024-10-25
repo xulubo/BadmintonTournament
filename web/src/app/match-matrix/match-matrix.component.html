@@ -1,0 +1,41 @@
+<table *ngIf="matches.length > 0" style="border-collapse: collapse; width: 100%;">
+  <thead>
+    <tr>
+      <th style="padding: 10px; border: 1px solid #ddd;">Match Number</th>
+      <th style="padding: 10px; border: 1px solid #ddd;">Team 1</th>
+      <th style="padding: 10px; border: 1px solid #ddd;">Team 2</th>
+      <th style="padding: 10px; border: 1px solid #ddd;">Result</th>
+      <th style="padding: 10px; border: 1px solid #ddd;">Date and Time</th>
+      <th style="padding: 10px; border: 1px solid #ddd;">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let match of matches">
+      <td style="padding: 10px; border: 1px solid #ddd;">
+        <a (click)="onEditMatch(match)" style="cursor: pointer; color: blue; text-decoration: underline;">
+          {{ match.matchNumber }}
+        </a>
+      </td>
+      <td style="padding: 10px; border: 1px solid #ddd;">
+        <span (click)="onViewTeamPlayers(match.teams[0].team.id)" style="cursor: pointer;">
+          {{ match.teams[0].team.name }}
+        </span>
+      </td>
+      <td style="padding: 10px; border: 1px solid #ddd;">
+        <span (click)="onViewTeamPlayers(match.teams[1].team.id)" style="cursor: pointer;">
+          {{ match.teams[1].team.name }}
+        </span>
+      </td>
+      <td style="padding: 10px; border: 1px solid #ddd;">
+        <span *ngIf="match.teams[0].totalWins != null" (click)="onViewDetails(match.id)" style="cursor: pointer;">
+          {{ match.teams[0].totalWins }} : {{ match.teams[1].totalWins }}
+        </span>
+      </td>
+      <td style="padding: 10px; border: 1px solid #ddd;">{{ match.matchDateTime | date:'medium' }}</td>
+      <td style="padding: 10px; border: 1px solid #ddd;">
+        <button (click)="onViewDetails(match.id)">View Details</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p *ngIf="matches.length === 0">No matches found.</p>

@@ -1,0 +1,18 @@
+<h3>Associated Teams</h3>
+<ul>
+  <li *ngFor="let team of associatedTeams">
+    {{ team.teamCode }} - {{ team.team.name }} - {{ team.team.id }}
+  </li>
+</ul>
+
+<h3 *ngIf="authService.isAdmin()">Associate Team</h3>
+<form *ngIf="authService.isAdmin()">
+  <div>
+    <label for="teamSelect">Select Team:</label>
+    <select id="teamSelect" [(ngModel)]="selectedTeamId" name="teamSelect">
+      <option [ngValue]="null">Select a team</option>
+      <option *ngFor="let team of availableTeams" [ngValue]="team.id">{{ team.name }}</option>
+    </select>
+  </div>
+  <button (click)="associateTeam()">Associate Team</button>
+</form>

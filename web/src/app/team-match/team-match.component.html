@@ -1,7 +1,4 @@
-<button (click)="goBack()">Back to Tournament</button>
-
-<h2>Team Match Details</h2>
-<div>
+<div *ngIf="authService.isAdmin()">
   <label for="matchNumber">Match Number:</label>
   <input type="number" id="matchNumber" [(ngModel)]="matchNumber" (change)="updateMatchNumber()">
   <button (click)="editTeamMatch()">Edit Match</button>
@@ -54,6 +51,7 @@
   </tr>
 </table>
 
+<ng-container *ngIf="authService.isAdmin()">
 <h3>Create Single Match</h3>
 
 <div>
@@ -94,3 +92,4 @@
 
   <button type="submit">Create Single Match</button>
 </form>
+</ng-container>

@@ -83,7 +83,7 @@ export class TeamMatchListComponent implements OnInit {
   }
 
   navigateToTeamMatch(matchId: number): void {
-    this.router.navigate(['team-match', matchId], { relativeTo: this.route });
+    this.router.navigate(['..','team-match', matchId], { relativeTo: this.route });
   }
 
   viewTeamPlayers(teamId: number): void {

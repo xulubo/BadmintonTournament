@@ -5,6 +5,7 @@ import { Location } from '@angular/common';
 import { forkJoin } from 'rxjs';
 import { Player } from '../models/player';
 import { GameScore } from '../models/game_score';
+import { AuthService } from '../services/auth.service';
 import { MatDialog } from '@angular/material/dialog';
 import { EditTeamMatchDialogComponent } from '../edit-team-match-dialog/edit-team-match-dialog.component';
 import { EditSingleMatchDialogComponent } from '../edit-single-match-dialog/edit-single-match-dialog.component';
@@ -36,6 +37,7 @@ export class TeamMatchComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private tournamentService: TournamentService,
+    public authService: AuthService,
     private location: Location,
     private dialog: MatDialog
   ) { }

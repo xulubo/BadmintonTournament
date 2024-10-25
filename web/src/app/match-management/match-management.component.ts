@@ -84,7 +84,7 @@ export class MatchManagementComponent implements OnInit {
   }
 
   navigateToTeamMatch(matchId: number): void {
-    this.router.navigate(['/team-match', matchId]);
+    this.router.navigate(['..','team-match', matchId], { relativeTo: this.route });
   }
 
   viewTeamPlayers(teamId: number): void {

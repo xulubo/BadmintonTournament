@@ -56,6 +56,16 @@ public class MatchService {
         return getMatchResults(teamMatch);
     }
 
+    public List<Collection<MatchResult>> getMatchResultsForTeam(int teamId) {
+        return teamRepository.findById(teamId).get()
+                .getTeamMatchTeams()
+                .stream()
+                .map(t->t.getTeamMatch())
+                .map(m->getMatchResults(m))
+                .collect(Collectors.toList())
+                ;
+    }
+
     public PlayerMatches getMatchResultsByPlayerId(int playerId) {
         var player = playerRepository.findById(playerId).get();
         var matchResultList = teamMatchRepository.findAll()

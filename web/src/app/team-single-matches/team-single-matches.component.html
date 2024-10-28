@@ -1,0 +1,10 @@
+<h3>Team Matches for {{ teamName }}</h3>
+<div *ngFor="let teamMatch of teamMatches">
+  <app-single-match-list
+    [singleMatches]="teamMatch"
+  [teamNames]="[teamName]"
+  (editMatch)="editSingleMatch($event)"
+  (deleteMatch)="deleteSingleMatch($event)">
+</app-single-match-list> 
+
+</div>

@@ -114,6 +114,7 @@ private logRequest(method: string, endpoint: string): void {
   }
 
   getTeamMatchResults(teamMatchId: number): Observable<any[]> {
+    this.logRequest('GET', `/team_match/${teamMatchId}/result`);
     return this.http.get<any[]>(`${this.apiUrl}/team_match/${teamMatchId}/result`, { headers: this.getHeaders() });
   }
 
@@ -220,5 +221,9 @@ private logRequest(method: string, endpoint: string): void {
 
   getAvailableTeamsForGroup(groupId: number): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/match-group/${groupId}/available-teams`, { headers: this.getHeaders() });
+  }
+
+  getTeamSingleMatches(teamId: number): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/team/${teamId}/team-matches`, { headers: this.getHeaders() });
   }
 }

@@ -1,6 +1,8 @@
 package ai.loobo.badminton.api.controller;
 
+import ai.loobo.badminton.api.model.MatchResult;
 import ai.loobo.badminton.api.model.Response;
+import ai.loobo.badminton.api.service.MatchService;
 import ai.loobo.badminton.model.Team;
 import ai.loobo.badminton.model.Player;
 import ai.loobo.badminton.model.TeamMatch;
@@ -27,6 +29,7 @@ public class TeamController {
     private final TournamentRepository tournamentRepository;
     private final PlayerRepository playerRepository;
     private final TeamMatchRepository teamMatchRepository;
+    private final MatchService matchService;
 
     @PostMapping
     public ResponseEntity<Response> createTeam(
@@ -77,15 +80,11 @@ public class TeamController {
      * @param teamId
      * @return
      */
-    @GetMapping("/{teamId}/team_match")
-    public Collection<TeamMatch> getMatchList(
+    @GetMapping("/{teamId}/team-matches")
+    public List<Collection<MatchResult>> getMatchList(
             @PathVariable int teamId
     ) {
-        return teamRepository.findById(teamId).get()
-                .getTeamMatchTeams()
-                .stream()
-                .map(tmt->tmt.getTeamMatch())
-                .collect(Collectors.toList());
+        return matchService.getMatchResultsForTeam(teamId);
     }
 
     @Data

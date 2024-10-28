@@ -115,7 +115,7 @@ export class TeamMatchComponent implements OnInit {
       teamMatchId: this.teamMatchId,
       matchNumber: this.matchNumber,
       matchType: '',
-      teams: [
+      teamMatchTeams: [
         { id: this.teams[0].team.id, players: [new Player(), new Player()], scores: [new GameScore(), new GameScore(), new GameScore()] },
         { id: this.teams[1].team.id, players: [new Player(), new Player()], scores: [new GameScore(), new GameScore(), new GameScore()] }
       ]
@@ -129,9 +129,9 @@ export class TeamMatchComponent implements OnInit {
   updateScore(teamIndex: number, scoreIndex: number, event: Event): void {
     const inputElement = event.target as HTMLInputElement;
     const newValue = inputElement.value;
-    this.singleMatchData.teams[teamIndex].scores[scoreIndex].gameNumber = scoreIndex;
-    this.singleMatchData.teams[teamIndex].scores[scoreIndex].teamScore = newValue ? parseInt(newValue, 10) : 0;
-    console.log("teamIndex", teamIndex, "scoreIndex", scoreIndex, "value", this.singleMatchData.teams[teamIndex]);
+    this.singleMatchData.teamMatchTeams[teamIndex].scores[scoreIndex].gameNumber = scoreIndex;
+    this.singleMatchData.teamMatchTeams[teamIndex].scores[scoreIndex].teamScore = newValue ? parseInt(newValue, 10) : 0;
+    console.log("teamIndex", teamIndex, "scoreIndex", scoreIndex, "value", this.singleMatchData.teamMatchTeams[teamIndex]);
   }
 
   loadSingleMatches(): void {

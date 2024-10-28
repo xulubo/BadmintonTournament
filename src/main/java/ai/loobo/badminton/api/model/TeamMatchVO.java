@@ -12,7 +12,7 @@ public class TeamMatchVO {
     // teamMatchId
     private int id;
 
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime matchDateTime;
 
     // used to update team wins in this team match

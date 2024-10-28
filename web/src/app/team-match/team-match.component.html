@@ -39,14 +39,8 @@
       <a [routerLink]="['/player-matches', match.teamMatchTeams[1].players[0].id]">{{ match.teamMatchTeams[1].players[0].displayName }}</a><br>
       <a [routerLink]="['/player-matches', match.teamMatchTeams[1].players[1].id]">{{ match.teamMatchTeams[1].players[1].displayName }}</a>
     </td>
-    <td style="padding: 10px; border: 1px solid #ddd;">
-      {{ match.teamMatchTeams[0].scores[0].teamScore }}:{{ match.teamMatchTeams[1].scores[0].teamScore }}
-    </td>
-    <td style="padding: 10px; border: 1px solid #ddd;">
-      {{ match.teamMatchTeams[0].scores[1].teamScore }}:{{ match.teamMatchTeams[1].scores[1].teamScore }}
-    </td>
-    <td style="padding: 10px; border: 1px solid #ddd;">
-      {{ match.teamMatchTeams[0].scores[2].teamScore }}:{{ match.teamMatchTeams[1].scores[2].teamScore }}
+    <td *ngFor="let score of match.teamMatchTeams[0].scores; let i = index" style="padding: 10px; border: 1px solid #ddd;">
+      {{ score.teamScore }}:{{ match.teamMatchTeams[1].scores[i].teamScore }}
     </td>
   </tr>
 </table>

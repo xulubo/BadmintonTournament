@@ -99,6 +99,7 @@ private logRequest(method: string, endpoint: string): void {
   }
 
   createSingleMatch(teamMatchId: number, singleMatchData: any): Observable<any> {
+    this.logRequest('POST', `${this.apiUrl}/match`);
     console.log("singleMatchData", singleMatchData);
     console.log("json", JSON.stringify(singleMatchData));
     return this.http.post(`${this.apiUrl}/match`, singleMatchData, { headers: this.getHeaders() });
@@ -212,6 +213,7 @@ private logRequest(method: string, endpoint: string): void {
   }
 
   updateSingleMatch(matchData: any): Observable<any> {
+    this.logRequest('PUT', `/match/${matchData.matchId}`);
     console.log("updateSingleMatch", matchData)
     return this.http.put(`${this.apiUrl}/match/${matchData.matchId}`, matchData, { headers: this.getHeaders() });
   }

@@ -3,29 +3,30 @@ package ai.loobo.badminton.api.controller;
 import ai.loobo.badminton.api.model.Response;
 import ai.loobo.badminton.model.Team;
 import ai.loobo.badminton.model.Player;
+import ai.loobo.badminton.model.TeamMatch;
+import ai.loobo.badminton.repository.TeamMatchRepository;
 import ai.loobo.badminton.repository.TeamRepository;
 import ai.loobo.badminton.repository.PlayerRepository;
 import ai.loobo.badminton.repository.TournamentRepository;
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/team")
+@RequiredArgsConstructor
 public class TeamController {
 
-    @Autowired
-    private TeamRepository teamRepository;
-
-    @Autowired
-    private TournamentRepository tournamentRepository;
-
-    @Autowired
-    private PlayerRepository playerRepository;
+    private final TeamRepository teamRepository;
+    private final TournamentRepository tournamentRepository;
+    private final PlayerRepository playerRepository;
+    private final TeamMatchRepository teamMatchRepository;
 
     @PostMapping
     public ResponseEntity<Response> createTeam(
@@ -69,6 +70,22 @@ public class TeamController {
     ) {
         return ResponseEntity
                 .ok(teamRepository.findById(teamId).get().getPlayers());
+    }
+
+    /**
+     * Get all team matches the team specified by teamId has joined
+     * @param teamId
+     * @return
+     */
+    @GetMapping("/{teamId}/team_match")
+    public Collection<TeamMatch> getMatchList(
+            @PathVariable int teamId
+    ) {
+        return teamRepository.findById(teamId).get()
+                .getTeamMatchTeams()
+                .stream()
+                .map(tmt->tmt.getTeamMatch())
+                .collect(Collectors.toList());
     }
 
     @Data

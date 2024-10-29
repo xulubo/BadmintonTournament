@@ -6,7 +6,7 @@ import lombok.*;
 import javax.persistence.*;
 import java.util.Set;
 
-@EqualsAndHashCode(exclude = "tournament")
+@EqualsAndHashCode(of = "id")
 @Builder
 @Entity
 @Table(name = "team", schema = "tournament")
@@ -30,6 +30,10 @@ public class Team {
     @ManyToOne
     @JoinColumn(name = "tournament_id")
     private Tournament tournament;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "team")
+    private Set<TeamMatchTeam> teamMatchTeams;
 
     @OneToMany(mappedBy = "team")
     private Set<Player> players;

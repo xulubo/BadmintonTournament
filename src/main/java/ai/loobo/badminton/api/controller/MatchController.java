@@ -2,15 +2,14 @@ package ai.loobo.badminton.api.controller;
 
 import ai.loobo.badminton.api.model.MatchResult;
 import ai.loobo.badminton.api.model.Response;
-import ai.loobo.badminton.model.GameScore;
-import ai.loobo.badminton.model.Match;
-import ai.loobo.badminton.model.MatchPlayer;
+import ai.loobo.badminton.model.*;
 import ai.loobo.badminton.repository.*;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
@@ -27,7 +26,7 @@ public class MatchController {
     @Transactional
     @PostMapping
     public Response create(
-            @RequestBody MatchResult matchResult
+            @RequestBody MatchEditVO matchResult
     ) {
         var teamMatch = teamMatchRepository.findById(matchResult.getTeamMatchId()).get();
 
@@ -39,8 +38,8 @@ public class MatchController {
                         .build()
         );
 
-        for(var teamData: matchResult.getTeamResults()) {
-            var teamMatchTeam = teamMatchTeamRepository.findById(teamData.getTeamMatchTeamId()).get();
+        for(var teamData: matchResult.getTeamMatchTeams()) {
+            var teamMatchTeam = teamMatchTeamRepository.findById(teamData.getId()).get();
 
             for(var playerId: teamData.getPlayers()
                     .stream().map(p->p.getId()).collect(Collectors.toList())
@@ -82,6 +81,19 @@ public class MatchController {
         match.setMatchNumber(matchEditVO.getMatchNumber());
         matchRepository.save(match);
 
+        var scores = matchEditVO
+                .getTeamMatchTeams()
+                .stream()
+                .flatMap(t->t.getScores().stream())
+                .map(score->{
+                    var savedScore = gameScoreRepository.findById(score.getId()).get();
+                    savedScore.setTeamScore(score.getTeamScore());
+                    return savedScore;
+                })
+                .collect(Collectors.toList());
+
+        gameScoreRepository.saveAll(scores);
+
         return Response.SUCCESS;
     }
 
@@ -97,9 +109,19 @@ public class MatchController {
 
     @Data
     public static class MatchEditVO {
-        private Integer matchId;
+        private Integer teamMatchId;
         private String matchType;
         private Integer matchNumber;
         private String comment;
+
+        private List<TeamMatchTeamVO> teamMatchTeams;
+    }
+
+    @Data
+    public static class TeamMatchTeamVO {
+        private Integer id; // team match team ID
+        private Integer totalWins;
+        private List<Player> players;
+        private List<GameScore> scores;
     }
 }

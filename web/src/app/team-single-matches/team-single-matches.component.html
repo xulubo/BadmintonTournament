@@ -1,10 +1,24 @@
 <h3>Team Matches for {{ teamName }}</h3>
-<div *ngFor="let teamMatch of teamMatches">
-  <app-single-match-list
-    [singleMatches]="teamMatch"
-  [teamNames]="[teamName]"
-  (editMatch)="editSingleMatch($event)"
-  (deleteMatch)="deleteSingleMatch($event)">
-</app-single-match-list> 
 
+<div class="match-type-filter" style="margin-bottom: 20px;">
+  <label for="matchType">Filter by Match Type:</label>
+  <select id="matchType" [(ngModel)]="selectedMatchType" (change)="onMatchTypeChange()" style="margin-left: 10px; padding: 5px;">
+    <option *ngFor="let type of matchTypes" [value]="type">
+      {{ type === 'ALL' ? 'All Types' : type }}
+    </option>
+  </select>
+</div>
+
+<div *ngFor="let teamMatch of filteredMatches">
+  <app-single-match-list
+    *ngIf="teamMatch.length > 0"
+    [singleMatches]="teamMatch"
+    [teamNames]="[teamName]"
+    (editMatch)="editSingleMatch($event)"
+    (deleteMatch)="deleteSingleMatch($event)">
+  </app-single-match-list>
+</div>
+
+<div *ngIf="filteredMatches.length === 0" style="text-align: center; padding: 20px;">
+  No matches found for the selected type.
 </div>

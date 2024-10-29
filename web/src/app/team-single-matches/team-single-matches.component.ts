@@ -12,6 +12,9 @@ export class TeamSingleMatchesComponent implements OnInit {
   teamId: number = 0;
   teamName: string = '';
   teamMatches: any[] = [];
+  filteredMatches: any[] = [];
+  selectedMatchType: string = 'ALL';
+  matchTypes: string[] = ['ALL', 'XD', 'WD', 'MD'];
 
   constructor(
     private route: ActivatedRoute,
@@ -53,12 +56,28 @@ export class TeamSingleMatchesComponent implements OnInit {
     this.tournamentService.getTeamSingleMatches(this.teamId).subscribe(
       (data: any[]) => {
         this.teamMatches = data;
+        this.filterMatches();
         console.log('Team single matches loaded:', this.teamMatches);
       },
       (error) => {
         console.error('Error fetching team single matches:', error);
       }
     );
+  }
+
+  filterMatches(): void {
+    if (this.selectedMatchType === 'ALL') {
+      this.filteredMatches = this.teamMatches;
+    } else {
+        this.filteredMatches = this.teamMatches
+        .map(matchCollection => 
+            matchCollection.filter((match: any) => match.matchType === this.selectedMatchType)
+          );
+    }
+  }
+
+  onMatchTypeChange(): void {
+    this.filterMatches();
   }
 
   editSingleMatch(match: any): void {

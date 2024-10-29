@@ -1,25 +1,28 @@
-<h3>Single Matches</h3>
+<!-- <h3>Single Matches</h3> -->
 <div *ngIf="singleMatches.length === 0">No single matches found.</div>
 <table *ngFor="let match of singleMatches" style="margin-bottom: 20px; border-collapse: collapse; width: 100%;">
   <tr>
-    <th colspan="6" style="text-align: center; padding: 10px; background-color: #f2f2f2;">
+    <th colspan="7" style="text-align: center; padding: 10px; background-color: #f2f2f2;">
       <div>
         <div>{{ match.teamMatchTeams[0].teamName }} vs {{ match.teamMatchTeams[1].teamName }}</div>
         <div style="font-size: 12px;font-weight: normal;">{{ match.comment }}</div>
       </div>
-      <button (click)="onEditMatch(match)" style="float: right; margin-right: 10px;">Edit</button>
-      <button (click)="onDeleteMatch(match.matchId)" style="float: right; margin-right: 10px;">Delete</button>
+      <div *ngIf="authService.isAdmin()">
+        <button (click)="onEditMatch(match)" style="float: right; margin-right: 10px;">Edit</button>
+        <button (click)="onDeleteMatch(match.matchId)" style="float: right; margin-right: 10px;">Delete</button>
+      </div>
     </th>
   </tr>
   <tr>
     <td style="padding: 10px; border: 1px solid #ddd;">Match Type</td>
-    <td style="padding: 10px; border: 1px solid #ddd;">{{ teamNames[0] }} Players</td>
-    <td style="padding: 10px; border: 1px solid #ddd;">{{ teamNames[1] }} Players</td>
+    <td style="padding: 10px; border: 1px solid #ddd;">{{ match.teamMatchTeams[0].teamName }} Players</td>
+    <td style="padding: 10px; border: 1px solid #ddd;">{{ match.teamMatchTeams[1].teamName }} Players</td>
     <td style="padding: 10px; border: 1px solid #ddd;">Game 1</td>
     <td style="padding: 10px; border: 1px solid #ddd;">Game 2</td>
     <td style="padding: 10px; border: 1px solid #ddd;">Game 3</td>
+    <td style="padding: 10px; border: 1px solid #ddd;">Result</td>
   </tr>
-  <tr>
+  <tr [ngClass]="{'green-row': match.teamMatchTeams[0].totalWins > match.teamMatchTeams[1].totalWins, 'red-row': match.teamMatchTeams[0].totalWins < match.teamMatchTeams[1].totalWins}">
     <td style="padding: 10px; border: 1px solid #ddd;">{{ match.matchType }}</td>
     <td style="padding: 10px; border: 1px solid #ddd;">
       <a (click)="navigateToPlayerMatches(match.teamMatchTeams[0].players[0].id)" style="cursor: pointer;">
@@ -39,6 +42,9 @@
     </td>
     <td *ngFor="let score of match.teamMatchTeams[0].scores; let i = index" style="padding: 10px; border: 1px solid #ddd;">
       {{ score.teamScore }}:{{ match.teamMatchTeams[1].scores[i].teamScore }}
+    </td>
+    <td style="padding: 10px; border: 1px solid #ddd;">
+        {{ match.teamMatchTeams[0].totalWins }}:{{ match.teamMatchTeams[1].totalWins }}
     </td>
   </tr>
 </table> 

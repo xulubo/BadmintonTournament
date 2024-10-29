@@ -61,7 +61,7 @@ public class MatchService {
                 .getTeamMatchTeams()
                 .stream()
                 .map(t->t.getTeamMatch())
-                .map(m->getMatchResults(m))
+                .map(m->getMatchResults(m, teamId))
                 .collect(Collectors.toList())
                 ;
     }
@@ -105,8 +105,19 @@ public class MatchService {
         });
     }
 
+    private Collection<MatchResult> getMatchResults(TeamMatch teamMatch) {
+        return getMatchResults(teamMatch, 0);
+    }
+
+    /**
+     *
+     * @param teamMatch
+     * @param leftTeamId which Team will be listed on the left
+     * @return
+     */
     private Collection<MatchResult> getMatchResults(
-            TeamMatch teamMatch
+            TeamMatch teamMatch,
+            int leftTeamId
     ) {
         var allMatches = matchRepository.findAllByTeamMatch(teamMatch);
         var matchResults = new ArrayList<MatchResult>();
@@ -115,6 +126,7 @@ public class MatchService {
             var teamResults = teamMatch
                     .getTeams()
                     .stream()
+                    .sorted((t1,t2)->t1.getTeam().getId().intValue() == leftTeamId ? -1 : t2.getTeam().getId().intValue() == leftTeamId ? 1 : 0)
                     .map(teamMatchTeam-> MatchResult.TeamResult.builder()
                             .teamName(teamMatchTeam.getTeam().getName())
                             .teamMatchTeamId(teamMatchTeam.getId())
